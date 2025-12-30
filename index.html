@@ -327,7 +327,7 @@
         // ✨ Gemini AI 核心邏輯
         // ==========================================
         
-        async function callGemini(promptText, customRetries = 3, customDelay = 1500) {
+        async function callGemini(promptText, customRetries = 3, customDelay = 500) { // Reduced delay to 500ms
             const key = localStorage.getItem('gemini_api_key') || apiKeyEnv || DEFAULT_GEMINI_KEY;
             
             // 重要：在 Canvas 環境中使用此穩定預覽模型名稱
@@ -337,8 +337,8 @@
             const payload = {
                 contents: [{ parts: [{ text: promptText }] }],
                 generationConfig: { 
-                    temperature: 0.8, 
-                    maxOutputTokens: 800 
+                    temperature: 0.7, 
+                    maxOutputTokens: 300 // Reduced output tokens for speed
                 },
                 safetySettings: [
                     { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
@@ -360,7 +360,7 @@
                     if (response.status === 429) {
                         if (i === customRetries - 1) throw new Error("API 呼叫太頻繁，請等一分鐘後再試。");
                         await new Promise(r => setTimeout(r, currentDelay));
-                        currentDelay *= 2; 
+                        currentDelay *= 1.5; // Less aggressive backoff
                         continue;
                     }
 
@@ -377,7 +377,7 @@
                     return text.trim();
                 } catch (error) {
                     if (i === customRetries - 1 || error.message === "MODEL_NOT_AVAILABLE") throw error;
-                    await new Promise(r => setTimeout(r, 1000));
+                    await new Promise(r => setTimeout(r, 800)); // Reduced error wait
                 }
             }
         }
@@ -394,7 +394,7 @@
 
             try {
                 const prompt = `妳是一位優雅、空靈的品牌文案師。請幫我潤色這段品牌故事描述。要求：繁體中文，富有禪意與詩意，精煉簡約。內容：${textarea.value}`;
-                const result = await callGemini(prompt, 3, 1000);
+                const result = await callGemini(prompt, 3, 500); // Faster retries
                 if (result) {
                     textarea.value = result;
                     siteData.about.text = result; // 同步更新數據
@@ -420,7 +420,7 @@
 
             try {
                 const prompt = `潤色靈石產品描述，空靈簡約，40字內，繁體中文：${input.value}`;
-                const result = await callGemini(prompt, 3, 1000);
+                const result = await callGemini(prompt, 3, 500); // Faster retries
                 if (result) {
                     input.value = result;
                     siteData.collections[index].desc = result; // 同步更新數據
@@ -447,7 +447,7 @@
 
             try {
                 const prompt = "生成一段 20 字內禪意繁體中文石語，關於礦石與自然的連結。不需要標題。";
-                const quote = await callGemini(prompt, 3, 1000); 
+                const quote = await callGemini(prompt, 3, 500); // Faster retries
                 display.innerText = `「${quote}」`;
             } catch (e) {
                 display.innerText = "「靜謐中，心自明。」";
