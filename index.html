@@ -113,13 +113,14 @@
             font-size: 0.75rem;
             letter-spacing: 0.2em;
         }
-        
+
         /* IG 嵌入容器微調 */
         .ig-embed-container {
             width: 100%;
-            min-height: 300px;
+            min-height: 200px;
             display: flex;
             justify-content: center;
+            align-items: flex-start;
         }
         .ig-embed-container blockquote {
             margin: 0 !important;
@@ -134,7 +135,7 @@
     <div id="loading" class="loading-overlay">
         <div class="flex flex-col items-center">
             <i data-lucide="loader" class="w-8 h-8 animate-spin mb-4 text-stone-400"></i>
-            <span>連結時空能量中...</span>
+            <span>讀取靈石頻率中...</span>
         </div>
     </div>
 
@@ -172,7 +173,7 @@
         <button onclick="scrollToSection('social')" class="text-xl tracking-[0.4em] text-stone-600 uppercase">追蹤我們</button>
     </div>
 
-    <!-- 首頁視覺區塊 -->
+    <!-- 首頁視覺 -->
     <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden bg-white">
         <div class="absolute inset-0 z-0">
             <img id="hero-img-display" src="" class="w-full h-full object-cover opacity-30 scale-105 animate-slowZoom" alt="">
@@ -188,7 +189,7 @@
         </div>
     </section>
 
-    <!-- 品牌故事區塊 -->
+    <!-- 品牌故事 -->
     <section id="about" class="py-40 px-8 bg-white">
         <div class="max-w-3xl mx-auto text-center">
             <div class="mb-12">
@@ -201,7 +202,6 @@
                 載入中...
             </p>
             
-            <!-- ✨ 每日石語互動區 -->
             <div class="mt-32 ai-spirit-box">
                 <p id="ai-quote" class="text-sm md:text-base text-stone-400 italic tracking-[0.3em] mb-12 leading-relaxed">
                     「每一塊石頭都有它的頻率，等待與您共鳴。」
@@ -216,13 +216,14 @@
     <!-- 收藏系列展示區 -->
     <section id="collections" class="py-24 px-6 md:px-20 bg-[#FAF9F6]">
         <div id="collections-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 md:gap-12 lg:gap-16 max-w-7xl mx-auto">
-            <!-- 由 JavaScript 動態生成 -->
+            <!-- 動態生成 -->
         </div>
     </section>
 
-    <!-- 社群區塊 (支援嵌入貼文) -->
-    <section id="social" class="py-40 px-8 bg-white">
+    <!-- 社群區塊 (還原原本的左右兩欄設計，但支援 WP 式嵌入) -->
+    <section id="social" class="py-40 px-8 bg-white overflow-hidden">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-24">
+            <!-- 左側：連結資訊 -->
             <div class="w-full md:w-2/5 space-y-16">
                 <h2 id="social-title-display" class="text-3xl font-extralight tracking-[0.3em] text-stone-800 uppercase">Follow Us</h2>
                 <div class="space-y-4">
@@ -236,22 +237,16 @@
                     </a>
                 </div>
             </div>
-            <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+            
+            <!-- 右側：四格照片牆 (支援動態嵌入與上傳) -->
+            <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-2 gap-6 items-start">
                  <div class="space-y-6">
-                    <div id="ig-slot-1" class="ig-embed-container overflow-hidden rounded-sm bg-stone-50 shadow-sm min-h-[300px]">
-                        <!-- 動態插入貼文或圖片 -->
-                    </div>
-                    <div id="ig-slot-2" class="ig-embed-container overflow-hidden rounded-sm bg-stone-50 shadow-sm min-h-[300px]">
-                        <!-- 動態插入貼文或圖片 -->
-                    </div>
+                    <div id="ig-slot-1" class="ig-embed-container overflow-hidden rounded-sm bg-stone-50 shadow-sm"></div>
+                    <div id="ig-slot-2" class="ig-embed-container overflow-hidden rounded-sm bg-stone-50 shadow-sm"></div>
                 </div>
-                <div class="space-y-6 pt-0 md:pt-12">
-                    <div id="ig-slot-3" class="ig-embed-container overflow-hidden rounded-sm bg-stone-50 shadow-sm min-h-[300px]">
-                        <!-- 動態插入貼文或圖片 -->
-                    </div>
-                    <div id="ig-slot-4" class="ig-embed-container overflow-hidden rounded-sm bg-stone-50 shadow-sm min-h-[300px]">
-                        <!-- 動態插入貼文或圖片 -->
-                    </div>
+                <div class="space-y-6 pt-12">
+                    <div id="ig-slot-3" class="ig-embed-container overflow-hidden rounded-sm bg-stone-50 shadow-sm"></div>
+                    <div id="ig-slot-4" class="ig-embed-container overflow-hidden rounded-sm bg-stone-50 shadow-sm"></div>
                 </div>
             </div>
         </div>
@@ -265,11 +260,13 @@
         </div>
         
         <div class="space-y-12">
+            <!-- 區塊 1: 頁首 -->
             <section class="space-y-4">
                 <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">Brand Header</h4>
                 <input type="text" id="edit-brand-name" placeholder="品牌名稱 (Logo)">
             </section>
 
+            <!-- 區塊 2: 首頁 -->
             <section class="space-y-4">
                 <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">Hero Section</h4>
                 <textarea id="edit-hero-title" rows="2" placeholder="首頁標題"></textarea>
@@ -277,53 +274,57 @@
                 <label class="upload-btn text-center w-full shadow-sm">更換首頁背景圖<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'hero')"></label>
             </section>
 
+            <!-- 區塊 3: 關於我們 -->
             <section class="space-y-4">
                 <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">Brand Story</h4>
                 <input type="text" id="edit-about-title" placeholder="故事標題">
                 <textarea id="edit-about-text" rows="5" placeholder="品牌故事內容"></textarea>
                 <div class="p-4 bg-stone-50 rounded-lg space-y-3">
-                    <label class="text-[10px] uppercase text-stone-400">QR Code 區塊設定</label>
+                    <label class="text-[10px] uppercase text-stone-400">QR Code 設定</label>
                     <label class="upload-btn text-center w-full text-[10px] shadow-sm m-0">更換圖示/QR Code<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'about_icon')"></label>
-                    <input type="text" id="edit-about-link" placeholder="圖片導向網址 (LINE/IG 連結)">
+                    <input type="text" id="edit-about-link" placeholder="圖片導向網址 (LINE/IG)">
                 </div>
             </section>
 
+            <!-- 🆕 區塊 4: 影像美學 (獨立管理區) -->
             <section class="space-y-4">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">Social Media</h4>
-                <input type="text" id="edit-ig-handle" placeholder="Instagram 帳號">
-                <input type="text" id="edit-ig-url" placeholder="Instagram 個人檔案完整網址">
-                <input type="text" id="edit-fb-handle" placeholder="Facebook 帳號">
-                <input type="text" id="edit-fb-url" placeholder="Facebook 粉絲專頁完整網址">
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">Gallery Setup (影像展示)</h4>
+                <p class="text-[9px] text-stone-400">在此管理首頁右側的四張動態圖片。貼上網址即可嵌入 IG，若不填寫則顯示上傳圖。</p>
                 
-                <div class="p-4 bg-stone-50 rounded-lg space-y-3 mt-4">
-                    <label class="text-[10px] uppercase text-stone-400 font-bold">Instagram 貼文嵌入 (WP 方式)</label>
-                    <p class="text-[9px] text-stone-400 mb-2">貼上 IG 貼文連結（如: https://www.instagram.com/p/xxxxxx/），或上傳備用圖片。</p>
-                    
-                    <div class="space-y-6">
-                        <!-- 第一則貼文設定 -->
-                        <div class="border-b pb-4">
-                            <input type="text" id="edit-ig-embed-1" placeholder="貼文 1 網址 (留空則顯示圖片)">
-                            <label class="upload-btn text-[9px] p-2 m-0 w-full text-center">或上傳備用圖片 1<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig1')"></label>
-                        </div>
-                        <!-- 第二則貼文設定 -->
-                        <div class="border-b pb-4">
-                            <input type="text" id="edit-ig-embed-2" placeholder="貼文 2 網址">
-                            <label class="upload-btn text-[9px] p-2 m-0 w-full text-center">或上傳備用圖片 2<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig2')"></label>
-                        </div>
-                        <!-- 第三則貼文設定 -->
-                        <div class="border-b pb-4">
-                            <input type="text" id="edit-ig-embed-3" placeholder="貼文 3 網址">
-                            <label class="upload-btn text-[9px] p-2 m-0 w-full text-center">或上傳備用圖片 3<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig3')"></label>
-                        </div>
-                        <!-- 第四則貼文設定 -->
-                        <div class="pb-4">
-                            <input type="text" id="edit-ig-embed-4" placeholder="貼文 4 網址">
-                            <label class="upload-btn text-[9px] p-2 m-0 w-full text-center">或上傳備用圖片 4<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig4')"></label>
-                        </div>
+                <div class="space-y-6">
+                    <div class="p-4 border rounded-lg bg-stone-50">
+                        <label class="text-[9px] uppercase mb-1 block">Slot 1</label>
+                        <input type="text" id="edit-ig-embed-1" placeholder="IG 貼文網址 (WP 式嵌入)">
+                        <label class="upload-btn text-[9px] p-2 m-0 w-full text-center">或上傳展示圖 1<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig1')"></label>
+                    </div>
+                    <div class="p-4 border rounded-lg bg-stone-50">
+                        <label class="text-[9px] uppercase mb-1 block">Slot 2</label>
+                        <input type="text" id="edit-ig-embed-2" placeholder="IG 貼文網址">
+                        <label class="upload-btn text-[9px] p-2 m-0 w-full text-center">或上傳展示圖 2<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig2')"></label>
+                    </div>
+                    <div class="p-4 border rounded-lg bg-stone-50">
+                        <label class="text-[9px] uppercase mb-1 block">Slot 3</label>
+                        <input type="text" id="edit-ig-embed-3" placeholder="IG 貼文網址">
+                        <label class="upload-btn text-[9px] p-2 m-0 w-full text-center">或上傳展示圖 3<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig3')"></label>
+                    </div>
+                    <div class="p-4 border rounded-lg bg-stone-50">
+                        <label class="text-[9px] uppercase mb-1 block">Slot 4</label>
+                        <input type="text" id="edit-ig-embed-4" placeholder="IG 貼文網址">
+                        <label class="upload-btn text-[9px] p-2 m-0 w-full text-center">或上傳展示圖 4<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig4')"></label>
                     </div>
                 </div>
             </section>
 
+            <!-- 區塊 5: 社群連結 -->
+            <section class="space-y-4">
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">Social Media (社群連結)</h4>
+                <input type="text" id="edit-ig-handle" placeholder="Instagram 帳號名稱">
+                <input type="text" id="edit-ig-url" placeholder="Instagram 個人檔案網址">
+                <input type="text" id="edit-fb-handle" placeholder="Facebook 帳號名稱">
+                <input type="text" id="edit-fb-url" placeholder="Facebook 專頁網址">
+            </section>
+
+            <!-- 區塊 6: 靈石清單 -->
             <section class="space-y-6">
                 <div class="flex justify-between items-center">
                     <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">Collection Items</h4>
@@ -333,7 +334,7 @@
             </section>
 
             <div class="sticky bottom-0 bg-white pt-4 pb-8 border-t z-50">
-                <button onclick="saveSiteData()" class="w-full bg-stone-900 text-white py-4 text-xs tracking-[0.4em] hover:bg-stone-800 transition-all shadow-xl uppercase font-bold">Publish & Save Changes</button>
+                <button onclick="saveSiteData()" class="w-full bg-stone-900 text-white py-4 text-xs tracking-[0.4em] hover:bg-stone-800 transition-all shadow-xl uppercase font-bold">Publish Changes</button>
             </div>
         </div>
     </div>
@@ -370,7 +371,7 @@
         const db = getFirestore(app);
 
         // ==========================================
-        // ✨ 非 AI 石語系統
+        // ✨ 非 AI 儀式感石語系統 (會話鎖定)
         // ==========================================
         const quotesPool = [
             "每一顆靈石，都在訴說宇宙的秘密。",
@@ -412,7 +413,7 @@
         };
 
         // ==========================================
-        // 📂 資料管理
+        // 📂 資料處理與管理邏輯
         // ==========================================
         let siteConfig = { 
             brandName: "奧兒絲朵",
@@ -461,7 +462,7 @@
                     else if (target === 'ig3') siteConfig.igImg3 = base64;
                     else if (target === 'ig4') siteConfig.igImg4 = base64;
                     else if (target === 'col') collectionsList[index].img = base64;
-                    alert("內容已準備就緒，請記得點擊儲存。");
+                    alert("內容準備就緒！");
                 };
                 img.src = e.target.result;
             };
@@ -498,11 +499,9 @@
             } catch (err) { console.error(err); }
         }
 
-        // 核心功能：渲染貼文或圖片
         function renderIgSlot(slotId, embedUrl, fallbackImg) {
             const container = document.getElementById(slotId);
             if (embedUrl && embedUrl.trim() !== "") {
-                // 處理 IG URL，確保為標準格式
                 let cleanUrl = embedUrl.trim();
                 if (!cleanUrl.endsWith('/')) cleanUrl += '/';
                 container.innerHTML = `
@@ -535,16 +534,13 @@
             document.getElementById('fb-link-display').href = fbUrl;
             document.getElementById('fb-text-display').innerText = `Facebook / ${siteConfig.fbHandle}`;
 
-            // 渲染四個 IG 槽位
+            // 渲染照片牆
             renderIgSlot('ig-slot-1', siteConfig.igEmbed1, siteConfig.igImg1);
             renderIgSlot('ig-slot-2', siteConfig.igEmbed2, siteConfig.igImg2);
             renderIgSlot('ig-slot-3', siteConfig.igEmbed3, siteConfig.igImg3);
             renderIgSlot('ig-slot-4', siteConfig.igEmbed4, siteConfig.igImg4);
 
-            // 觸發 IG 指令碼解析新插入的 Blockquote
-            if (window.instgrm) {
-                window.instgrm.Embeds.process();
-            }
+            if (window.instgrm) { window.instgrm.Embeds.process(); }
             
             document.getElementById('edit-brand-name').value = siteConfig.brandName;
             document.getElementById('edit-hero-title').value = siteConfig.heroTitle;
@@ -556,7 +552,7 @@
             document.getElementById('edit-ig-url').value = siteConfig.igUrl || "";
             document.getElementById('edit-fb-handle').value = siteConfig.fbHandle;
             document.getElementById('edit-fb-url').value = siteConfig.fbUrl || "";
-            // 同步嵌入欄位
+            // 同步獨立區塊的嵌入網址
             document.getElementById('edit-ig-embed-1').value = siteConfig.igEmbed1 || "";
             document.getElementById('edit-ig-embed-2').value = siteConfig.igEmbed2 || "";
             document.getElementById('edit-ig-embed-3').value = siteConfig.igEmbed3 || "";
@@ -589,14 +585,14 @@
                     <input type="text" value="${item.name}" placeholder="名稱" onchange="updateLocalItem(${index}, 'name', this.value)">
                     <input type="text" value="${item.sub}" placeholder="副標" onchange="updateLocalItem(${index}, 'sub', this.value)">
                     <textarea placeholder="描述" onchange="updateLocalItem(${index}, 'desc', this.value)">${item.desc}</textarea>
-                    <label class="upload-btn w-full text-center m-0 text-[10px]">更換照片 (獨立儲存空間)<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label>
+                    <label class="upload-btn w-full text-center m-0 text-[10px]">更換照片 (獨立空間)<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label>
                 </div>
             `).join('');
             lucide.createIcons();
         }
 
         window.addNewCollectionItem = () => {
-            collectionsList.unshift({ id: 'temp_' + Date.now(), name: "新收藏", desc: "", sub: "Collection Series", img: "", createdAt: Date.now(), isNew: true });
+            collectionsList.unshift({ id: 'temp_' + Date.now(), name: "新收藏", desc: "", sub: "Collection Item", img: "", createdAt: Date.now(), isNew: true });
             renderAdminList();
         };
 
