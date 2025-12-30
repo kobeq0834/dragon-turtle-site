@@ -118,7 +118,7 @@
     <div id="loading" class="loading-overlay">
         <div class="flex flex-col items-center">
             <i data-lucide="loader" class="w-8 h-8 animate-spin mb-4 text-stone-400"></i>
-            <span>連結時空能量中...</span>
+            <span>感應時空能量中...</span>
         </div>
     </div>
 
@@ -126,13 +126,13 @@
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-700 bg-transparent py-8">
         <div class="max-w-7xl mx-auto px-8 flex justify-between items-center">
             <div class="flex items-center space-x-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                <span id="nav-brand-display" class="text-xl font-medium tracking-[0.4em] text-stone-800">奧兒絲朵</span>
+                <span id="nav-brand-display" class="text-xl font-medium tracking-[0.4em] text-stone-800 uppercase">奧兒絲朵</span>
             </div>
 
             <div class="hidden md:flex space-x-12 items-center">
-                <button onclick="scrollToSection('collections')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em]">收藏系列</button>
-                <button onclick="scrollToSection('about')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em]">品牌故事</button>
-                <button onclick="scrollToSection('social')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em]">追蹤我們</button>
+                <button onclick="scrollToSection('collections')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em] uppercase">收藏系列</button>
+                <button onclick="scrollToSection('about')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em] uppercase">品牌故事</button>
+                <button onclick="scrollToSection('social')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em] uppercase">追蹤我們</button>
                 
                 <div class="flex items-center space-x-5 border-l border-stone-200 pl-8 opacity-60 hover:opacity-100 transition-opacity">
                     <a id="nav-ig-link" href="#" target="_blank" class="text-stone-500 hover:text-stone-800 transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
@@ -151,15 +151,15 @@
         <button class="absolute top-8 right-8 text-stone-600" onclick="toggleMenu()">
             <i data-lucide="x" class="w-8 h-8"></i>
         </button>
-        <button onclick="scrollToSection('collections')" class="text-xl tracking-[0.4em] text-stone-600">收藏系列</button>
-        <button onclick="scrollToSection('about')" class="text-xl tracking-[0.4em] text-stone-600">品牌故事</button>
-        <button onclick="scrollToSection('social')" class="text-xl tracking-[0.4em] text-stone-600">追蹤我們</button>
+        <button onclick="scrollToSection('collections')" class="text-xl tracking-[0.4em] text-stone-600 uppercase">收藏系列</button>
+        <button onclick="scrollToSection('about')" class="text-xl tracking-[0.4em] text-stone-600 uppercase">品牌故事</button>
+        <button onclick="scrollToSection('social')" class="text-xl tracking-[0.4em] text-stone-600 uppercase">追蹤我們</button>
     </div>
 
     <!-- 首頁視覺區塊 -->
     <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden bg-white">
         <div class="absolute inset-0 z-0">
-            <img id="hero-img-display" src="" class="w-full h-full object-cover opacity-30 scale-105 animate-slowZoom" alt="奧兒絲朵主視覺">
+            <img id="hero-img-display" src="" class="w-full h-full object-cover opacity-30 scale-105 animate-slowZoom" alt="">
         </div>
         <div class="relative z-10 text-center px-6">
             <p id="hero-sub-display" class="text-[10px] tracking-[0.6em] text-stone-400 mb-10 animate-fadeInUp uppercase font-medium">Every stone has its own story</p>
@@ -176,14 +176,14 @@
     <section id="about" class="py-40 px-8 bg-white">
         <div class="max-w-3xl mx-auto text-center">
             <div class="mb-12 opacity-40">
-                <img id="about-icon-display" src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200" class="w-16 mx-auto" alt="品牌圖示">
+                <img id="about-icon-display" src="" class="w-16 mx-auto" alt="">
             </div>
-            <h2 id="about-title-display" class="text-xl font-light tracking-[0.4em] text-stone-800 mb-16">關於 奧兒絲朵</h2>
+            <h2 id="about-title-display" class="text-xl font-light tracking-[0.4em] text-stone-800 mb-16 uppercase">About Our Story</h2>
             <p id="about-text-display" class="text-stone-500 leading-[2.8] tracking-[0.25em] text-sm md:text-base font-extralight whitespace-pre-line text-justify md:text-center">
                 載入中...
             </p>
             
-            <!-- ✨ 每日石語互動區 -->
+            <!-- ✨ 每日石語互動區 (非 AI 版本) -->
             <div class="mt-20 ai-spirit-box">
                 <p id="ai-quote" class="text-xs text-stone-400 italic tracking-widest mb-6">
                     「每一塊石頭都有它的頻率，等待與您共鳴。」
@@ -206,19 +206,19 @@
     <section id="social" class="py-40 px-8 bg-white">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-24">
             <div class="w-full md:w-2/5 space-y-16">
-                <h2 id="social-title-display" class="text-3xl font-extralight tracking-[0.3em] text-stone-800">隨時，共享日常</h2>
+                <h2 id="social-title-display" class="text-3xl font-extralight tracking-[0.3em] text-stone-800 uppercase">Follow Us</h2>
                 <div class="space-y-4">
                     <a id="ig-link-display" href="#" target="_blank" class="flex items-center justify-between group py-5 border-b border-stone-100">
-                        <span id="ig-text-display" class="text-xs tracking-[0.2em] text-stone-500 uppercase">Instagram / @our_story_gem</span>
+                        <span id="ig-text-display" class="text-xs tracking-[0.2em] text-stone-500 uppercase">Instagram</span>
                         <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300 group-hover:translate-x-1 transition-transform"></i>
                     </a>
                     <a id="fb-link-display" href="#" target="_blank" class="flex items-center justify-between group py-5 border-b border-stone-100">
-                        <span id="fb-text-display" class="text-xs tracking-[0.2em] text-stone-500 uppercase">Facebook / 奧兒絲朵 Our Story</span>
+                        <span id="fb-text-display" class="text-xs tracking-[0.2em] text-stone-500 uppercase">Facebook</span>
                         <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300 group-hover:translate-x-1 transition-transform"></i>
                     </a>
                 </div>
             </div>
-            <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-2 gap-6">
+            <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-2 gap-6 text-center text-stone-300 text-xs">
                  <div class="space-y-6">
                     <div class="aspect-[3/4] overflow-hidden rounded-sm bg-stone-100 shadow-sm"><img src="https://images.unsplash.com/photo-1512168221867-0485ba5e561e?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-90" alt=""></div>
                     <div class="aspect-square overflow-hidden rounded-sm bg-stone-100 shadow-sm"><img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-90" alt=""></div>
@@ -240,43 +240,40 @@
         
         <div class="space-y-12">
             <section class="space-y-4">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">首頁區塊</h4>
-                <input type="text" id="edit-brand-name" placeholder="品牌名稱 (左上角)">
-                <textarea id="edit-hero-title" rows="2" placeholder="首頁大標題"></textarea>
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">Brand Header</h4>
+                <input type="text" id="edit-brand-name" placeholder="品牌名稱 (Logo)">
+            </section>
+
+            <section class="space-y-4">
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">Hero Section</h4>
+                <textarea id="edit-hero-title" rows="2" placeholder="首頁標題"></textarea>
                 <input type="text" id="edit-hero-sub" placeholder="首頁小標題">
-                <div class="flex flex-col space-y-2">
-                    <label class="upload-btn text-center">上傳首頁背景照片<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'hero')"></label>
-                </div>
+                <label class="upload-btn text-center w-full">更換首頁背景圖<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'hero')"></label>
             </section>
 
             <section class="space-y-4">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">關於我們</h4>
-                <input type="text" id="edit-about-title" placeholder="關於標題">
-                <textarea id="edit-about-text" rows="5" placeholder="關於文案描述"></textarea>
-                <div class="flex flex-col space-y-2">
-                    <label class="upload-btn text-center text-[10px]">更換區塊小圖示<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'about_icon')"></label>
-                </div>
-                <!-- 移除 AI 潤色按鈕 -->
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">Brand Story</h4>
+                <input type="text" id="edit-about-title" placeholder="故事標題">
+                <textarea id="edit-about-text" rows="5" placeholder="品牌故事內容"></textarea>
+                <label class="upload-btn text-center w-full text-[10px]">更換品牌 Icon<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'about_icon')"></label>
             </section>
 
             <section class="space-y-4">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">社群連結 (帳號名稱)</h4>
-                <input type="text" id="edit-ig-handle" placeholder="Instagram 帳號 (如 @our_story_gem)">
-                <input type="text" id="edit-fb-handle" placeholder="Facebook 帳號名稱">
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">Social Media</h4>
+                <input type="text" id="edit-ig-handle" placeholder="Instagram 帳號">
+                <input type="text" id="edit-fb-handle" placeholder="Facebook 帳號">
             </section>
 
             <section class="space-y-6">
                 <div class="flex justify-between items-center">
-                    <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">收藏展示清單</h4>
-                    <button onclick="addNewCollectionItem()" class="text-[10px] bg-stone-900 text-white px-4 py-1.5 rounded-full hover:bg-stone-700 transition-all">＋ 新增靈石</button>
+                    <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">Collection Items</h4>
+                    <button onclick="addNewCollectionItem()" class="text-[10px] bg-stone-900 text-white px-4 py-1.5 rounded-full uppercase">＋ Add Stone</button>
                 </div>
-                <div id="edit-collections-list" class="space-y-6">
-                    <!-- 動態生成 -->
-                </div>
+                <div id="edit-collections-list" class="space-y-6"></div>
             </section>
 
             <div class="sticky bottom-0 bg-white pt-4 pb-8 border-t z-50">
-                <button onclick="saveSiteData()" class="w-full bg-stone-900 text-white py-4 text-xs tracking-[0.4em] hover:bg-stone-800 transition-all shadow-xl uppercase">Save & Publish Changes</button>
+                <button onclick="saveSiteData()" class="w-full bg-stone-900 text-white py-4 text-xs tracking-[0.4em] hover:bg-stone-800 transition-all shadow-xl uppercase font-bold">Publish & Save Changes</button>
             </div>
         </div>
     </div>
@@ -285,7 +282,7 @@
     <footer class="py-24 px-8 bg-white border-t border-stone-50 text-center">
         <div class="max-w-7xl mx-auto flex flex-col items-center space-y-10">
             <span id="footer-brand-display" class="text-xl font-medium tracking-[0.5em] text-stone-800 uppercase">奧兒絲朵</span>
-            <p class="text-[9px] tracking-[0.2em] text-stone-300 uppercase">© 2025 OUR STORY. CURATED FOR YOUR SOUL.</p>
+            <p class="text-[9px] tracking-[0.2em] text-stone-300">© 2025 OUR STORY. CURATED FOR YOUR SOUL.</p>
             <button onclick="toggleAdmin()" class="text-[9px] tracking-[0.2em] text-stone-200 hover:text-stone-500 transition-colors uppercase border-b border-transparent hover:border-stone-400 pb-0.5">Admin Login</button>
         </div>
     </footer>
@@ -295,9 +292,6 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot, query, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // ==========================================
-        // 配置與初始狀態
-        // ==========================================
         const myFirebaseConfig = {
             apiKey: "AIzaSyDruZNMUyiJNcyoksYIBDHv5F1SiiG2Mss",
             authDomain: "our-story-53723.firebaseapp.com",
@@ -316,7 +310,7 @@
         const db = getFirestore(app);
 
         // ==========================================
-        // ✨ 非 AI 石語池 (會話鎖定)
+        // ✨ 非 AI 儀式感石語系統 (會話鎖定)
         // ==========================================
         const quotesPool = [
             "每一顆靈石，都在訴說宇宙的秘密。",
@@ -341,7 +335,6 @@
             "靈石無言，卻最懂你的心。"
         ];
 
-        // 頁面加載時鎖定一句隨機石語
         const sessionQuote = quotesPool[Math.floor(Math.random() * quotesPool.length)];
 
         window.generateDailyQuote = () => {
@@ -349,10 +342,9 @@
             const display = document.getElementById('ai-quote');
             
             btn.disabled = true;
-            btn.innerText = "感應時空能量中...";
+            btn.innerText = "感應靈石能量中...";
             display.style.opacity = "0.3";
 
-            // 模擬感應儀式感的等待時間
             setTimeout(() => {
                 display.innerText = `「${sessionQuote}」`;
                 display.style.opacity = "1";
@@ -362,26 +354,19 @@
         };
 
         // ==========================================
-        // 📂 資料處理與管理 (移除 AI 潤色邏輯)
+        // 📂 資料處理與管理邏輯
         // ==========================================
         let siteConfig = { 
             brandName: "奧兒絲朵",
             heroTitle: "奧兒絲朵\n靈石與您的故事", 
             heroSub: "Every stone has its own story",
-            heroImg: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1920",
+            heroImg: "",
             aboutTitle: "關於 奧兒絲朵",
-            aboutText: "奧兒絲朵（Our Story），始於對大自然原始生命力的敬畏。\n我們不刻意渲染功能，而是希望透過靈石本身的質地與光影，\n連結您內心深處那份未曾言說的故事。\n在這裡，每一顆隕石與水晶，都是時光留給您的溫柔獻禮。",
-            aboutIcon: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200",
+            aboutText: "",
+            aboutIcon: "",
             igHandle: "@our_story_gem",
             fbHandle: "奧兒絲朵 Our Story"
         };
-
-        const defaultCollections = [
-            { name: "星辰系列：隕石", sub: "Celestial Echoes", desc: "穿越銀河的溫潤，將宇宙的呢喃私藏於掌心。", img: "https://images.unsplash.com/photo-1506318137071-a8e063b4b574?auto=format&fit=crop&q=80&w=1200", createdAt: Date.now() - 100 },
-            { name: "大地系列：水晶", sub: "Earth Whispers", desc: "純粹的光影折射，映照出靈魂最深處的平靜。", img: "https://images.unsplash.com/photo-1515405295579-ba7b45403062?auto=format&fit=crop&q=80&w=1200", createdAt: Date.now() - 200 },
-            { name: "守望系列：龍龜", sub: "Serene Guardians", desc: "古老工藝的柔和線條，靜謐守護每一段珍貴時光。", img: "https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&q=80&w=1200", createdAt: Date.now() - 300 }
-        ];
-
         let collectionsList = [];
 
         window.handleImageUpload = (input, target, index = null) => {
@@ -434,13 +419,9 @@
 
                     const collRef = collection(db, 'artifacts', appId, 'public', 'data', 'galleryItems');
                     onSnapshot(collRef, async (snap) => {
-                        if (snap.empty) {
-                            collectionsList = defaultCollections.map(item => ({ ...item, id: 'def_' + Math.random() }));
-                        } else {
-                            collectionsList = [];
-                            snap.forEach(d => collectionsList.push({ id: d.id, ...d.data() }));
-                            collectionsList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                        }
+                        collectionsList = [];
+                        snap.forEach(d => collectionsList.push({ id: d.id, ...d.data() }));
+                        collectionsList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
                         renderFrontEndCollections();
                         if (document.getElementById('admin-panel').classList.contains('active')) renderAdminList();
                     });
@@ -475,6 +456,10 @@
 
         function renderFrontEndCollections() {
             const container = document.getElementById('collections-container');
+            if (collectionsList.length === 0) {
+                container.innerHTML = `<p class="col-span-full text-center text-stone-300 py-20 tracking-widest text-xs uppercase">No items found</p>`;
+                return;
+            }
             container.innerHTML = collectionsList.map(item => `
                 <div class="group flex flex-col items-center animate-fadeInUp">
                     <div class="relative overflow-hidden aspect-[4/5] w-full mb-10 shadow-sm bg-stone-200">
@@ -490,31 +475,28 @@
         function renderAdminList() {
             const list = document.getElementById('edit-collections-list');
             list.innerHTML = collectionsList.map((item, index) => `
-                <div class="p-6 bg-stone-50 rounded-xl border border-stone-100 relative space-y-3">
-                    <button onclick="deleteItem('${item.id}')" class="absolute top-4 right-4 text-red-300 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                    <input type="text" value="${item.name}" placeholder="產品名稱" onchange="updateLocalItem(${index}, 'name', this.value)">
-                    <input type="text" value="${item.sub}" placeholder="小標" onchange="updateLocalItem(${index}, 'sub', this.value)">
+                <div class="p-6 bg-stone-50 rounded-2xl border border-stone-100 relative space-y-3">
+                    <button onclick="deleteItem('${item.id}')" class="absolute top-4 right-4 text-red-200 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    <input type="text" value="${item.name}" placeholder="名稱" onchange="updateLocalItem(${index}, 'name', this.value)">
+                    <input type="text" value="${item.sub}" placeholder="系列" onchange="updateLocalItem(${index}, 'sub', this.value)">
                     <textarea placeholder="描述" onchange="updateLocalItem(${index}, 'desc', this.value)">${item.desc}</textarea>
-                    <label class="upload-btn w-full text-center m-0">更換此項照片<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label>
+                    <label class="upload-btn w-full text-center m-0 text-[10px]">更換照片 (獨立儲存空間)<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label>
                 </div>
             `).join('');
             lucide.createIcons();
         }
 
         window.addNewCollectionItem = () => {
-            collectionsList.unshift({ id: 'temp_' + Date.now(), name: "新項目", desc: "請輸入描述", sub: "Collection Series", img: "https://images.unsplash.com/photo-1523554888454-841f72e27df2?auto=format&fit=crop&q=80&w=800", createdAt: Date.now(), isNew: true });
+            collectionsList.unshift({ id: 'temp_' + Date.now(), name: "新項目", desc: "", sub: "Collection Series", img: "", createdAt: Date.now(), isNew: true });
             renderAdminList();
         };
 
         window.updateLocalItem = (index, field, value) => { collectionsList[index][field] = value; };
 
         window.deleteItem = async (id) => {
-            if (!confirm("確定移除？")) return;
-            if (id.startsWith('temp_') || id.startsWith('def_')) { 
-                collectionsList = collectionsList.filter(i => i.id !== id); renderAdminList(); 
-            } else { 
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'galleryItems', id)); 
-            }
+            if (!confirm("確定移除此展示？")) return;
+            if (id.startsWith('temp_')) { collectionsList = collectionsList.filter(i => i.id !== id); renderAdminList(); }
+            else { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'galleryItems', id)); }
         };
 
         window.saveSiteData = async () => {
@@ -535,13 +517,13 @@
                 });
 
                 for (const item of collectionsList) {
-                    const id = (item.isNew || item.id.startsWith('def_')) ? doc(collection(db, 'dummy')).id : item.id;
+                    const id = item.isNew ? doc(collection(db, 'dummy')).id : item.id;
                     const itemRef = doc(db, 'artifacts', appId, 'public', 'data', 'galleryItems', id);
                     const cleanItem = { ...item }; delete cleanItem.id; delete cleanItem.isNew;
                     await setDoc(itemRef, cleanItem);
                 }
-                alert('內容已成功發佈！'); window.toggleAdmin();
-            } catch (e) { alert('儲存發生異常：' + e.message); }
+                alert('變更已成功同步至雲端！'); window.toggleAdmin();
+            } catch (e) { alert('儲存失敗：' + e.message); }
             finally { document.getElementById('loading').style.display = 'none'; }
         };
 
@@ -555,6 +537,21 @@
             } else { panel.classList.remove('active'); document.body.style.overflow = ''; }
         };
 
+        // 核心修復：讓選單項目點擊後自動關閉選單，並執行滾動
+        window.scrollToSection = (id) => {
+            const e = document.getElementById(id);
+            if (e) {
+                // 先執行滾動
+                window.scrollTo({ top: e.offsetTop - 80, behavior: 'smooth' });
+                
+                // 如果手機選單是開啟狀態，則將其關閉
+                const mobileMenu = document.getElementById('mobile-menu');
+                if (mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                }
+            }
+        };
+
         init();
         lucide.createIcons();
         window.addEventListener('scroll', () => {
@@ -562,10 +559,6 @@
             if (window.scrollY > 50) n.classList.add('nav-scrolled');
             else n.classList.remove('nav-scrolled');
         });
-        window.scrollToSection = (id) => {
-            const e = document.getElementById(id);
-            if (e) window.scrollTo({ top: e.offsetTop - 80, behavior: 'smooth' });
-        };
         window.toggleMenu = () => { document.getElementById('mobile-menu').classList.toggle('active'); };
     </script>
 </body>
