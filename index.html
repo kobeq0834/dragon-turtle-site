@@ -75,19 +75,6 @@
             font-size: 0.875rem;
             background: #fafaf9;
         }
-        
-        .ai-btn {
-            font-size: 0.75rem;
-            color: #8b5cf6;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            transition: opacity 0.2s;
-            cursor: pointer;
-        }
-        .ai-btn:hover { opacity: 0.7; }
-        .ai-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .upload-btn {
             display: inline-block;
@@ -139,7 +126,7 @@
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-700 bg-transparent py-8">
         <div class="max-w-7xl mx-auto px-8 flex justify-between items-center">
             <div class="flex items-center space-x-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                <span id="nav-brand-display" class="text-xl font-medium tracking-[0.4em] text-stone-800">奧兒絲朵</span>
+                <span id="nav-brand-display" class="text-xl font-medium tracking-[0.4em] text-stone-800 uppercase">奧兒絲朵</span>
             </div>
 
             <div class="hidden md:flex space-x-12 items-center">
@@ -188,8 +175,9 @@
     <!-- 品牌故事區塊 -->
     <section id="about" class="py-40 px-8 bg-white">
         <div class="max-w-3xl mx-auto text-center">
-            <div class="mb-12 opacity-40">
-                <img id="about-icon-display" src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200" class="w-16 mx-auto" alt="品牌圖示">
+            <!-- 已優化尺寸，適合展示 LINE QR Code -->
+            <div class="mb-12">
+                <img id="about-icon-display" src="" class="w-48 md:w-64 mx-auto object-contain rounded-lg" alt="品牌圖示/QR Code">
             </div>
             <h2 id="about-title-display" class="text-xl font-light tracking-[0.4em] text-stone-800 mb-16">關於 奧兒絲朵</h2>
             <p id="about-text-display" class="text-stone-500 leading-[2.8] tracking-[0.25em] text-sm md:text-base font-extralight whitespace-pre-line text-justify md:text-center">
@@ -267,7 +255,7 @@
                 <input type="text" id="edit-about-title" placeholder="關於標題">
                 <textarea id="edit-about-text" rows="5" placeholder="關於文案描述"></textarea>
                 <div class="flex flex-col space-y-2">
-                    <label class="upload-btn text-center text-[10px]">更換區塊小圖示<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'about_icon')"></label>
+                    <label class="upload-btn text-center text-[10px]">更換區塊圖示/QR Code<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'about_icon')"></label>
                 </div>
             </section>
 
@@ -310,7 +298,7 @@
         import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot, query, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ==========================================
-        // 配置與初始狀態
+        // 配置
         // ==========================================
         const myFirebaseConfig = {
             apiKey: "AIzaSyDruZNMUyiJNcyoksYIBDHv5F1SiiG2Mss",
@@ -383,7 +371,7 @@
             heroImg: "",
             aboutTitle: "關於 奧兒絲朵",
             aboutText: "",
-            aboutIcon: "",
+            aboutIcon: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200",
             igHandle: "@our_story_gem",
             igUrl: "#",
             fbHandle: "奧兒絲朵 Our Story",
@@ -464,7 +452,6 @@
             document.getElementById('about-text-display').innerText = siteConfig.aboutText;
             if (siteConfig.aboutIcon) document.getElementById('about-icon-display').src = siteConfig.aboutIcon;
 
-            // 更新所有連結網址
             const igUrl = siteConfig.igUrl || "#";
             const fbUrl = siteConfig.fbUrl || "#";
             
@@ -476,7 +463,6 @@
             document.getElementById('fb-link-display').href = fbUrl;
             document.getElementById('fb-text-display').innerText = `Facebook / ${siteConfig.fbHandle}`;
             
-            // 同步編輯面板
             document.getElementById('edit-brand-name').value = siteConfig.brandName;
             document.getElementById('edit-hero-title').value = siteConfig.heroTitle;
             document.getElementById('edit-hero-sub').value = siteConfig.heroSub;
@@ -558,7 +544,7 @@
                     const cleanItem = { ...item }; delete cleanItem.id; delete cleanItem.isNew;
                     await setDoc(itemRef, cleanItem);
                 }
-                alert('變更已發佈至雲端！'); window.toggleAdmin();
+                alert('變更已成功同步！'); window.toggleAdmin();
             } catch (e) { alert('儲存失敗：' + e.message); }
             finally { document.getElementById('loading').style.display = 'none'; }
         };
