@@ -18,12 +18,23 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://our-story.com.tw/">
     <meta property="og:image" content="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1200">
+    <meta property="og:site_name" content="奧兒絲朵 Our Story">
     
+    <!-- 結構化資料 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Brand",
+      "name": "奧兒絲朵 Our Story",
+      "description": "專業精選天然靈石與美學品牌",
+      "logo": "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200",
+      "url": "https://our-story.com.tw/"
+    }
+    </script>
+
     <!-- Tailwind & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Instagram 官方腳本 -->
-    <script async src="//www.instagram.com/embed.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500&display=swap');
@@ -59,28 +70,25 @@
         .ai-spirit-box { max-width: 700px; margin: 0 auto; padding: 4rem 2rem; border: 1px dashed #e5e7eb; border-radius: 1.5rem; background: rgba(255, 255, 255, 0.5); }
         .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.98); z-index: 2000; display: none; align-items: center; justify-content: center; font-size: 0.8rem; letter-spacing: 0.3em; }
         
-        /* === iPhone Safari 最終相容性優化樣式 === */
+        /* === iPhone Safari 最終乾淨版樣式 === */
+        /* 移除所有強制屬性，回歸最單純的容器，讓 IG 腳本接手 */
         .ig-embed-container { 
             width: 100%; 
-            min-height: 500px; 
+            /* 移除 min-height, 讓 IG 內容撐開 */
             display: block; 
-            overflow: visible !important; 
             background: #fff; 
-            position: relative;
-            z-index: 10;
-            pointer-events: auto !important; 
-            /* 讓 iPhone 將其視為可點擊區塊 */
-            cursor: pointer;
-            margin-bottom: 2rem;
-            transform: none !important;
+            margin-bottom: 1.5rem;
         }
         .ig-embed-container blockquote { 
             margin: 0 auto !important; 
             width: 100% !important; 
             border: 0 !important;
             padding: 0 !important;
-            box-shadow: none !important;
-            background: transparent !important;
+        }
+        /* 確保 iframe 寬度正確 */
+        .ig-embed-container iframe {
+            width: 100% !important;
+            max-width: 100% !important;
         }
     </style>
 </head>
@@ -154,7 +162,7 @@
             <div id="collections-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16 max-w-7xl mx-auto"></div>
         </section>
 
-        <!-- 社群區塊 (iPhone 觸控穿透修正區) -->
+        <!-- 社群區塊 (iPhone 修正：移除 overflow-hidden) -->
         <section id="social" class="py-24 md:py-40 px-8 bg-white">
             <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16">
                 <div class="w-full md:w-2/5 space-y-12">
@@ -164,16 +172,16 @@
                         <a id="fb-link-display" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between group py-5 border-b border-stone-100"><span id="fb-text-display" class="text-xs tracking-[0.2em] text-stone-500 uppercase">Facebook</span><i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300 group-hover:translate-x-1 transition-transform"></i></a>
                     </div>
                 </div>
-                <!-- 移除了所有 animate-fadeIn 等類別，防止 iPhone Safari 動態層級衝突 -->
+                
+                <!-- 注意：移除外層任何可能造成 iPhone 誤判的類別 -->
                 <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
                     <div class="space-y-6">
-                        <!-- 加入 onclick="" 是 iPhone Safari 的必備 Trick，強迫開啟點擊傳遞 -->
-                        <div id="ig-slot-1" class="ig-embed-container shadow-sm" onclick=""></div>
-                        <div id="ig-slot-2" class="ig-embed-container shadow-sm" onclick=""></div>
+                        <div id="ig-slot-1" class="ig-embed-container shadow-sm"></div>
+                        <div id="ig-slot-2" class="ig-embed-container shadow-sm"></div>
                     </div>
                     <div class="space-y-6 sm:pt-12">
-                        <div id="ig-slot-3" class="ig-embed-container shadow-sm" onclick=""></div>
-                        <div id="ig-slot-4" class="ig-embed-container shadow-sm" onclick=""></div>
+                        <div id="ig-slot-3" class="ig-embed-container shadow-sm"></div>
+                        <div id="ig-slot-4" class="ig-embed-container shadow-sm"></div>
                     </div>
                 </div>
             </div>
@@ -213,6 +221,9 @@
         <p class="text-[9px] tracking-[0.2em] text-stone-300 mt-8">© 2025 OUR STORY. CURATED FOR YOUR SOUL.</p>
         <button onclick="toggleAdmin()" id="admin-action-btn" class="text-[9px] tracking-[0.2em] text-stone-200 mt-8 uppercase border-b border-transparent hover:border-stone-200">Admin Login</button>
     </footer>
+
+    <!-- Instagram 腳本放置於底部 -->
+    <script async src="//www.instagram.com/embed.js"></script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -306,9 +317,9 @@
             const container = document.getElementById(slotId);
             if (!container) return;
             if (embedUrl && embedUrl.trim() !== "") {
-                // iPhone 點擊穿透終極修正：移除所有外層邊框與陰影，並加上 onclick 屬性強制喚醒
+                // iPhone Safari：使用最純淨的 HTML 結構，移除所有 onclick hack
                 container.innerHTML = `
-                    <blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14" style="background:#FFF; border:0; border-radius:0px; margin:0; width:100%; -webkit-transform: translateZ(0); pointer-events: auto;">
+                    <blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14" style="background:#FFF; border:0; margin:0; width:100%;">
                         <div style="padding:16px;"> <a href="${embedUrl}" target="_blank" style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" rel="noopener noreferrer">載入貼文中...</a></div>
                     </blockquote>
                 `;
@@ -333,19 +344,9 @@
             
             for(let i=1; i<=4; i++) { renderIgSlot(`ig-slot-${i}`, siteConfig[`igEmbed${i}`], siteConfig[`igImg${i}`]); }
             
-            // iPhone 喚醒邏輯：三段式強化，解決 Safari 的遺失問題
-            const processIG = () => { 
-                if (window.instgrm) {
-                    window.instgrm.Embeds.process(); 
-                    // 針對 iPhone 的觸控強化
-                    document.querySelectorAll('.ig-embed-container iframe').forEach(f => {
-                        f.style.pointerEvents = 'auto';
-                    });
-                }
-            };
-            setTimeout(processIG, 500);
-            setTimeout(processIG, 1500);
-            setTimeout(processIG, 3000);
+            // iPhone 喚醒邏輯：確保 IG 腳本在渲染後執行
+            setTimeout(() => { if (window.instgrm) window.instgrm.Embeds.process(); }, 500);
+            setTimeout(() => { if (window.instgrm) window.instgrm.Embeds.process(); }, 2000);
             
             const brand = siteConfig.brandName || "奧兒絲朵";
             const sub = siteConfig.heroSub || "靈石與您的故事";
@@ -362,13 +363,21 @@
         function renderCollections() {
             const container = document.getElementById('collections-container');
             if (!container) return;
-            container.innerHTML = collectionsList.map(item => `<article class="group flex flex-col items-center"><div class="aspect-[4/5] w-full overflow-hidden bg-stone-200"><img src="${item.img}" class="w-full h-full object-cover transition-all duration-[1500ms] group-hover:scale-110" alt="${item.name}"></div><h3 class="text-base font-light mt-6 tracking-widest text-stone-800 uppercase">${item.name}</h3><p class="text-xs text-stone-400 mt-2 tracking-widest">${item.desc}</p></article>`).join('');
+            container.innerHTML = collectionsList.map(item => `
+                <article class="group flex flex-col items-center">
+                    <div class="aspect-[4/5] w-full overflow-hidden bg-stone-200 shadow-sm">
+                        <img src="${item.img}" class="w-full h-full object-cover transition-all duration-[1500ms] group-hover:scale-110" alt="${item.name}">
+                    </div>
+                    <h3 class="text-base font-light mt-6 tracking-widest text-stone-800 uppercase">${item.name}</h3>
+                    <p class="text-xs text-stone-400 mt-2 tracking-widest">${item.desc}</p>
+                </article>
+            `).join('');
         }
 
         function renderAdminList() {
             const list = document.getElementById('edit-collections-list');
             if (!list) return;
-            list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="updateLocalItem(${index}, 'name', this.value)" class="text-xs font-bold"><textarea onchange="updateLocalItem(${index}, 'desc', this.value)" class="text-xs">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">換照<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
+            list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="updateLocalItem(${index}, 'name', this.value)" class="text-xs font-bold"><textarea onchange="updateLocalItem(${index}, 'desc', this.value)" class="text-xs">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">換照<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
             lucide.createIcons();
         }
 
