@@ -180,7 +180,7 @@
     <!-- 收藏系列展示區 -->
     <section id="collections" class="py-24 px-6 md:px-20 bg-[#FAF9F6]">
         <div id="collections-container" class="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8 lg:gap-16 max-w-7xl mx-auto">
-            <!-- 由 JavaScript 動態生成 -->
+            <!-- 動態生成 -->
         </div>
     </section>
 
@@ -237,7 +237,7 @@
             </section>
 
             <section id="edit-collections-list">
-                <!-- 動態編輯列表 -->
+                <!-- 由 JavaScript 動態渲染 -->
             </section>
 
             <button onclick="saveSiteData()" class="w-full bg-stone-800 text-white py-4 text-xs tracking-[0.3em] hover:bg-stone-700 transition-colors">儲存並發佈更新</button>
@@ -266,6 +266,9 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // ==========================================
+        // 配置資訊
+        // ==========================================
         const myFirebaseConfig = {
             apiKey: "AIzaSyDruZNMUyiJNcyoksYIBDHv5F1SiiG2Mss",
             authDomain: "our-story-53723.firebaseapp.com",
@@ -275,11 +278,13 @@
             appId: "1:651350028652:web:44db9f6bd7d1b502578349"
         };
         const ADMIN_PASSWORD = "1234"; 
+        
+        // Gemini API Key 處理
         const DEFAULT_GEMINI_KEY = "AIzaSyDYjCaxY3-MfYWfcHAgYM11CYLDefbSsvQ";
         let geminiKey = DEFAULT_GEMINI_KEY;
 
         const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : myFirebaseConfig;
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'our-story-main';
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'our-story-53723';
 
         const app = initializeApp(config);
         const auth = getAuth(app);
@@ -295,15 +300,20 @@
             ]
         };
 
-        // ✨ Gemini AI 核心邏輯
-        async function callGemini(promptText) {
+        // ==========================================
+        // ✨ Gemini AI 核心邏輯 (強化重試與排隊機制)
+        // ==========================================
+        
+        async function callGemini(promptText, retries = 5, delay = 2000) {
             const key = localStorage.getItem('gemini_api_key') || geminiKey;
+            
+            // 重要：鎖定為環境中最穩定的型號
             const modelName = "gemini-2.5-flash-preview-09-2025";
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${key}`;
             
             const payload = {
                 contents: [{ parts: [{ text: promptText }] }],
-                generationConfig: { temperature: 0.7, maxOutputTokens: 800 },
+                generationConfig: { temperature: 0.9, maxOutputTokens: 800 },
                 safetySettings: [
                     { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
                     { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
@@ -312,24 +322,36 @@
                 ]
             };
 
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                
-                if (!response.ok) {
-                    const err = await response.json();
-                    throw new Error(err.error?.message || response.status);
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    // 處理 429 頻率限制
+                    if (response.status === 429) {
+                        console.warn(`頻率受限，正在自動等待重試 (第 ${i + 1} 次)...`);
+                        if (i === retries - 1) throw new Error("API 呼叫太頻繁，Google 暫時不提供服務，請一分鐘後再試。");
+                        await new Promise(r => setTimeout(r, delay));
+                        delay *= 2; // 指數級別等待 (2s, 4s, 8s, 16s)
+                        continue;
+                    }
+                    
+                    if (!response.ok) {
+                        const err = await response.json().catch(() => ({}));
+                        throw new Error(err.error?.message || `HTTP ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    const output = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (!output) throw new Error("AI 回傳內容為空。");
+                    return output.trim();
+                } catch (error) {
+                    if (i === retries - 1 || error.message.includes("403") || error.message.includes("key")) throw error;
+                    await new Promise(r => setTimeout(r, 1000));
                 }
-                const result = await response.json();
-                const output = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (!output) throw new Error("AI 回傳內容為空，可能是被安全過濾器攔截。");
-                return output.trim();
-            } catch (error) {
-                console.error("Gemini API Error:", error);
-                throw error;
             }
         }
 
@@ -339,21 +361,20 @@
             if (!textarea.value) return;
 
             btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> 感應中...`;
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> 正在感應...`;
             lucide.createIcons();
 
             try {
-                const prompt = `妳是一位空靈、詩意且專業的品牌文案師。請幫我潤色這段靈石品牌的品牌故事描述。要求：繁體中文，語氣要優雅且簡約，強調靈魂與大自然的連結，限制在 200 字以內。文案內容：${textarea.value}`;
-                const polished = await callGemini(prompt);
-                if (polished) {
-                    textarea.value = polished;
-                    siteData.about.text = polished;
-                }
-            } catch (error) {
-                alert('AI 潤色暫時無法使用：' + error.message);
+                const prompt = `妳是一位空靈、詩意且專業的品牌文案師。請潤色這段關於「奧兒絲朵」靈石品牌的品牌故事描述。要求：繁體中文，語氣優雅、詩意且簡約，強調靈魂與大自然的連結，限制 150 字內。原稿：${textarea.value}`;
+                const result = await callGemini(prompt);
+                textarea.value = result;
+                siteData.about.text = result;
+            } catch (e) {
+                alert("感應失敗：" + e.message);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="sparkles" class="w-3 h-3"></i> AI 潤色文案 ✨`;
+                btn.innerHTML = originalHtml;
                 lucide.createIcons();
             }
         };
@@ -364,20 +385,19 @@
             if (!input.value) return;
 
             btn.disabled = true;
+            const originalHtml = btn.innerHTML;
             btn.innerHTML = `✨ AI...`;
 
             try {
-                const prompt = `潤色這段靈石產品描述。要求：繁體中文，空靈簡約風格，不超過 40 字。內容：${input.value}`;
-                const polished = await callGemini(prompt);
-                if (polished) {
-                    input.value = polished;
-                    siteData.collections[index].desc = polished;
-                }
-            } catch (error) {
-                console.error(error);
+                const prompt = `潤色靈石描述。繁體中文、空靈簡約、40字內：${input.value}`;
+                const result = await callGemini(prompt);
+                input.value = result;
+                siteData.collections[index].desc = result;
+            } catch (e) {
+                console.error(e);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="sparkles" class="w-3 h-3"></i> AI ✨`;
+                btn.innerHTML = originalHtml;
                 lucide.createIcons();
             }
         };
@@ -387,16 +407,16 @@
             const display = document.getElementById('ai-quote');
             
             btn.disabled = true;
-            btn.innerText = "讀取靈石能量中...";
+            btn.innerText = "感應靈石能量中...";
             display.style.opacity = "0.5";
 
             try {
-                const prompt = "請生成一段極簡、充滿靈性且富有禪意的繁體中文「每日石語」，關於隕石、水晶或自然的啟示，限制在 30 字以內。不要標題，直接輸出石語內容。";
+                const seed = Math.floor(Math.random() * 1000);
+                const prompt = `生成一段極簡、充滿靈性且富有禪意的繁體中文「每日石語」，關於隕石、水晶或自然的啟示，限制 25 字內。隨機因子：${seed}`;
                 const quote = await callGemini(prompt);
                 display.innerText = `「${quote}」`;
-            } catch (error) {
-                display.innerText = "「靜謐中，心自明。」";
-                console.error("Quote Error:", error.message);
+            } catch (e) {
+                display.innerText = `「感應受阻：${e.message}」`;
             } finally {
                 display.style.opacity = "1";
                 btn.disabled = false;
@@ -404,7 +424,7 @@
             }
         };
 
-        // Firebase 初始化與數據渲染
+        // Firebase 初始化
         async function init() {
             try {
                 const initAuth = async () => {
@@ -445,7 +465,7 @@
                     <div class="relative overflow-hidden aspect-[4/5] w-full mb-10 shadow-sm transition-shadow hover:shadow-xl duration-1000 bg-stone-200">
                         <img src="${item.img}" class="w-full h-full object-cover opacity-95 transition-all duration-[2000ms] group-hover:scale-105 group-hover:opacity-100" alt="">
                     </div>
-                    <p class="text-[9px] tracking-[0.4em] text-stone-400 mb-3 uppercase font-medium">${item.sub}</p>
+                    <p class="text-[9px] tracking-[0.4em] text-stone-400 mb-3 uppercase font-medium">${item.sub || ''}</p>
                     <h3 class="text-base font-light tracking-[0.3em] text-stone-800 mb-4">${item.name}</h3>
                     <p class="text-xs text-stone-400 leading-relaxed font-light text-center max-w-[240px] tracking-widest">${item.desc}</p>
                 </div>
@@ -476,7 +496,7 @@
             try {
                 const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'siteContent', 'main');
                 await setDoc(docRef, siteData);
-                alert('內容已發佈！頁面將自動更新。');
+                alert('內容已成功發佈！');
                 window.toggleAdmin();
             } catch (e) {
                 alert('儲存失敗：' + e.message);
