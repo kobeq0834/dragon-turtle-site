@@ -6,14 +6,15 @@
     
     <!-- === SEO 搜尋優化 === -->
     <title>奧兒絲朵 | 靈石與您的故事 - 專業收藏</title>
-    <meta name="description" id="meta-desc" content="奧兒絲朵（Our Story）提供高品質天鐵隕石、能量水晶、精雕龍龜收藏。每一顆靈石都是連結內心深處的故事。">
-    <meta name="keywords" content="奧兒絲朵,靈石,隕石,水晶,龍龜,能量石,天鐵,捷克隕石,淨化磁場">
+    <meta name="description" id="meta-desc" content="奧兒絲朵（Our Story）致力於提供高品質天鐵隕石、能量水晶、精雕龍龜收藏。每一顆靈石都是連結內心深處的故事，找尋屬於您的生命頻率。">
+    <meta name="keywords" content="奧兒絲朵,靈石,隕石,水晶,龍龜,能量石,美學品牌,天鐵,捷克隕石,淨化磁場,能量水晶,龍龜收藏">
+    <meta name="author" content="奧兒絲朵 Our Story">
     
     <link rel="canonical" href="https://our-story.com.tw/">
 
     <!-- Open Graph 分享預覽 -->
     <meta property="og:title" id="og-title" content="奧兒絲朵 | 靈石與您的故事">
-    <meta property="og:description" id="og-desc" content="探索奧兒絲朵精選收藏，找尋專屬於您的能量共鳴。">
+    <meta property="og:description" id="og-desc" content="每一顆靈石都有它的頻率。探索奧兒絲朵的精選收藏。">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://our-story.com.tw/">
     <meta property="og:image" content="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1200">
@@ -21,8 +22,8 @@
     <!-- Tailwind & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Instagram 官方腳本 (iPhone 相容建議：使用單一實體載入) -->
-    <script id="instagram-embed-script" async src="//www.instagram.com/embed.js"></script>
+    <!-- Instagram 官方腳本 -->
+    <script async src="//www.instagram.com/embed.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500&display=swap');
@@ -31,7 +32,8 @@
             background-color: #FAF9F6; 
             color: #555555; 
             scroll-behavior: smooth; 
-            -webkit-overflow-scrolling: touch; /* 關鍵：iPhone 流暢捲動 */
+            -webkit-overflow-scrolling: touch;
+            -webkit-tap-highlight-color: transparent;
         }
         
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -57,19 +59,19 @@
         .ai-spirit-box { max-width: 700px; margin: 0 auto; padding: 4rem 2rem; border: 1px dashed #e5e7eb; border-radius: 1.5rem; background: rgba(255, 255, 255, 0.5); }
         .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.98); z-index: 2000; display: none; align-items: center; justify-content: center; font-size: 0.8rem; letter-spacing: 0.3em; }
         
-        /* === iPhone Safari 最終修正樣式 === */
+        /* === iPhone Safari 最終相容性優化樣式 === */
         .ig-embed-container { 
             width: 100%; 
-            min-height: 480px; 
+            min-height: 500px; 
             display: block; 
-            overflow: visible !important; /* 絕對不能在 iPhone 用 overflow: hidden */
+            overflow: visible !important; 
             background: #fff; 
             position: relative;
-            z-index: 5;
-            pointer-events: auto !important; /* 強制 iPhone 接收點擊 */
-            -webkit-user-select: auto !important;
+            z-index: 10;
+            pointer-events: auto !important; 
+            /* 讓 iPhone 將其視為可點擊區塊 */
+            cursor: pointer;
             margin-bottom: 2rem;
-            /* 移除所有可能干擾觸控的 3D 屬性 */
             transform: none !important;
         }
         .ig-embed-container blockquote { 
@@ -78,6 +80,7 @@
             border: 0 !important;
             padding: 0 !important;
             box-shadow: none !important;
+            background: transparent !important;
         }
     </style>
 </head>
@@ -151,7 +154,7 @@
             <div id="collections-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16 max-w-7xl mx-auto"></div>
         </section>
 
-        <!-- 社群區塊 (iPhone 相容性核心區) -->
+        <!-- 社群區塊 (iPhone 觸控穿透修正區) -->
         <section id="social" class="py-24 md:py-40 px-8 bg-white">
             <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16">
                 <div class="w-full md:w-2/5 space-y-12">
@@ -161,15 +164,16 @@
                         <a id="fb-link-display" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between group py-5 border-b border-stone-100"><span id="fb-text-display" class="text-xs tracking-[0.2em] text-stone-500 uppercase">Facebook</span><i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300 group-hover:translate-x-1 transition-transform"></i></a>
                     </div>
                 </div>
-                <!-- 移除所有外層動畫，確保 iPhone 點擊不被偏移 -->
+                <!-- 移除了所有 animate-fadeIn 等類別，防止 iPhone Safari 動態層級衝突 -->
                 <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
                     <div class="space-y-6">
-                        <div id="ig-slot-1" class="ig-embed-container shadow-sm"></div>
-                        <div id="ig-slot-2" class="ig-embed-container shadow-sm"></div>
+                        <!-- 加入 onclick="" 是 iPhone Safari 的必備 Trick，強迫開啟點擊傳遞 -->
+                        <div id="ig-slot-1" class="ig-embed-container shadow-sm" onclick=""></div>
+                        <div id="ig-slot-2" class="ig-embed-container shadow-sm" onclick=""></div>
                     </div>
                     <div class="space-y-6 sm:pt-12">
-                        <div id="ig-slot-3" class="ig-embed-container shadow-sm"></div>
-                        <div id="ig-slot-4" class="ig-embed-container shadow-sm"></div>
+                        <div id="ig-slot-3" class="ig-embed-container shadow-sm" onclick=""></div>
+                        <div id="ig-slot-4" class="ig-embed-container shadow-sm" onclick=""></div>
                     </div>
                 </div>
             </div>
@@ -197,8 +201,8 @@
         </div>
         <div class="fixed bottom-0 right-0 w-full max-w-[450px] bg-white p-6 border-t z-[2000] shadow-2xl">
             <div class="grid grid-cols-2 gap-4">
-                <button onclick="saveSiteData()" class="bg-stone-900 text-white py-4 text-xs font-bold uppercase rounded-sm shadow-lg">發佈更新</button>
-                <button onclick="signOutAdmin()" class="bg-stone-50 text-stone-400 py-4 text-xs font-bold border border-stone-200 rounded-sm">登出後台</button>
+                <button onclick="saveSiteData()" class="bg-stone-900 text-white py-4 text-xs font-bold uppercase rounded-sm">發佈更新</button>
+                <button onclick="signOutAdmin()" class="bg-stone-50 text-stone-400 py-4 text-xs font-bold border border-stone-200 rounded-sm">登出</button>
             </div>
         </div>
     </div>
@@ -259,7 +263,7 @@
                     else if (target === 'about_icon') siteConfig.aboutIcon = base64;
                     else if (target.startsWith('ig')) siteConfig[`igImg${target.slice(2)}`] = base64;
                     else if (target === 'col') collectionsList[index].img = base64;
-                    alert("內容準備就緒。");
+                    alert("照片準備就緒。");
                 };
                 img.src = e.target.result;
             };
@@ -302,9 +306,9 @@
             const container = document.getElementById(slotId);
             if (!container) return;
             if (embedUrl && embedUrl.trim() !== "") {
-                // iPhone 點擊穿透終極修正：移除 box-shadow 與過多樣式，確保觸控坐標 100% 正確
+                // iPhone 點擊穿透終極修正：移除所有外層邊框與陰影，並加上 onclick 屬性強制喚醒
                 container.innerHTML = `
-                    <blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14" style="background:#FFF; border:0; border-radius:0px; margin:0; width:100%;">
+                    <blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14" style="background:#FFF; border:0; border-radius:0px; margin:0; width:100%; -webkit-transform: translateZ(0); pointer-events: auto;">
                         <div style="padding:16px;"> <a href="${embedUrl}" target="_blank" style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" rel="noopener noreferrer">載入貼文中...</a></div>
                     </blockquote>
                 `;
@@ -329,22 +333,24 @@
             
             for(let i=1; i<=4; i++) { renderIgSlot(`ig-slot-${i}`, siteConfig[`igEmbed${i}`], siteConfig[`igImg${i}`]); }
             
-            // iPhone 專屬喚醒：使用更短的延遲，避開渲染死角
-            setTimeout(() => { 
+            // iPhone 喚醒邏輯：三段式強化，解決 Safari 的遺失問題
+            const processIG = () => { 
                 if (window.instgrm) {
                     window.instgrm.Embeds.process(); 
-                    // 針對 iPhone 的雙重強化：重新強制渲染一遍
-                    const iframes = document.querySelectorAll('iframe');
-                    iframes.forEach(f => f.style.pointerEvents = 'auto');
+                    // 針對 iPhone 的觸控強化
+                    document.querySelectorAll('.ig-embed-container iframe').forEach(f => {
+                        f.style.pointerEvents = 'auto';
+                    });
                 }
-            }, 600);
+            };
+            setTimeout(processIG, 500);
+            setTimeout(processIG, 1500);
+            setTimeout(processIG, 3000);
             
-            // 更新動態 SEO 標籤
             const brand = siteConfig.brandName || "奧兒絲朵";
             const sub = siteConfig.heroSub || "靈石與您的故事";
             document.title = `${brand} | ${sub}`;
             
-            // 同步後台
             safeSetVal('edit-brand-name', siteConfig.brandName);
             safeSetVal('edit-hero-title', siteConfig.heroTitle);
             safeSetVal('edit-hero-sub', siteConfig.heroSub);
@@ -356,7 +362,7 @@
         function renderCollections() {
             const container = document.getElementById('collections-container');
             if (!container) return;
-            container.innerHTML = collectionsList.map(item => `<article class="group flex flex-col items-center"><div class="aspect-[4/5] w-full overflow-hidden bg-stone-200 shadow-sm"><img src="${item.img}" class="w-full h-full object-cover transition-all duration-[1500ms] group-hover:scale-110" alt="${item.name}"></div><h3 class="text-base font-light mt-6 tracking-widest text-stone-800 uppercase">${item.name}</h3><p class="text-xs text-stone-400 mt-2 tracking-widest">${item.desc}</p></article>`).join('');
+            container.innerHTML = collectionsList.map(item => `<article class="group flex flex-col items-center"><div class="aspect-[4/5] w-full overflow-hidden bg-stone-200"><img src="${item.img}" class="w-full h-full object-cover transition-all duration-[1500ms] group-hover:scale-110" alt="${item.name}"></div><h3 class="text-base font-light mt-6 tracking-widest text-stone-800 uppercase">${item.name}</h3><p class="text-xs text-stone-400 mt-2 tracking-widest">${item.desc}</p></article>`).join('');
         }
 
         function renderAdminList() {
@@ -401,8 +407,8 @@
                     const cleanItem = { ...item }; delete cleanItem.id; delete cleanItem.isNew;
                     await setDoc(itemRef, cleanItem);
                 }
-                alert("已成功同步雲端！後台介面維持開啟。");
-            } catch (e) { alert("發佈失敗: " + e.message); }
+                alert("同步成功！");
+            } catch (e) { alert("失敗: " + e.message); }
             finally { document.getElementById('loading').style.display = 'none'; }
         };
 
@@ -411,7 +417,6 @@
             const currentUid = auth.currentUser?.uid?.trim();
             if (auth.currentUser && currentUid === ADMIN_UID) {
                 panel.classList.toggle('active');
-                document.body.style.overflow = panel.classList.contains('active') ? 'hidden' : '';
             } else {
                 const email = prompt("Email:"); if (!email) return;
                 const pass = prompt("Password:"); if (!pass) return;
@@ -427,11 +432,7 @@
             }
         };
 
-        window.signOutAdmin = () => { 
-            if(!confirm("確定要登出管理員身份嗎？")) return;
-            signOut(auth).then(() => { alert("已安全登出。"); window.location.reload(); }); 
-        };
-        
+        window.signOutAdmin = () => { signOut(auth).then(() => window.location.reload()); };
         window.scrollToSection = (id) => {
             const e = document.getElementById(id);
             if (e) { 
@@ -439,11 +440,7 @@
                 document.getElementById('mobile-menu').classList.remove('active'); 
             }
         };
-        
-        window.toggleMenu = () => {
-            const m = document.getElementById('mobile-menu');
-            m.classList.toggle('active');
-        };
+        window.toggleMenu = () => document.getElementById('mobile-menu').classList.toggle('active');
 
         init();
         lucide.createIcons();
