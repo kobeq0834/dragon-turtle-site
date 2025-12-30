@@ -115,8 +115,10 @@
                 <button onclick="scrollToSection('social')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em]">追蹤我們</button>
                 
                 <div class="flex items-center space-x-5 border-l border-stone-200 pl-8 opacity-60 hover:opacity-100 transition-opacity">
-                    <a href="#" class="text-stone-500 hover:text-stone-800 transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
-                    <a href="#" class="text-stone-500 hover:text-stone-800 transition-colors"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                    <!-- 導航欄社群連結更新 -->
+                    <a href="https://www.instagram.com/__our.story__" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-stone-800 transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=61559138616942" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-stone-800 transition-colors"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                    <a href="https://line.me/R/ti/p/@291pcwxm" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-stone-800 transition-colors"><i data-lucide="message-circle" class="w-4 h-4"></i></a>
                 </div>
             </div>
 
@@ -134,6 +136,11 @@
         <button onclick="scrollToSection('collections')" class="text-xl tracking-[0.4em] text-stone-600">收藏系列</button>
         <button onclick="scrollToSection('about')" class="text-xl tracking-[0.4em] text-stone-600">品牌故事</button>
         <button onclick="scrollToSection('social')" class="text-xl tracking-[0.4em] text-stone-600">追蹤我們</button>
+        <div class="flex space-x-8 pt-4">
+            <a href="https://www.instagram.com/__our.story__" target="_blank" class="text-stone-400"><i data-lucide="instagram" class="w-6 h-6"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=61559138616942" target="_blank" class="text-stone-400"><i data-lucide="facebook" class="w-6 h-6"></i></a>
+            <a href="https://line.me/R/ti/p/@291pcwxm" target="_blank" class="text-stone-400"><i data-lucide="message-circle" class="w-6 h-6"></i></a>
+        </div>
     </div>
 
     <!-- 首頁視覺區塊 -->
@@ -190,8 +197,17 @@
             <div class="w-full md:w-2/5 space-y-16">
                 <h2 class="text-3xl font-extralight tracking-[0.3em] text-stone-800">隨時，共享日常</h2>
                 <div class="space-y-4">
-                    <a href="#" class="flex items-center justify-between group py-5 border-b border-stone-100">
-                        <span id="ig-handle" class="text-xs tracking-[0.2em] text-stone-500 uppercase">Instagram / @our_story_gem</span>
+                    <!-- 社群清單更新 -->
+                    <a href="https://www.instagram.com/__our.story__" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between group py-5 border-b border-stone-100">
+                        <span id="ig-handle" class="text-xs tracking-[0.2em] text-stone-500 uppercase">Instagram / @__our.story__</span>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                    <a href="https://www.facebook.com/profile.php?id=61559138616942" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between group py-5 border-b border-stone-100">
+                        <span class="text-xs tracking-[0.2em] text-stone-500 uppercase">Facebook / 奧兒絲朵 Our Story</span>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                    <a href="https://line.me/R/ti/p/@291pcwxm" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between group py-5 border-b border-stone-100">
+                        <span class="text-xs tracking-[0.2em] text-stone-500 uppercase">LINE / @291pcwxm</span>
                         <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300 group-hover:translate-x-1 transition-transform"></i>
                     </a>
                 </div>
@@ -322,7 +338,6 @@
             if (!key) throw new Error("KEY_MISSING");
 
             // 重要：在 Canvas 預覽環境中必須使用這個特定型號
-            // 如果是在外部環境 (Cloudflare)，這個型號通常也是支援的
             const modelName = "gemini-2.5-flash-preview-09-2025";
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${key}`;
             
@@ -417,7 +432,7 @@
 
         function handleAIError(error) {
             if (error.message === "MODEL_NOT_FOUND") {
-                alert("AI 錯誤 (404)：模型路徑不正確。這通常是因為環境不支援當前選用的 AI 型號，我已嘗試自動修正。");
+                alert("AI 錯誤 (404)：模型路徑不正確。這通常是因為環境不支援當前選用的 AI 型號。");
             } else if (error.message === "KEY_INVALID") {
                 const newKey = prompt("金鑰似乎失效或無效，請輸入您的 Gemini API Key (AIza開頭)：");
                 if (newKey) {
@@ -445,7 +460,6 @@
             } catch (error) {
                 console.error(error);
                 display.innerText = "「靜謐中，心自明。」(AI 感應受阻)";
-                // 如果是 404 或 403 錯誤，給予彈窗提示
                 if (error.message.includes("HTTP_") || error.message.includes("INVALID") || error.message.includes("NOT_FOUND")) {
                    handleAIError(error);
                 }
