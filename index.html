@@ -1,196 +1,261 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>櫻花瑪瑙龍龜</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Noto Serif TC', serif;
-      background-color: #fefefe;
-      color: #333;
-      line-height: 1.8;
-    }
-    header {
-      background: url('hero-image.jpg') center/cover no-repeat;
-      color: white;
-      text-align: center;
-      padding: 6rem 2rem 4rem;
-    }
-    header h1 {
-      font-size: 2.8rem;
-      margin: 0;
-      background: rgba(0,0,0,0.5);
-      display: inline-block;
-      padding: 1rem 2rem;
-      border-radius: 8px;
-    }
-    section {
-      width: 100%;
-      box-sizing: border-box;
-      max-width: 780px;
-      text-align: center;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-    section h2 {
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
-    }
-    section p {
-      text-align: center;
-      font-size: 1.1rem;
-      margin: 1.2rem 0;
-      text-align: justify;
-    }
-    .image-block {
-      margin: 2rem 0;
-      text-align: center;
-    }
-    .image-block img {
-      width: 100%;
-      max-width: 720px;
-      border-radius: 12px;
-    }
-    .scene-options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      justify-content: center;
-      margin: 3rem 0;
-    }
-    .scene {
-      background: #f8f8f8;
-      border-radius: 10px;
-      overflow: hidden;
-      max-width: 300px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      transition: transform 0.3s ease;
-    }
-    .scene:hover {
-      transform: translateY(-4px);
-    }
-    .scene img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    .scene p {
-      padding: 1rem;
-      font-size: 1rem;
-      margin: 0;
-    }
-    .quote {
-      font-style: italic;
-      background: #f8f3f4;
-      border-left: 4px solid #d08b92;
-      margin: 2rem 0;
-      padding: 1rem;
-    }
-    .buy-btn {
-      display: inline-block;
-      background-color: #d08b92;
-      color: white;
-      text-decoration: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 6px;
-      margin: 2rem auto;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
-    }
-    .buy-btn:hover {
-      background-color: #b36d76;
-    }
-    footer {
-      text-align: center;
-      padding: 2rem;
-      font-size: 0.9rem;
-      color: #777;
-    }
-    footer a {
-      color: #d08b92;
-      text-decoration: none;
-    }
-    footer a:hover {
-      text-decoration: underline;
-    }
-      .cta-block {
-      background-color: #fceff1;
-      text-align: center;
-      padding: 3rem 2rem;
-      margin-top: 4rem;
-      border-radius: 16px;
-    }
-    .cta-block h2 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-      color: #b25a67;
-    }
-    .cta-block p {
-      font-size: 1.05rem;
-      margin-bottom: 2rem;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-  </style>
+import React, { useState, useEffect } from 'react';
+import { Instagram, Facebook, Menu, X, ArrowRight, ArrowDown } from 'lucide-react';
 
-</head>
-<body>
-  <header>
-    <h1>櫻花瑪瑙龍龜：靜靜守在你身邊的存在</h1>
-  </header>
-  <section>
-    <h2>它不是水晶收藏，也不是風水物件</h2>
-    <p>我們不談迷信，也不賣故事。只是想把這個讓人安心的小東西，帶到更多人的桌上。龍龜是個意象，也是一種靜默的陪伴。你不需要相信它，只需要喜歡它。</p>
-    <div class="image-block">
-      <img src="dragon-front.jpg" alt="龍龜正面">
-    </div>
+const App = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-    <h2>為什麼是櫻花瑪瑙？</h2>
-    <p>這是一種紋理細緻的天然石材，色澤溫潤，帶有透明與粉白層疊的特殊紋路，像春天的光灑在霧裡。</p>
-    <div class="image-block">
-      <img src="dragon-detail.jpg" alt="紋理細節">
-    </div>
+  // 監聽滾動事件以切換導航欄樣式
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-    <h2>擺著就好，不用解釋</h2>
-    <p>我們不強調它有什麼特殊意義，但許多買過的人說：「桌上擺著它，看著就是會微笑」。也許這就夠了。</p>
-    <div class="image-block">
-      <img src="dragon-scene.jpg" alt="龍龜擺設示意">
-    </div>
+  // 平滑滾動至指定區塊
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    setIsMenuOpen(false);
+  };
 
-    <div class="scene-options">
-      <div class="scene">
-        <img src="scene-desk.jpg" alt="書桌場景">
-        <p>放在書桌上，一個轉頭就能看到的靜謐角落</p>
-      </div>
-      <div class="scene">
-        <img src="scene-shelf.jpg" alt="書櫃角落">
-        <p>藏在書櫃邊，一本舊書旁的安靜守護</p>
-      </div>
-      <div class="scene">
-        <img src="scene-entry.jpg" alt="玄關桌">
-        <p>玄關入口的小物件，迎接每一次的回家</p>
-      </div>
-    </div>
+  const collections = [
+    {
+      id: 'celestial',
+      name: '星辰系列：隕石',
+      sub: 'Celestial Echoes',
+      desc: '穿越銀河的溫潤，將宇宙的呢喃私藏於掌心。',
+      img: 'https://images.unsplash.com/photo-1506318137071-a8e063b4b574?auto=format&fit=crop&q=80&w=1200'
+    },
+    {
+      id: 'earth',
+      name: '大地系列：水晶',
+      sub: 'Earth Whispers',
+      desc: '純粹的光影折射，映照出靈魂最深處的平靜。',
+      img: 'https://images.unsplash.com/photo-1515405295579-ba7b45403062?auto=format&fit=crop&q=80&w=1200'
+    },
+    {
+      id: 'tradition',
+      name: '守望系列：龍龜',
+      sub: 'Serene Guardians',
+      desc: '古老工藝的柔和線條，靜謐守護每一段珍貴時光。',
+      img: 'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&q=80&w=1200'
+    }
+  ];
 
-    <div class="quote">「我原本只是想找個好看的小東西，結果收到這個比想像中更有份量。」</div>
-    <div class="quote">「放在桌上，就像空間多了一種平靜。」</div>
+  return (
+    <div className="min-h-screen bg-[#FAF9F6] text-[#555555] font-light selection:bg-stone-100">
+      {/* 導航欄 */}
+      <nav className={`fixed w-full z-50 transition-all duration-700 ${scrolled ? 'bg-white/90 backdrop-blur-md py-4 shadow-sm' : 'bg-transparent py-8'}`}>
+        <div className="max-w-7xl mx-auto px-8 flex justify-between items-center">
+          <div className="flex items-center space-x-3 cursor-pointer" onClick={() => scrollToSection('home')}>
+            <span className="text-xl font-medium tracking-[0.4em] text-stone-800">奧兒絲朵</span>
+          </div>
 
-    <div style="text-align:center;">
-      <a class="buy-btn" href="https://www.instagram.com/__our.story__/" target="_blank">點我看更多實拍搭配照 🐢</a>
+          {/* 桌面端導覽選單 */}
+          <div className="hidden md:flex space-x-12 items-center">
+            {['收藏系列', '品牌故事', '追蹤我們'].map((item, index) => (
+              <button 
+                key={item} 
+                onClick={() => scrollToSection(['collections', 'about', 'social'][index])}
+                className="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em]"
+              >
+                {item}
+              </button>
+            ))}
+            <div className="flex items-center space-x-5 border-l border-stone-200 pl-8 opacity-60 hover:opacity-100 transition-opacity">
+              <a href="#" className="text-stone-500 hover:text-stone-800 transition-colors"><Instagram size={18} /></a>
+              <a href="#" className="text-stone-500 hover:text-stone-800 transition-colors"><Facebook size={18} /></a>
+            </div>
+          </div>
+
+          {/* 行動端選單切換按鈕 */}
+          <button className="md:hidden text-stone-600" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </nav>
+
+      {/* 行動端全屏選單內容 */}
+      {isMenuOpen && (
+        <div className="md:hidden fixed inset-0 z-[60] bg-white flex flex-col items-center justify-center space-y-10 animate-fadeIn">
+          <button className="absolute top-8 right-8 text-stone-600" onClick={() => setIsMenuOpen(false)}>
+            <X size={32} />
+          </button>
+          {['收藏系列', '品牌故事', '追蹤我們'].map((item, index) => (
+            <button 
+              key={item} 
+              onClick={() => scrollToSection(['collections', 'about', 'social'][index])}
+              className="text-xl tracking-[0.4em] text-stone-600"
+            >
+              {item}
+            </button>
+          ))}
+          <div className="flex space-x-8 pt-6">
+            <Instagram size={28} className="text-stone-400" />
+            <Facebook size={28} className="text-stone-400" />
+          </div>
+        </div>
+      )}
+
+      {/* 首頁視覺區塊 */}
+      <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden bg-white">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1920" 
+            className="w-full h-full object-cover opacity-30 scale-105 animate-slowZoom"
+            alt=""
+          />
+        </div>
+        
+        <div className="relative z-10 text-center px-6">
+          <p className="text-[10px] tracking-[0.6em] text-stone-400 mb-10 animate-fadeInUp uppercase font-medium">Every stone has its own story</p>
+          <h1 className="text-4xl md:text-5xl font-extralight text-stone-800 mb-10 tracking-[0.4em] leading-[1.8] animate-fadeInUp delay-100">
+            奧兒絲朵<br /><span className="text-2xl md:text-3xl tracking-[0.6em] text-stone-400 italic">靈石與您的故事</span>
+          </h1>
+          <div className="w-px h-20 bg-stone-200 mx-auto mt-16 animate-growLine"></div>
+        </div>
+        
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-3 opacity-40">
+          <span className="text-[9px] tracking-[0.4em] uppercase">Discovery</span>
+          <ArrowDown size={12} className="animate-bounce" />
+        </div>
+      </section>
+
+      {/* 品牌故事區塊 */}
+      <section id="about" className="py-40 px-8 bg-white">
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="mb-12 opacity-40">
+             <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200" className="w-16 mx-auto" alt="" />
+          </div>
+          <h2 className="text-xl font-light tracking-[0.4em] text-stone-800 mb-16">關於 奧兒絲朵</h2>
+          <p className="text-stone-500 leading-[2.8] tracking-[0.25em] text-sm md:text-base font-extralight">
+            奧兒絲朵（Our Story），始於對大自然原始生命力的敬畏。<br />
+            我們不刻意渲染功能，而是希望透過靈石本身的質地與光影，<br />
+            連結您內心深處那份未曾言說的故事。<br />
+            在這裡，每一顆隕石與水晶，都是時光留給您的溫柔獻禮。
+          </p>
+        </div>
+      </section>
+
+      {/* 收藏系列展示區 */}
+      <section id="collections" className="py-24 px-6 md:px-20 bg-[#FAF9F6]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8 lg:gap-16 max-w-7xl mx-auto">
+          {collections.map((item) => (
+            <div key={item.id} className="group flex flex-col items-center">
+              <div className="relative overflow-hidden aspect-[4/5] w-full mb-10 shadow-sm transition-shadow hover:shadow-xl duration-1000 bg-stone-200">
+                <img 
+                  src={item.img} 
+                  className="w-full h-full object-cover opacity-95 transition-all duration-[2000ms] group-hover:scale-105 group-hover:opacity-100" 
+                  alt={``}
+                />
+                <div className="absolute inset-0 bg-white/5 group-hover:bg-transparent transition-colors duration-1000"></div>
+              </div>
+              <p className="text-[9px] tracking-[0.4em] text-stone-400 mb-3 uppercase font-medium">{item.sub}</p>
+              <h3 className="text-base font-light tracking-[0.3em] text-stone-800 mb-4">{item.name}</h3>
+              <p className="text-xs text-stone-400 leading-relaxed font-light text-center max-w-[240px] tracking-widest">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 社群與生活美學區塊 */}
+      <section id="social" className="py-40 px-8 bg-white overflow-hidden">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center gap-24">
+            <div className="w-full md:w-2/5 space-y-16">
+              <div className="space-y-6">
+                <h2 className="text-3xl font-extralight tracking-[0.3em] text-stone-800">隨時，共享日常</h2>
+                <p className="text-stone-400 leading-loose tracking-[0.15em] text-sm font-extralight">
+                  捕捉靈石在日光下的細微變化，<br />
+                  紀錄那些觸動心靈的瞬間。<br />
+                  邀請您一同進入奧兒絲朵的靜謐世界。
+                </p>
+              </div>
+              
+              <div className="space-y-4">
+                <a href="#" className="flex items-center justify-between group py-5 border-b border-stone-100 hover:border-stone-400 transition-all">
+                  <div className="flex items-center space-x-5">
+                    <Instagram size={18} className="text-stone-400" />
+                    <span className="text-xs tracking-[0.2em] text-stone-500 group-hover:text-stone-800 transition-colors uppercase font-medium">Instagram / @our_story_gem</span>
+                  </div>
+                  <ArrowRight size={14} className="text-stone-300 group-hover:translate-x-1 transition-transform" />
+                </a>
+                <a href="#" className="flex items-center justify-between group py-5 border-b border-stone-100 hover:border-stone-400 transition-all">
+                  <div className="flex items-center space-x-5">
+                    <Facebook size={18} className="text-stone-400" />
+                    <span className="text-xs tracking-[0.2em] text-stone-500 group-hover:text-stone-800 transition-colors uppercase font-medium">Facebook / 奧兒絲朵 Our Story</span>
+                  </div>
+                  <ArrowRight size={14} className="text-stone-300 group-hover:translate-x-1 transition-transform" />
+                </a>
+              </div>
+            </div>
+            
+            {/* 網格影像牆 */}
+            <div className="w-full md:w-3/5 grid grid-cols-2 gap-6">
+              <div className="space-y-6">
+                <div className="aspect-[3/4] overflow-hidden rounded-sm bg-stone-100">
+                  <img src="https://images.unsplash.com/photo-1512168221867-0485ba5e561e?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover hover:scale-110 transition-transform duration-1000 opacity-90" alt="" />
+                </div>
+                <div className="aspect-square overflow-hidden rounded-sm bg-stone-100">
+                  <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover hover:scale-110 transition-transform duration-1000 opacity-90" alt="" />
+                </div>
+              </div>
+              <div className="space-y-6 pt-12">
+                <div className="aspect-square overflow-hidden rounded-sm bg-stone-100">
+                  <img src="https://images.unsplash.com/photo-1523554888454-841f72e27df2?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover hover:scale-110 transition-transform duration-1000 opacity-90" alt="" />
+                </div>
+                <div className="aspect-[3/4] overflow-hidden rounded-sm bg-stone-100">
+                  <img src="https://images.unsplash.com/photo-1515549832467-8783363e19b6?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover hover:scale-110 transition-transform duration-1000 opacity-90" alt="" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 頁腳 */}
+      <footer className="py-24 px-8 bg-white border-t border-stone-50 text-center">
+        <div className="max-w-7xl mx-auto flex flex-col items-center space-y-12">
+          <span className="text-xl font-medium tracking-[0.5em] text-stone-800">奧兒絲朵</span>
+          <div className="flex space-x-12 text-[9px] tracking-[0.3em] text-stone-400 uppercase font-medium">
+            <a href="#" className="hover:text-stone-800 transition-colors">Philosophy</a>
+            <a href="#" className="hover:text-stone-800 transition-colors">Privacy</a>
+            <a href="#" className="hover:text-stone-800 transition-colors">Contact</a>
+          </div>
+          <p className="text-[9px] tracking-[0.2em] text-stone-300">© 2025 OUR STORY. CURATED FOR YOUR SOUL.</p>
+        </div>
+      </footer>
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(40px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slowZoom {
+          from { transform: scale(1); }
+          to { transform: scale(1.1); }
+        }
+        @keyframes growLine {
+          from { height: 0; opacity: 0; }
+          to { height: 80px; opacity: 1; }
+        }
+        .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }
+        .animate-fadeInUp { animation: fadeInUp 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-slowZoom { animation: slowZoom 40s linear infinite alternate; }
+        .animate-growLine { animation: growLine 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .delay-100 { animation-delay: 0.3s; }
+      `}</style>
     </div>
-      <div class="cta-block">
-      <h2>想帶一隻回家？</h2>
-      <p>我們不開放直接購買，只開放 Instagram 私訊預約。想看看有哪些樣式、詢問價格、預約收藏——</p>
-      <a class="buy-btn" href="https://www.instagram.com/__our.story__/" target="_blank">點我私訊預約 🐢</a>
-    </div>
-  </section>
-  <footer>
-    © 2025 Our.Story | 更多作品在 <a href="https://www.instagram.com/__our.story__/" target="_blank">@__our.story__</a>
-  </footer>
-</body>
-</html>
+  );
+};
+
+export default App;
