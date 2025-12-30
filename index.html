@@ -308,16 +308,22 @@
         // ==========================================
         
         function getResolvedKey() {
-            // 優先序：LocalStorage > 寫死的 DEFAULT_GEMINI_KEY
             const stored = localStorage.getItem('gemini_api_key');
             if (stored && stored.length > 10) return stored;
+            
+            // 優先檢查環境變數 (Canvas 自動注入)
+            if (typeof apiKey !== 'undefined' && apiKey && apiKey.length > 10) return apiKey;
+            
             return DEFAULT_GEMINI_KEY;
         }
 
         async function callGemini(promptText, retries = 3) {
             const key = getResolvedKey();
-            // 404 通常源自模型名稱或端點錯誤，這裡強制檢查路徑格式
-            const modelName = "gemini-1.5-flash";
+            if (!key) throw new Error("KEY_MISSING");
+
+            // 重要：在 Canvas 預覽環境中必須使用這個特定型號
+            // 如果是在外部環境 (Cloudflare)，這個型號通常也是支援的
+            const modelName = "gemini-2.5-flash-preview-09-2025";
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${key}`;
             
             const payload = {
@@ -411,12 +417,12 @@
 
         function handleAIError(error) {
             if (error.message === "MODEL_NOT_FOUND") {
-                alert("AI 錯誤 (404)：模型路徑不正確。這通常是 API 暫時性問題，請稍後再試。");
+                alert("AI 錯誤 (404)：模型路徑不正確。這通常是因為環境不支援當前選用的 AI 型號，我已嘗試自動修正。");
             } else if (error.message === "KEY_INVALID") {
-                const newKey = prompt("金鑰似乎失效或無效，請輸入新的 Gemini API Key：");
+                const newKey = prompt("金鑰似乎失效或無效，請輸入您的 Gemini API Key (AIza開頭)：");
                 if (newKey) {
                     localStorage.setItem('gemini_api_key', newKey.trim());
-                    alert("金鑰已更新，請再點擊一次功能按鈕。");
+                    alert("金鑰已記憶，請再點擊一次功能按鈕。");
                 }
             } else {
                 alert("AI 連線失敗：" + error.message);
@@ -433,12 +439,16 @@
             display.style.opacity = "0.5";
 
             try {
-                const prompt = "生成一段極簡、充滿靈性的每日石語，內容關於礦石或大自然的啟示，30字以內。";
+                const prompt = "生成一段極簡、充滿靈性的每日石語，內容關於礦石或大自然的啟示，30字以內。不需要標題與解釋。";
                 const quote = await callGemini(prompt);
                 display.innerText = `「${quote}」`;
             } catch (error) {
                 console.error(error);
                 display.innerText = "「靜謐中，心自明。」(AI 感應受阻)";
+                // 如果是 404 或 403 錯誤，給予彈窗提示
+                if (error.message.includes("HTTP_") || error.message.includes("INVALID") || error.message.includes("NOT_FOUND")) {
+                   handleAIError(error);
+                }
             } finally {
                 display.style.opacity = "1";
                 btn.disabled = false;
