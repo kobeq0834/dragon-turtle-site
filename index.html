@@ -146,7 +146,7 @@
             <h1 id="hero-title" class="text-4xl md:text-5xl font-extralight text-stone-800 mb-10 tracking-[0.4em] leading-[1.8] animate-fadeInUp delay-100">
                 奧兒絲朵<br /><span class="text-2xl md:text-3xl tracking-[0.6em] text-stone-400 italic">靈石與您的故事</span>
             </h1>
-            <div class="w-px h-20 bg-stone-200 mx-auto mt-16 animate-growLine"></div>
+            <!-- 已移除中間的垂直裝飾線，保持畫面乾淨 -->
         </div>
         
         <!-- 下滑提示箭頭 -->
@@ -282,10 +282,10 @@
         const ADMIN_PASSWORD = "1234"; 
         
         // ==========================================
-        // ⚠️ 請在此填入您的 Gemini API Key ⚠️
-        // 如果為空，第一次使用功能時會跳出視窗詢問
+        // Gemini API Key (已為您填入)
         // ==========================================
-        let geminiKey = ""; 
+        const apiKey = ""; // 環境預留
+        let geminiKey = "AIzaSyDYjCaxY3-MfYWfcHAgYM11CYLDefbSsvQ"; 
 
         const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : myFirebaseConfig;
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'our-story-main';
@@ -308,29 +308,41 @@
         // ✨ Gemini AI 核心邏輯
         // ==========================================
         
-        // 獲取 Key 的輔助函式
         function getGeminiKey() {
-            if (geminiKey && geminiKey.length > 10) return geminiKey;
+            // 1. 優先檢查環境變數
+            if (typeof apiKey !== 'undefined' && apiKey && apiKey.length > 10) return apiKey;
             
-            // 嘗試從執行環境獲取 (預覽用)
-            if (typeof apiKey !== 'undefined' && apiKey.length > 10) return apiKey;
+            // 2. 檢查記憶體變數 (現在包含您提供的 Key)
+            if (geminiKey && geminiKey.length > 10) return geminiKey;
 
-            // 如果都沒有，詢問用戶
-            const userKey = prompt("請輸入您的 Gemini API Key 以啟用 AI 功能：\n(為了長期使用，請建議修改程式碼中的 geminiKey 變數)");
-            if (userKey) {
-                geminiKey = userKey;
-                return userKey;
+            // 3. 檢查 LocalStorage (實現記住密碼)
+            const storedKey = localStorage.getItem('gemini_api_key');
+            if (storedKey && storedKey.length > 10) {
+                geminiKey = storedKey;
+                return storedKey;
+            }
+
+            // 4. 詢問用戶
+            const userKey = prompt("請輸入您的 Gemini API Key 以啟用 AI 功能：\n(輸入後瀏覽器會自動記憶，無需重複輸入)");
+            if (userKey && userKey.trim().length > 0) {
+                const cleanedKey = userKey.trim();
+                geminiKey = cleanedKey;
+                localStorage.setItem('gemini_api_key', cleanedKey); // 存入 LocalStorage
+                return cleanedKey;
             }
             return null;
         }
 
-        async function callGemini(prompt, retries = 5, delay = 1000) {
+        async function callGemini(promptText, retries = 5, delay = 1000) {
             const key = getGeminiKey();
-            if (!key) throw new Error("未提供 API Key");
+            if (!key) {
+                // 如果沒有 Key，直接返回 null
+                return null;
+            }
 
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${key}`;
             const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
+                contents: [{ parts: [{ text: promptText }] }],
                 generationConfig: { temperature: 0.7, maxOutputTokens: 500 }
             };
 
@@ -341,7 +353,13 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
+                    
                     if (!response.ok) {
+                        if (response.status === 400 || response.status === 403) {
+                            localStorage.removeItem('gemini_api_key');
+                            // 這裡不清除 geminiKey，避免清除寫死的 key
+                            throw new Error("API Key 無效或已過期，請檢查配置。");
+                        }
                         const errText = await response.text();
                         throw new Error(`API Error: ${response.status} - ${errText}`);
                     }
@@ -369,7 +387,12 @@
             try {
                 const prompt = `你是一位高級品牌文案師。請幫我潤色這段關於「奧兒絲朵 (Our Story)」靈石品牌的描述。要求：語言要優雅、空靈、簡約、富有詩意，強調靈魂與自然的連結，不要有過多商業推銷感。字數保持在200字以內。原始文案：${originalText}`;
                 const polished = await callGemini(prompt);
-                textarea.value = polished.trim();
+                
+                if (polished) {
+                    textarea.value = polished.trim();
+                } else {
+                    alert('未輸入 API Key，無法使用 AI 潤色功能。');
+                }
             } catch (error) {
                 console.error(error);
                 alert('AI 處理失敗：' + error.message);
@@ -392,8 +415,12 @@
             try {
                 const prompt = `請幫我潤色這段產品描述。這是一個靈石收藏品（可能是隕石、水晶或守望雕刻）。風格要空靈、文藝。字數在50字以內。原句：${originalText}`;
                 const polished = await callGemini(prompt);
-                input.value = polished.trim();
-                siteData.collections[index].desc = polished.trim();
+                if (polished) {
+                    input.value = polished.trim();
+                    siteData.collections[index].desc = polished.trim();
+                } else {
+                    // 用戶取消輸入 Key
+                }
             } catch (error) {
                 console.error(error);
                 alert('AI 處理失敗：' + error.message);
@@ -416,11 +443,16 @@
             try {
                 const prompt = "請生成一段極簡、充滿靈性且空靈的「每日石語」，內容關於隕石、水晶或大自然的啟示。字數在30字以內。例如：宇宙的星塵，在您呼吸間悄然綻放。";
                 const quote = await callGemini(prompt);
-                display.innerText = `「${quote.trim()}」`;
+                
+                if (quote) {
+                    display.innerText = `「${quote.trim()}」`;
+                } else {
+                    display.innerText = "「靜謐中，心自明。」(請輸入 API Key 以解鎖 AI 靈感)";
+                }
             } catch (error) {
                 console.error(error);
-                alert('AI 連線失敗，請檢查 API Key 是否正確。詳細錯誤：' + error.message);
                 display.innerText = "「靜謐中，心自明。」(AI 暫時休息中)";
+                alert('AI 連線異常：' + error.message);
             } finally {
                 display.style.opacity = "1";
                 btn.disabled = false;
