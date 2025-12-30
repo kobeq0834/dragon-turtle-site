@@ -4,39 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- === SEO 搜尋優化 === -->
+    <!-- === SEO 搜尋優化 (提高 Google 被搜索到的機率) === -->
     <title>奧兒絲朵 | 靈石與您的故事 - 隕石、水晶、龍龜專業收藏</title>
-    <meta name="description" content="奧兒絲朵（Our Story）提供精選天鐵隕石、能量水晶、精雕龍龜。每一顆靈石都是連結內心深處的故事，找尋屬於您的生命頻率。">
-    <meta name="keywords" content="奧兒絲朵,靈石,隕石,水晶,龍龜,能量石,天鐵,捷克隕石,淨化磁場">
+    <meta name="description" content="奧兒絲朵（Our Story）致力於提供高品質天然靈石收藏，包括天鐵隕石、能量水晶、精雕龍龜。每一顆靈石都是連結內心深處的故事，找尋屬於您的生命頻率。">
+    <meta name="keywords" content="奧兒絲朵,靈石,隕石,水晶,龍龜,能量石,美學品牌,天鐵,捷克隕石,淨化磁場,能量療癒">
     <meta name="author" content="奧兒絲朵 Our Story">
     
-    <!-- Open Graph 分享預覽 -->
+    <!-- Open Graph (社群分享預覽：LINE/FB) -->
     <meta property="og:title" content="奧兒絲朵 | 靈石與您的故事">
-    <meta property="og:description" content="探索精選收藏。每一顆靈石都有它的頻率，等待與您共鳴。">
+    <meta property="og:description" content="探索奧兒絲朵的精選收藏。每一顆靈石都有它的頻率，等待與您共鳴。">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1200">
     
-    <!-- 結構化資料 -->
+    <!-- 結構化資料 (JSON-LD) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Brand",
+      "@type": "LocalBusiness",
       "name": "奧兒絲朵 Our Story",
-      "description": "專業精選天然靈石與美學品牌",
-      "logo": "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200"
+      "description": "專業精選天然靈石與美學品牌，提供隕石、水晶、龍龜等精美收藏。",
+      "logo": "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200",
+      "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1200"
     }
     </script>
 
     <!-- Tailwind CSS & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Instagram 官方嵌入指令碼 -->
+    <!-- Instagram 官方嵌入腳本 -->
     <script async src="//www.instagram.com/embed.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500&display=swap');
         body { font-family: 'Noto Sans TC', sans-serif; background-color: #FAF9F6; color: #555555; scroll-behavior: smooth; }
         
+        /* 動畫效果定義 */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.05); } }
@@ -50,6 +52,7 @@
         #mobile-menu { display: none; opacity: 0; transition: opacity 0.5s ease; }
         #mobile-menu.active { display: flex; opacity: 1; }
         
+        /* 管理面板樣式 */
         .admin-panel { display: none; position: fixed; top: 0; right: 0; width: 100%; max-width: 450px; height: 100%; background: white; z-index: 100; box-shadow: -10px 0 30px rgba(0,0,0,0.1); overflow-y: auto; padding: 2.5rem; }
         .admin-panel.active { display: block; }
         
@@ -68,6 +71,7 @@
 </head>
 <body class="font-light">
 
+    <!-- 加載中疊加層 -->
     <div id="loading" class="loading-overlay">
         <div class="flex flex-col items-center">
             <i data-lucide="loader" class="w-8 h-8 animate-spin mb-4 text-stone-400"></i>
@@ -94,19 +98,19 @@
         </div>
     </nav>
 
-    <!-- 行動選單 -->
+    <!-- 行動端全屏選單 -->
     <div id="mobile-menu" class="fixed inset-0 z-[60] bg-white flex flex-col items-center justify-center space-y-10">
         <button class="absolute top-8 right-8 text-stone-600" onclick="toggleMenu()"><i data-lucide="x" class="w-8 h-8"></i></button>
         <button onclick="scrollToSection('collections')" class="text-xl tracking-[0.4em] text-stone-600 uppercase font-light">收藏系列</button>
-        <button onclick="scrollToSection('about')" class="text-xl tracking-[0.4em] text-stone-600 font-light uppercase">品牌故事</button>
-        <button onclick="scrollToSection('social')" class="text-xl tracking-[0.4em] text-stone-600 font-light uppercase">追蹤我們</button>
+        <button onclick="scrollToSection('about')" class="text-xl tracking-[0.4em] text-stone-600 uppercase font-light">品牌故事</button>
+        <button onclick="scrollToSection('social')" class="text-xl tracking-[0.4em] text-stone-600 uppercase font-light">追蹤我們</button>
     </div>
 
     <main>
-        <!-- 主視覺 -->
+        <!-- 主視覺 (Hero) -->
         <header id="home" class="relative h-screen flex items-center justify-center overflow-hidden bg-white">
             <div class="absolute inset-0 z-0">
-                <img id="hero-img-display" src="" class="w-full h-full object-cover opacity-30 scale-105 animate-slowZoom" alt="">
+                <img id="hero-img-display" src="" class="w-full h-full object-cover opacity-30 scale-105 animate-slowZoom" alt="Our Story Hero Image">
             </div>
             <div class="relative z-10 text-center px-6">
                 <p id="hero-sub-display" class="text-[10px] tracking-[0.6em] text-stone-400 mb-10 animate-fadeInUp uppercase font-medium">Every stone has its own story</p>
@@ -114,27 +118,30 @@
             </div>
         </header>
 
-        <!-- 關於我們 -->
+        <!-- 品牌故事 / QR Code -->
         <section id="about" class="py-40 px-8 bg-white text-center">
             <div class="max-w-3xl mx-auto">
                 <div class="mb-12">
                     <a id="about-link-display" href="#" target="_blank" rel="noopener noreferrer" class="block hover:opacity-80 transition-opacity">
-                        <img id="about-icon-display" src="" class="w-48 md:w-64 mx-auto object-contain rounded-lg shadow-sm" alt="Contact QR">
+                        <img id="about-icon-display" src="" class="w-48 md:w-64 mx-auto object-contain rounded-lg shadow-sm" alt="奧兒絲朵 LINE 客服 QR Code">
                     </a>
                 </div>
                 <h2 id="about-title-display" class="text-xl font-light tracking-[0.4em] text-stone-800 mb-16 uppercase">關於 奧兒絲朵</h2>
                 <p id="about-text-display" class="text-stone-500 leading-[2.8] tracking-[0.25em] text-sm md:text-base font-extralight whitespace-pre-line text-justify md:text-center">載入中...</p>
+                
                 <div class="mt-32 ai-spirit-box">
-                    <p id="ai-quote" class="text-sm md:text-base text-stone-400 italic tracking-[0.3em] mb-12">「每一塊石頭都有它的頻率，等待與您共鳴。」</p>
+                    <p id="ai-quote" class="text-sm md:text-base text-stone-400 italic tracking-[0.3em] mb-12 leading-relaxed">「每一塊石頭都有它的頻率，等待與您共鳴。」</p>
                     <button id="btn-daily-quote" onclick="generateDailyQuote()" class="text-[10px] tracking-[0.3em] uppercase px-6 py-2 border border-stone-200 hover:border-stone-800 transition-all">獲取今日石語 ✨</button>
                 </div>
             </div>
         </section>
 
+        <!-- 靈石展示 -->
         <section id="collections" class="py-24 px-6 md:px-20 bg-[#FAF9F6]">
             <div id="collections-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 max-w-7xl mx-auto"></div>
         </section>
 
+        <!-- 社群區塊 (含影像牆) -->
         <section id="social" class="py-40 px-8 bg-white overflow-hidden">
             <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-24">
                 <div class="w-full md:w-2/5 space-y-16">
@@ -145,8 +152,8 @@
                     </div>
                 </div>
                 <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-2 gap-6 items-start">
-                    <div class="space-y-6"><div id="ig-slot-1" class="ig-embed-container rounded-sm shadow-sm"></div><div id="ig-slot-2" class="ig-embed-container rounded-sm shadow-sm"></div></div>
-                    <div class="space-y-6 pt-12"><div id="ig-slot-3" class="ig-embed-container rounded-sm shadow-sm"></div><div id="ig-slot-4" class="ig-embed-container rounded-sm shadow-sm"></div></div>
+                    <div class="space-y-6"><div id="ig-slot-1" class="ig-embed-container shadow-sm"></div><div id="ig-slot-2" class="ig-embed-container shadow-sm"></div></div>
+                    <div class="space-y-6 pt-12"><div id="ig-slot-3" class="ig-embed-container shadow-sm"></div><div id="ig-slot-4" class="ig-embed-container shadow-sm"></div></div>
                 </div>
             </div>
         </section>
@@ -157,82 +164,88 @@
         <div class="flex justify-between items-center mb-8 border-b pb-4">
             <div class="flex items-center space-x-2">
                 <div class="w-2 h-2 bg-green-400 rounded-full"></div>
-                <h3 class="font-bold tracking-widest text-stone-800 uppercase">管理模式中</h3>
+                <h3 class="font-bold tracking-widest text-stone-800 uppercase">管理員模式</h3>
             </div>
             <button onclick="toggleAdmin()"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
         
         <div class="space-y-10 pb-32">
+            <!-- 區塊 1: 品牌設定 -->
             <section class="space-y-3">
                 <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">基本配置</h4>
-                <input type="text" id="edit-brand-name" placeholder="Logo 名稱">
-                <textarea id="edit-hero-title" rows="2" placeholder="主標題"></textarea>
-                <input type="text" id="edit-hero-sub" placeholder="副標題">
-                <label class="upload-btn">更換首頁圖<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'hero')"></label>
+                <input type="text" id="edit-brand-name" placeholder="Logo 顯示名稱">
+                <textarea id="edit-hero-title" rows="2" placeholder="首頁大標題"></textarea>
+                <input type="text" id="edit-hero-sub" placeholder="首頁副標題">
+                <label class="upload-btn">更換首頁背景<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'hero')"></label>
             </section>
 
+            <!-- 區塊 2: 關於我們 -->
             <section class="space-y-3">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">故事與 QR Code</h4>
-                <textarea id="edit-about-text" rows="5" placeholder="品牌故事"></textarea>
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">品牌故事 & QR Code</h4>
+                <textarea id="edit-about-text" rows="5" placeholder="故事內容"></textarea>
                 <div class="p-4 bg-stone-50 rounded-lg space-y-3">
-                    <label class="upload-btn w-full m-0">更換 QR 圖<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'about_icon')"></label>
-                    <input type="text" id="edit-about-link" placeholder="圖片連結">
+                    <label class="upload-btn w-full m-0">更換 QR Code 圖片<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'about_icon')"></label>
+                    <input type="text" id="edit-about-link" placeholder="圖片跳轉連結 (LINE/IG)">
                 </div>
             </section>
 
+            <!-- 區塊 3: 影像展示 -->
             <section class="space-y-3">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">影像展示 (IG 嵌入)</h4>
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">影像展示 (IG 連結)</h4>
                 <div class="space-y-4">
                     <div class="p-4 border rounded-lg bg-stone-50">
-                        <input type="text" id="edit-ig-embed-1" placeholder="IG 連結 1">
+                        <input type="text" id="edit-ig-embed-1" placeholder="IG 貼文網址 1">
                         <label class="upload-btn text-[9px] m-0">或上傳備用圖 1<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig1')"></label>
                     </div>
                     <div class="p-4 border rounded-lg bg-stone-50">
-                        <input type="text" id="edit-ig-embed-2" placeholder="IG 連結 2">
+                        <input type="text" id="edit-ig-embed-2" placeholder="IG 貼文網址 2">
                         <label class="upload-btn text-[9px] m-0">或上傳備用圖 2<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig2')"></label>
                     </div>
                     <div class="p-4 border rounded-lg bg-stone-50">
-                        <input type="text" id="edit-ig-embed-3" placeholder="IG 連結 3">
+                        <input type="text" id="edit-ig-embed-3" placeholder="IG 貼文網址 3">
                         <label class="upload-btn text-[9px] m-0">或上傳備用圖 3<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig3')"></label>
                     </div>
                     <div class="p-4 border rounded-lg bg-stone-50">
-                        <input type="text" id="edit-ig-embed-4" placeholder="IG 連結 4">
+                        <input type="text" id="edit-ig-embed-4" placeholder="IG 貼文網址 4">
                         <label class="upload-btn text-[9px] m-0">或上傳備用圖 4<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig4')"></label>
                     </div>
                 </div>
             </section>
 
-            <!-- 社群連結管理 -->
+            <!-- 區塊 4: 社群連結 (修正報錯關鍵) -->
             <section class="space-y-3 border-t pt-8">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">社群資訊 (Social)</h4>
-                <input type="text" id="edit-ig-handle" placeholder="IG 帳號 (如: @our_story)">
-                <input type="text" id="edit-ig-url" placeholder="IG 主頁網址">
-                <input type="text" id="edit-fb-handle" placeholder="FB 帳號名稱">
-                <input type="text" id="edit-fb-url" placeholder="FB 專頁網址">
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">社群帳號資訊 (Social)</h4>
+                <input type="text" id="edit-ig-handle" placeholder="IG 顯示名稱 (如: @our_story)">
+                <input type="text" id="edit-ig-url" placeholder="IG 個人主頁連結">
+                <input type="text" id="edit-fb-handle" placeholder="FB 顯示名稱">
+                <input type="text" id="edit-fb-url" placeholder="FB 粉絲專頁連結">
             </section>
 
+            <!-- 區塊 5: 靈石清單 -->
             <section class="space-y-6 border-t pt-8">
                 <div class="flex justify-between items-center">
-                    <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">靈石清單</h4>
-                    <button onclick="addNewCollectionItem()" class="text-[9px] bg-stone-800 text-white px-3 py-1 rounded">＋ Add</button>
+                    <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">收藏清單管理</h4>
+                    <button onclick="addNewCollectionItem()" class="text-[9px] bg-stone-800 text-white px-3 py-1 rounded">＋ 新增靈石</button>
                 </div>
                 <div id="edit-collections-list" class="space-y-4"></div>
             </section>
         </div>
 
+        <!-- 面板底部動作 -->
         <div class="fixed bottom-0 right-0 w-full max-w-[450px] bg-white p-6 border-t z-50 shadow-2xl">
             <div class="grid grid-cols-2 gap-4">
-                <button onclick="saveSiteData()" class="bg-stone-900 text-white py-4 text-xs tracking-widest font-bold uppercase rounded-sm hover:bg-stone-800 transition-colors">Publish Changes</button>
-                <button onclick="signOutAdmin()" class="bg-stone-50 text-stone-400 py-4 text-xs tracking-widest font-bold uppercase rounded-sm border border-stone-200 hover:text-red-400 hover:border-red-200 transition-all">Logout Admin</button>
+                <button onclick="saveSiteData()" class="bg-stone-900 text-white py-4 text-xs tracking-widest font-bold uppercase rounded-sm hover:bg-stone-800 transition-colors shadow-lg">發佈更新</button>
+                <button onclick="signOutAdmin()" class="bg-stone-50 text-stone-400 py-4 text-xs tracking-widest font-bold uppercase rounded-sm border border-stone-200 hover:text-red-500 hover:border-red-200 transition-all">安全登出</button>
             </div>
         </div>
     </div>
 
+    <!-- 頁腳 -->
     <footer class="py-24 px-8 bg-white border-t border-stone-50 text-center">
         <span class="text-xl font-medium tracking-[0.5em] text-stone-800 uppercase">奧兒絲朵</span>
         <p class="text-[9px] tracking-[0.2em] text-stone-300 mt-8">© 2025 OUR STORY. CURATED FOR YOUR SOUL.</p>
         <div id="auth-status-area" class="mt-8">
-            <button onclick="toggleAdmin()" id="admin-action-btn" class="text-[9px] tracking-[0.2em] text-stone-200 uppercase border-b border-transparent hover:border-stone-200">Admin Login</button>
+            <button onclick="toggleAdmin()" id="admin-action-btn" class="text-[9px] tracking-[0.2em] text-stone-200 uppercase border-b border-transparent hover:border-stone-200 transition-colors">Admin Login</button>
         </div>
     </footer>
 
@@ -241,7 +254,7 @@
         import { getAuth, signInWithEmailAndPassword, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot, query, initializeFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // === 最高級防護：鎖定您的 UID ===
+        // === 最高級防護：鎖定您的專屬 UID ===
         const ADMIN_UID = "dIQchefYFDc2Kl1V9S4dWehdR7I3";
 
         const firebaseConfig = {
@@ -255,21 +268,24 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        // 使用 Long Polling 提升連線穩定度
         const db = initializeFirestore(app, { experimentalForceLongPolling: true });
 
+        // 石語系統池
         const quotesPool = ["每一顆靈石，都在訴說宇宙的秘密。", "靜謐之中，感受大地的呼吸。", "光影折射，映照出靈魂的純粹。", "穿越億萬年的星塵，只為與你相遇。", "心如明鏡，塵埃自落。", "在石頭的溫潤中，找回內心的平靜。", "礦石的低語，是時間留下的情書。", "擁抱自然，與萬物共鳴。", "純粹的光，照亮未曾察覺的角落。", "靜聽石語，找尋失落的記憶。", "大地之母的饋贈，值得溫柔以待。", "靈魂的頻率，在色彩中閃耀。", "靜默，是最高級的溝通方式。", "不刻意渲染，美自會浮現。", "每一道裂痕，都是成長的印記。", "與石結緣，即是與自己重逢。", "星辰隕落，化作掌心的溫度。", "在忙碌的世界中，保有一方淨土。", "心之所向，便是能量所在。", "靈石無言，卻最懂你的心。"];
         const sessionQuote = quotesPool[Math.floor(Math.random() * quotesPool.length)];
 
         window.generateDailyQuote = () => {
             const btn = document.getElementById('btn-daily-quote');
             const display = document.getElementById('ai-quote');
-            btn.disabled = true; btn.innerText = "感應場域能量中...";
+            btn.disabled = true; btn.innerText = "感應場域中...";
             setTimeout(() => { display.innerText = `「${sessionQuote}」`; btn.disabled = false; btn.innerText = "獲取今日石語 ✨"; }, 1200);
         };
 
         let siteConfig = { brandName: "奧兒絲朵", heroTitle: "", heroSub: "", heroImg: "", aboutText: "", aboutIcon: "", aboutLink: "", igHandle: "", igUrl: "#", fbHandle: "", fbUrl: "#", igEmbed1: "", igEmbed2: "", igEmbed3: "", igEmbed4: "", igImg1: "", igImg2: "", igImg3: "", igImg4: "" };
         let collectionsList = [];
 
+        // 圖片上傳處理
         window.handleImageUpload = (input, target, index = null) => {
             const file = input.files[0]; if (!file) return;
             const reader = new FileReader();
@@ -286,7 +302,7 @@
                     else if (target === 'about_icon') siteConfig.aboutIcon = base64;
                     else if (target.startsWith('ig')) siteConfig[`igImg${target.slice(2)}`] = base64;
                     else if (target === 'col') collectionsList[index].img = base64;
-                    alert("照片準備就緒！請記得 Publish 儲存。");
+                    alert("照片準備就緒，請記得按發佈更新。");
                 };
                 img.src = e.target.result;
             };
@@ -296,17 +312,13 @@
         async function init() {
             document.getElementById('loading').style.display = 'flex';
             try {
-                // 嘗試背景登入以讀取資料
-                await signInAnonymously(auth).catch(() => {});
-                
+                // 不再強制匿名登入，直接開始監聽資料
                 onAuthStateChanged(auth, (user) => {
                     const panel = document.getElementById('admin-panel');
                     const btn = document.getElementById('admin-action-btn');
-                    
                     if (user && user.uid === ADMIN_UID) {
-                        // 關鍵修正：登入成功後確保面版開啟
                         panel.classList.add('active');
-                        btn.innerText = " 管理介面 (已登入)";
+                        btn.innerText = "管理面板 (已登入)";
                         renderAdminList();
                     } else {
                         panel.classList.remove('active');
@@ -334,52 +346,76 @@
 
         function renderIgSlot(slotId, embedUrl, fallbackImg) {
             const container = document.getElementById(slotId);
+            if (!container) return;
             if (embedUrl && embedUrl.trim() !== "") {
                 container.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14"></blockquote>`;
             } else if (fallbackImg) {
-                container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 hover:scale-105" alt="Showcase">`;
+                container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 hover:scale-105" alt="Instagram Showcase">`;
+            } else {
+                container.innerHTML = `<div class="w-full h-full bg-stone-100 flex items-center justify-center text-stone-300 text-[10px]">影像載入中</div>`;
             }
         }
 
         function renderFrontEnd() {
-            document.getElementById('nav-brand-display').innerText = siteConfig.brandName;
-            document.getElementById('hero-title-display').innerText = siteConfig.heroTitle;
-            document.getElementById('hero-sub-display').innerText = siteConfig.heroSub;
-            if (siteConfig.heroImg) document.getElementById('hero-img-display').src = siteConfig.heroImg;
-            document.getElementById('about-text-display').innerText = siteConfig.aboutText;
-            if (siteConfig.aboutIcon) document.getElementById('about-icon-display').src = siteConfig.aboutIcon;
-            document.getElementById('about-link-display').href = siteConfig.aboutLink || "#";
+            const safeSetText = (id, text) => { if(document.getElementById(id)) document.getElementById(id).innerText = text || ""; };
+            const safeSetSrc = (id, src) => { if(document.getElementById(id)) document.getElementById(id).src = src || ""; };
+            const safeSetHref = (id, href) => { if(document.getElementById(id)) document.getElementById(id).href = href || "#"; };
+            const safeSetVal = (id, val) => { if(document.getElementById(id)) document.getElementById(id).value = val || ""; };
+
+            safeSetText('nav-brand-display', siteConfig.brandName);
+            safeSetText('hero-title-display', siteConfig.heroTitle);
+            safeSetText('hero-sub-display', siteConfig.heroSub);
+            if (siteConfig.heroImg) safeSetSrc('hero-img-display', siteConfig.heroImg);
+            safeSetText('about-text-display', siteConfig.aboutText);
+            if (siteConfig.aboutIcon) safeSetSrc('about-icon-display', siteConfig.aboutIcon);
+            safeSetHref('about-link-display', siteConfig.aboutLink);
             
-            document.getElementById('ig-text-display').innerText = `Instagram / ${siteConfig.igHandle}`;
-            document.getElementById('fb-text-display').innerText = `Facebook / ${siteConfig.fbHandle}`;
-            document.getElementById('ig-link-display').href = siteConfig.igUrl || "#";
-            document.getElementById('fb-link-display').href = siteConfig.fbUrl || "#";
+            safeSetText('ig-text-display', `Instagram / ${siteConfig.igHandle}`);
+            safeSetText('fb-text-display', `Facebook / ${siteConfig.fbHandle}`);
+            safeSetHref('ig-link-display', siteConfig.igUrl);
+            safeSetHref('fb-link-display', siteConfig.fbUrl);
 
             for(let i=1; i<=4; i++) { renderIgSlot(`ig-slot-${i}`, siteConfig[`igEmbed${i}`], siteConfig[`igImg${i}`]); }
             if (window.instgrm) window.instgrm.Embeds.process();
             
-            // 安全同步編輯框內容
-            const setVal = (id, val) => { if(document.getElementById(id)) document.getElementById(id).value = val || ""; };
-            setVal('edit-brand-name', siteConfig.brandName);
-            setVal('edit-hero-title', siteConfig.heroTitle);
-            setVal('edit-hero-sub', siteConfig.heroSub);
-            setVal('edit-about-text', siteConfig.aboutText);
-            setVal('edit-about-link', siteConfig.aboutLink);
-            setVal('edit-ig-handle', siteConfig.igHandle);
-            setVal('edit-ig-url', siteConfig.igUrl);
-            setVal('edit-fb-handle', siteConfig.fbHandle);
-            setVal('edit-fb-url', siteConfig.fbUrl);
-            for(let i=1; i<=4; i++) { setVal(`edit-ig-embed-${i}`, siteConfig[`igEmbed${i}`]); }
+            // 安全同步編輯內容 (修正 Null 報錯關鍵)
+            safeSetVal('edit-brand-name', siteConfig.brandName);
+            safeSetVal('edit-hero-title', siteConfig.heroTitle);
+            safeSetVal('edit-hero-sub', siteConfig.heroSub);
+            safeSetVal('edit-about-text', siteConfig.aboutText);
+            safeSetVal('edit-about-link', siteConfig.aboutLink);
+            safeSetVal('edit-ig-handle', siteConfig.igHandle);
+            safeSetVal('edit-ig-url', siteConfig.igUrl);
+            safeSetVal('edit-fb-handle', siteConfig.fbHandle);
+            safeSetVal('edit-fb-url', siteConfig.fbUrl);
+            for(let i=1; i<=4; i++) { safeSetVal(`edit-ig-embed-${i}`, siteConfig[`igEmbed${i}`]); }
         }
 
         function renderCollections() {
             const container = document.getElementById('collections-container');
-            container.innerHTML = collectionsList.map(item => `<article class="group flex flex-col items-center animate-fadeInUp"><div class="aspect-[4/5] w-full overflow-hidden bg-stone-200"><img src="${item.img}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 group-hover:scale-110" alt="${item.name}"></div><h3 class="text-base font-light mt-6 tracking-widest text-stone-800 uppercase">${item.name}</h3><p class="text-xs text-stone-400 mt-2 tracking-widest">${item.desc}</p></article>`).join('');
+            if (!container) return;
+            container.innerHTML = collectionsList.map(item => `
+                <article class="group flex flex-col items-center animate-fadeInUp">
+                    <div class="aspect-[4/5] w-full overflow-hidden bg-stone-200">
+                        <img src="${item.img}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 group-hover:scale-110" alt="${item.name}">
+                    </div>
+                    <h3 class="text-base font-light mt-6 tracking-widest text-stone-800 uppercase">${item.name}</h3>
+                    <p class="text-xs text-stone-400 mt-2 tracking-widest">${item.desc}</p>
+                </article>
+            `).join('');
         }
 
         function renderAdminList() {
             const list = document.getElementById('edit-collections-list');
-            list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border space-y-2 relative"><button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="updateLocalItem(${index}, 'name', this.value)" placeholder="名稱"><textarea onchange="updateLocalItem(${index}, 'desc', this.value)" placeholder="描述">${item.desc}</textarea><label class="upload-btn m-0 py-1 px-3 text-[10px]">換照<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
+            if (!list) return;
+            list.innerHTML = collectionsList.map((item, index) => `
+                <div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm">
+                    <button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    <input type="text" value="${item.name}" onchange="updateLocalItem(${index}, 'name', this.value)" placeholder="靈石名稱" class="text-xs font-bold">
+                    <textarea onchange="updateLocalItem(${index}, 'desc', this.value)" placeholder="描述" class="text-xs">${item.desc}</textarea>
+                    <label class="upload-btn m-0 py-2 px-3 text-[10px]">更換照片<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label>
+                </div>
+            `).join('');
             lucide.createIcons();
         }
 
@@ -389,13 +425,13 @@
         };
         window.updateLocalItem = (index, field, value) => { collectionsList[index][field] = value; };
         window.deleteItem = async (id) => {
-            if (!confirm("確定移除？")) return;
+            if (!confirm("確定移除這件收藏嗎？")) return;
             if (id.startsWith('temp_')) { collectionsList = collectionsList.filter(i => i.id !== id); renderAdminList(); }
             else { await deleteDoc(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems', id)); }
         };
 
         window.saveSiteData = async () => {
-            if (auth.currentUser?.uid !== ADMIN_UID) return alert("權限不足，請先登入！");
+            if (!auth.currentUser || auth.currentUser.uid !== ADMIN_UID) return alert("權限不足，請先登入！");
             document.getElementById('loading').style.display = 'flex';
             try {
                 const configRef = doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'main');
@@ -422,36 +458,48 @@
                     const cleanItem = { ...item }; delete cleanItem.id; delete cleanItem.isNew;
                     await setDoc(itemRef, cleanItem);
                 }
-                alert("已成功同步變更！");
-            } catch (e) { alert("失敗: " + e.message); }
+                alert("已成功發佈變更！後台介面維持開啟。");
+            } catch (e) { alert("發佈失敗 (請檢查資料庫 Rules): " + e.message); }
             finally { document.getElementById('loading').style.display = 'none'; }
         };
 
         window.toggleAdmin = async () => {
+            const panel = document.getElementById('admin-panel');
             if (auth.currentUser?.uid === ADMIN_UID) {
-                const panel = document.getElementById('admin-panel');
                 panel.classList.toggle('active');
                 document.body.style.overflow = panel.classList.contains('active') ? 'hidden' : '';
             } else {
-                const email = prompt("管理員 Email:"); if (!email) return;
-                const pass = prompt("密碼:"); if (!pass) return;
+                const email = prompt("管理員帳號 Email:"); if (!email) return;
+                const pass = prompt("登入密碼:"); if (!pass) return;
+                document.getElementById('loading').style.display = 'flex';
                 try {
                     const cred = await signInWithEmailAndPassword(auth, email, pass);
                     if (cred.user.uid === ADMIN_UID) {
                         alert("身分核對成功！管理模式已開啟。");
+                        panel.classList.add('active'); // 關鍵：立即開啟
+                        document.body.style.overflow = 'hidden';
                     } else {
-                        alert("驗證成功，但您不具備管理權限。");
-                        await signOut(auth);
+                        alert("驗證成功，但該帳號不具備管理權限。"); await signOut(auth);
                     }
-                } catch(e) { alert("帳號或密碼錯誤。"); }
+                } catch(e) { alert("登入失敗：帳號或密碼錯誤。"); }
+                finally { document.getElementById('loading').style.display = 'none'; }
             }
         };
 
-        window.signOutAdmin = () => { signOut(auth).then(() => { alert("已安全登出。"); window.location.reload(); }); };
+        window.signOutAdmin = () => { 
+            if(!confirm("確定要登出管理員身份嗎？")) return;
+            signOut(auth).then(() => { alert("已安全登出。"); window.location.reload(); }); 
+        };
+        
         window.scrollToSection = (id) => {
             const e = document.getElementById(id);
-            if (e) { window.scrollTo({ top: e.offsetTop - 80, behavior: 'smooth' }); document.getElementById('mobile-menu').classList.remove('active'); document.body.style.overflow = ''; }
+            if (e) { 
+                window.scrollTo({ top: e.offsetTop - 80, behavior: 'smooth' }); 
+                document.getElementById('mobile-menu').classList.remove('active'); 
+                document.body.style.overflow = ''; 
+            }
         };
+        
         window.toggleMenu = () => {
             const m = document.getElementById('mobile-menu');
             m.classList.toggle('active');
