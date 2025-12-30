@@ -247,7 +247,7 @@
                 <label class="text-[10px] uppercase tracking-widest text-stone-400 block mb-2">首頁背景圖片</label>
                 <div class="flex flex-col space-y-2 mb-4">
                     <label class="upload-btn">
-                        從電腦上傳照片 (將嚴格壓至 200KB 下)
+                        上傳首頁大圖 (單張上限 700KB)
                         <input type="file" id="hero-upload-input" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'hero')">
                     </label>
                     <input type="text" id="edit-hero-img" placeholder="或貼上圖片 URL">
@@ -288,7 +288,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ==========================================
         // 配置資訊
@@ -312,6 +312,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // 預設內容
         let siteData = {
             hero: { title: "奧兒絲朵\n靈石與您的故事", sub: "Every stone has its own story", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1920" },
             about: { text: "奧兒絲朵（Our Story），始於對大自然原始生命力的敬畏。\n我們不刻意渲染功能，而是希望透過靈石本身的質地與光影，\n連結您內心深處那份未曾言說的故事。\n在這裡，每一顆隕石與水晶，都是時光留給您的溫柔獻禮。" },
@@ -371,35 +372,11 @@
             btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> 感應中...`;
             lucide.createIcons();
             try {
-                const prompt = `妳是一位空靈專業的 brand 文案師。請幫我潤色這段關於「奧兒絲朵」品牌故事描述。要求：繁體中文，語氣優雅詩意，不超過 150 字。原稿：${textarea.value}`;
+                const prompt = `妳是一位專業文案師。請潤色這段品牌故事。要求：繁體中文、優雅空靈、簡約，限制 150 字內：${textarea.value}`;
                 const result = await callGemini(prompt);
                 textarea.value = result.trim();
                 siteData.about.text = result.trim();
-            } catch (e) {
-                alert("感應異常：" + e.message);
-            } finally {
-                isAiBusy = false;
-                btn.disabled = false;
-                btn.innerHTML = originalHtml;
-                lucide.createIcons();
-            }
-        };
-
-        window.polishProductAI = async (index) => {
-            if (isAiBusy) return;
-            const btn = document.getElementById(`btn-polish-prod-${index}`);
-            const input = document.getElementById(`edit-prod-desc-${index}`);
-            if (!input.value) return;
-            isAiBusy = true;
-            btn.disabled = true;
-            const originalHtml = btn.innerHTML;
-            btn.innerHTML = `✨ AI...`;
-            try {
-                const prompt = `潤色產品描述。繁體中文、空靈簡約風格，40 字內：${input.value}`;
-                const result = await callGemini(prompt);
-                input.value = result.trim();
-                siteData.collections[index].desc = result.trim();
-            } catch (e) { console.error(e); } 
+            } catch (e) { alert("感應異常：" + e.message); } 
             finally {
                 isAiBusy = false;
                 btn.disabled = false;
@@ -418,12 +395,11 @@
             display.style.opacity = "0.5";
             try {
                 const seed = Math.floor(Math.random() * 100000);
-                const prompt = `生成極簡、禪意的繁體中文「每日石語」，關於靈石啟示，25 字內。直接輸出。隨機因子：${seed}`;
+                const prompt = `生成充滿禪意的繁體中文「石語」，25 字內。直接輸出內容。隨機：${seed}`;
                 const quote = await callGemini(prompt, 5, 2000);
                 display.innerText = `「${quote.trim()}」`;
             } catch (e) {
                 display.innerText = "「靜謐中，心自明。」";
-                console.error(e.message);
             } finally {
                 display.style.opacity = "1";
                 btn.disabled = false;
@@ -433,7 +409,7 @@
         };
 
         // ==========================================
-        // 🖼️ 強化版圖片處理 (確保總容量低於 1MB)
+        // 🖼️ 強化版圖片處理 (分件儲存邏輯)
         // ==========================================
         window.handleImageUpload = (input, target, index = null) => {
             const file = input.files[0];
@@ -443,19 +419,11 @@
             reader.onload = (e) => {
                 const img = new Image();
                 img.onload = () => {
-                    // 設定圖片處理參數
-                    // 為了確保 4 張圖片 + 文字不超過 1MB (1,048,576 bytes)
-                    // 單張圖片的字串長度目標限制在 200,000 bytes 左右
                     let targetWidth = 1000; 
-                    
                     const processImage = (w) => {
                         let width = img.width;
                         let height = img.height;
-
-                        if (width > w) {
-                            height *= w / width;
-                            width = w;
-                        }
+                        if (width > w) { height *= w / width; width = w; }
 
                         const canvas = document.createElement('canvas');
                         canvas.width = width;
@@ -463,30 +431,25 @@
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
 
-                        // 核心：更嚴格的迭代壓縮
                         let quality = 0.8;
                         let base64Data = canvas.toDataURL('image/jpeg', quality);
                         
-                        // 200KB 的 Base64 長度大約是 200,000 * 1.33 = 266,000 字元
-                        // 為了保險，我們設定單張上限為 200,000 字元
-                        const SAFE_STR_LIMIT = 200000; 
+                        // 現在每一張圖片都有獨立 1MB 空間，我們目標設在單張 700KB 左右
+                        // 確保 700,000 字元長度
+                        const STR_LIMIT = 700000; 
 
-                        while (base64Data.length > SAFE_STR_LIMIT && quality > 0.1) {
+                        while (base64Data.length > STR_LIMIT && quality > 0.1) {
                             quality -= 0.1;
                             base64Data = canvas.toDataURL('image/jpeg', quality);
                         }
 
-                        // 如果品質降到 0.1 還是太大，就強行縮小尺寸
-                        if (base64Data.length > SAFE_STR_LIMIT && w > 400) {
+                        if (base64Data.length > STR_LIMIT && w > 400) {
                             return processImage(w * 0.7);
                         }
-
-                        return { data: base64Data, finalQuality: quality, finalWidth: width };
+                        return { data: base64Data, size: Math.round(base64Data.length / 1024) };
                     };
 
                     const result = processImage(targetWidth);
-                    const finalSizeKB = Math.round(result.data.length / 1024);
-
                     if (target === 'hero') {
                         siteData.hero.img = result.data;
                         document.getElementById('edit-hero-img').value = result.data;
@@ -494,8 +457,7 @@
                         siteData.collections[index].img = result.data;
                         document.getElementById(`edit-prod-img-${index}`).value = result.data;
                     }
-                    
-                    alert(`圖片壓縮成功！\n最終大小：約 ${finalSizeKB} KB\n此容量可確保多圖共存不超過資料庫上限。\n點擊下方『發佈』生效。`);
+                    alert(`圖片優化成功！\n大小：約 ${result.size} KB\n此圖片已準備好獨立儲存，不會佔用文字空間。`);
                 };
                 img.src = e.target.result;
             };
@@ -503,7 +465,7 @@
         };
 
         // ==========================================
-        // Firebase 邏輯
+        // Firebase 邏輯 (多文件讀取與儲存)
         // ==========================================
         async function init() {
             try {
@@ -513,18 +475,36 @@
                     } else { await signInAnonymously(auth); }
                 };
                 await initAuth();
+
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
-                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'siteContent', 'main');
-                        onSnapshot(docRef, (snapshot) => {
-                            if (snapshot.exists()) {
-                                siteData = snapshot.data();
+                        const configCollection = collection(db, 'artifacts', appId, 'public', 'data', 'siteConfig');
+                        onSnapshot(configCollection, (snapshot) => {
+                            if (!snapshot.empty) {
+                                // 將分散的多個文件重新組合回 siteData
+                                snapshot.forEach(doc => {
+                                    const data = doc.data();
+                                    if (doc.id === 'main_text') {
+                                        siteData.hero.title = data.heroTitle;
+                                        siteData.about.text = data.aboutText;
+                                        data.collections.forEach((c, i) => {
+                                            siteData.collections[i].name = c.name;
+                                            siteData.collections[i].desc = c.desc;
+                                            siteData.collections[i].sub = c.sub;
+                                        });
+                                    } else if (doc.id === 'img_hero') {
+                                        siteData.hero.img = data.data;
+                                    } else if (doc.id.startsWith('img_col_')) {
+                                        const idx = parseInt(doc.id.replace('img_col_', ''));
+                                        siteData.collections[idx].img = data.data;
+                                    }
+                                });
                                 renderSite();
                             } else {
-                                setDoc(docRef, siteData);
-                                renderSite();
+                                // 第一次初始化
+                                saveSiteData();
                             }
-                        }, (err) => console.error(err));
+                        });
                     }
                 });
             } catch (err) { console.error(err); }
@@ -562,10 +542,10 @@
                     </button>
                     <div class="flex flex-col space-y-2 mb-4">
                         <label class="upload-btn text-center">
-                            從電腦替換照片 (嚴格壓縮)
+                            替換照片 (獨立空間儲存)
                             <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'collection', ${index})">
                         </label>
-                        <input type="text" id="edit-prod-img-${index}" value="${item.img}" onchange="window.updateLocalItem(${index}, 'img', this.value)" placeholder="或貼上圖片 URL">
+                        <input type="text" id="edit-prod-img-${index}" value="${item.img}" onchange="window.updateLocalItem(${index}, 'img', this.value)" placeholder="圖片 URL">
                     </div>
                 </div>
             `).join('');
@@ -574,17 +554,29 @@
 
         window.saveSiteData = async () => {
             if (!auth.currentUser) return;
-            siteData.hero.title = document.getElementById('edit-hero-title').value;
-            siteData.hero.img = document.getElementById('edit-hero-img').value;
-            siteData.about.text = document.getElementById('edit-about-text').value;
+            
+            const baseRef = collection(db, 'artifacts', appId, 'public', 'data', 'siteConfig');
+            
             try {
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'siteContent', 'main');
-                await setDoc(docRef, siteData);
-                alert('內容已成功發佈！頁面照片將自動更新。');
+                // 1. 儲存文字資料 (總量極小)
+                await setDoc(doc(baseRef, 'main_text'), {
+                    heroTitle: document.getElementById('edit-hero-title').value,
+                    aboutText: document.getElementById('edit-about-text').value,
+                    collections: siteData.collections.map(c => ({ name: c.name, desc: c.desc, sub: c.sub }))
+                });
+
+                // 2. 分散儲存圖片資料 (每個文件有獨立 1MB 空間)
+                await setDoc(doc(baseRef, 'img_hero'), { data: siteData.hero.img });
+                
+                for(let i=0; i<siteData.collections.length; i++) {
+                    await setDoc(doc(baseRef, `img_col_${i}`), { data: siteData.collections[i].img });
+                }
+
+                alert('內容已成功發佈！所有照片已分別儲存。');
                 window.toggleAdmin();
             } catch (e) { 
-                console.error("Save Error:", e);
-                alert('儲存失敗：資料量可能仍過大。請嘗試重新上傳照片，系統會再次壓縮。'); 
+                console.error(e);
+                alert('儲存失敗：請確認單張照片是否過大（建議維持在 700KB 內）。'); 
             }
         };
 
@@ -593,11 +585,11 @@
         window.toggleAdmin = () => {
             const panel = document.getElementById('admin-panel');
             if (!panel.classList.contains('active')) {
-                const pass = prompt("進入管理員模式，請輸入密碼：");
+                const pass = prompt("密碼：");
                 if (pass === ADMIN_PASSWORD) {
                     panel.classList.add('active');
                     document.body.style.overflow = 'hidden';
-                } else if (pass !== null) { alert("密碼不正確"); }
+                } else if (pass !== null) { alert("密碼錯誤"); }
             } else {
                 panel.classList.remove('active');
                 document.body.style.overflow = '';
