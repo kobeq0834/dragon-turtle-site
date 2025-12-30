@@ -4,25 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- === SEO 搜尋優化 (提高 Google 被搜索到的機率) === -->
+    <!-- === SEO 搜尋優化 === -->
     <title>奧兒絲朵 | 靈石與您的故事 - 隕石、水晶、龍龜專業收藏</title>
-    <meta name="description" content="奧兒絲朵（Our Story）致力於提供高品質天然靈石收藏，包括天鐵隕石、能量水晶、精雕龍龜。每一顆靈石都是連結內心深處的故事，找尋屬於您的生命頻率。">
-    <meta name="keywords" content="奧兒絲朵,靈石,隕石,水晶,龍龜,能量石,美學品牌,天鐵,捷克隕石,淨化磁場,能量療癒">
+    <meta name="description" content="奧兒絲朵（Our Story）提供精選天鐵隕石、能量水晶、精雕龍龜。每一顆靈石都是連結內心深處的故事，找尋屬於您的生命頻率。">
+    <meta name="keywords" content="奧兒絲朵,靈石,隕石,水晶,龍龜,能量石,天鐵,捷克隕石,淨化磁場">
     <meta name="author" content="奧兒絲朵 Our Story">
     
-    <!-- Open Graph (社群分享預覽：LINE/FB) -->
+    <!-- Open Graph 分享預覽 -->
     <meta property="og:title" content="奧兒絲朵 | 靈石與您的故事">
-    <meta property="og:description" content="探索奧兒絲朵的精選收藏。每一顆靈石都有它的頻率，等待與您共鳴。">
+    <meta property="og:description" content="探索精選收藏。每一顆靈石都有它的頻率，等待與您共鳴。">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1200">
     
-    <!-- 結構化資料 (JSON-LD) -->
+    <!-- 結構化資料 -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "name": "奧兒絲朵 Our Story",
-      "description": "專業精選天然靈石與美學品牌，提供隕石、水晶、龍龜等精美收藏。",
+      "description": "專業精選天然靈石與美學品牌",
       "logo": "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200",
       "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1200"
     }
@@ -31,14 +31,13 @@
     <!-- Tailwind CSS & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Instagram 官方嵌入腳本 -->
+    <!-- Instagram 官方嵌入指令碼 -->
     <script async src="//www.instagram.com/embed.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500&display=swap');
         body { font-family: 'Noto Sans TC', sans-serif; background-color: #FAF9F6; color: #555555; scroll-behavior: smooth; }
         
-        /* 動畫效果定義 */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.05); } }
@@ -52,7 +51,6 @@
         #mobile-menu { display: none; opacity: 0; transition: opacity 0.5s ease; }
         #mobile-menu.active { display: flex; opacity: 1; }
         
-        /* 管理面板樣式 */
         .admin-panel { display: none; position: fixed; top: 0; right: 0; width: 100%; max-width: 450px; height: 100%; background: white; z-index: 100; box-shadow: -10px 0 30px rgba(0,0,0,0.1); overflow-y: auto; padding: 2.5rem; }
         .admin-panel.active { display: block; }
         
@@ -98,12 +96,12 @@
         </div>
     </nav>
 
-    <!-- 行動端全屏選單 -->
+    <!-- 行動端選單 -->
     <div id="mobile-menu" class="fixed inset-0 z-[60] bg-white flex flex-col items-center justify-center space-y-10">
         <button class="absolute top-8 right-8 text-stone-600" onclick="toggleMenu()"><i data-lucide="x" class="w-8 h-8"></i></button>
         <button onclick="scrollToSection('collections')" class="text-xl tracking-[0.4em] text-stone-600 uppercase font-light">收藏系列</button>
-        <button onclick="scrollToSection('about')" class="text-xl tracking-[0.4em] text-stone-600 uppercase font-light">品牌故事</button>
-        <button onclick="scrollToSection('social')" class="text-xl tracking-[0.4em] text-stone-600 uppercase font-light">追蹤我們</button>
+        <button onclick="scrollToSection('about')" class="text-xl tracking-[0.4em] text-stone-600 font-light uppercase">品牌故事</button>
+        <button onclick="scrollToSection('social')" class="text-xl tracking-[0.4em] text-stone-600 font-light uppercase">追蹤我們</button>
     </div>
 
     <main>
@@ -118,7 +116,7 @@
             </div>
         </header>
 
-        <!-- 品牌故事 / QR Code -->
+        <!-- 關於我們 -->
         <section id="about" class="py-40 px-8 bg-white text-center">
             <div class="max-w-3xl mx-auto">
                 <div class="mb-12">
@@ -128,7 +126,6 @@
                 </div>
                 <h2 id="about-title-display" class="text-xl font-light tracking-[0.4em] text-stone-800 mb-16 uppercase">關於 奧兒絲朵</h2>
                 <p id="about-text-display" class="text-stone-500 leading-[2.8] tracking-[0.25em] text-sm md:text-base font-extralight whitespace-pre-line text-justify md:text-center">載入中...</p>
-                
                 <div class="mt-32 ai-spirit-box">
                     <p id="ai-quote" class="text-sm md:text-base text-stone-400 italic tracking-[0.3em] mb-12 leading-relaxed">「每一塊石頭都有它的頻率，等待與您共鳴。」</p>
                     <button id="btn-daily-quote" onclick="generateDailyQuote()" class="text-[10px] tracking-[0.3em] uppercase px-6 py-2 border border-stone-200 hover:border-stone-800 transition-all">獲取今日石語 ✨</button>
@@ -136,12 +133,12 @@
             </div>
         </section>
 
-        <!-- 靈石展示 -->
+        <!-- 靈石展示牆 -->
         <section id="collections" class="py-24 px-6 md:px-20 bg-[#FAF9F6]">
             <div id="collections-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 max-w-7xl mx-auto"></div>
         </section>
 
-        <!-- 社群區塊 (含影像牆) -->
+        <!-- 社群區塊 -->
         <section id="social" class="py-40 px-8 bg-white overflow-hidden">
             <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-24">
                 <div class="w-full md:w-2/5 space-y-16">
@@ -212,12 +209,12 @@
                 </div>
             </section>
 
-            <!-- 區塊 4: 社群連結 (修正報錯關鍵) -->
+            <!-- 區塊 4: 社群連結 -->
             <section class="space-y-3 border-t pt-8">
                 <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">社群帳號資訊 (Social)</h4>
                 <input type="text" id="edit-ig-handle" placeholder="IG 顯示名稱 (如: @our_story)">
                 <input type="text" id="edit-ig-url" placeholder="IG 個人主頁連結">
-                <input type="text" id="edit-fb-handle" placeholder="FB 顯示名稱">
+                <input type="text" id="edit-fb-handle" placeholder="FB 帳號名稱">
                 <input type="text" id="edit-fb-url" placeholder="FB 粉絲專頁連結">
             </section>
 
@@ -231,7 +228,7 @@
             </section>
         </div>
 
-        <!-- 面板底部動作 -->
+        <!-- 面板底部固定按鈕 -->
         <div class="fixed bottom-0 right-0 w-full max-w-[450px] bg-white p-6 border-t z-50 shadow-2xl">
             <div class="grid grid-cols-2 gap-4">
                 <button onclick="saveSiteData()" class="bg-stone-900 text-white py-4 text-xs tracking-widest font-bold uppercase rounded-sm hover:bg-stone-800 transition-colors shadow-lg">發佈更新</button>
@@ -268,7 +265,6 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        // 使用 Long Polling 提升連線穩定度
         const db = initializeFirestore(app, { experimentalForceLongPolling: true });
 
         // 石語系統池
@@ -350,7 +346,7 @@
             if (embedUrl && embedUrl.trim() !== "") {
                 container.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14"></blockquote>`;
             } else if (fallbackImg) {
-                container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 hover:scale-105" alt="Instagram Showcase">`;
+                container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 hover:scale-105" alt="Showcase">`;
             } else {
                 container.innerHTML = `<div class="w-full h-full bg-stone-100 flex items-center justify-center text-stone-300 text-[10px]">影像載入中</div>`;
             }
@@ -378,7 +374,7 @@
             for(let i=1; i<=4; i++) { renderIgSlot(`ig-slot-${i}`, siteConfig[`igEmbed${i}`], siteConfig[`igImg${i}`]); }
             if (window.instgrm) window.instgrm.Embeds.process();
             
-            // 安全同步編輯內容 (修正 Null 報錯關鍵)
+            // 安全同步編輯內容
             safeSetVal('edit-brand-name', siteConfig.brandName);
             safeSetVal('edit-hero-title', siteConfig.heroTitle);
             safeSetVal('edit-hero-sub', siteConfig.heroSub);
@@ -463,9 +459,10 @@
             finally { document.getElementById('loading').style.display = 'none'; }
         };
 
+        // 核心修改：增加錯誤診斷提示
         window.toggleAdmin = async () => {
             const panel = document.getElementById('admin-panel');
-            if (auth.currentUser?.uid === ADMIN_UID) {
+            if (auth.currentUser && auth.currentUser.uid === ADMIN_UID) {
                 panel.classList.toggle('active');
                 document.body.style.overflow = panel.classList.contains('active') ? 'hidden' : '';
             } else {
@@ -474,14 +471,19 @@
                 document.getElementById('loading').style.display = 'flex';
                 try {
                     const cred = await signInWithEmailAndPassword(auth, email, pass);
+                    // 重要：檢查 UID 是否匹配
                     if (cred.user.uid === ADMIN_UID) {
-                        alert("身分核對成功！管理模式已開啟。");
-                        panel.classList.add('active'); // 關鍵：立即開啟
+                        alert("身分核對成功！管理員模式已開啟。");
+                        panel.classList.add('active'); 
                         document.body.style.overflow = 'hidden';
                     } else {
-                        alert("驗證成功，但該帳號不具備管理權限。"); await signOut(auth);
+                        // 診斷訊息：告知使用者目前登入的真實 UID 是多少
+                        alert("驗證成功，但該帳號不具備管理權限。\n\n您目前的帳號 UID 為:\n" + cred.user.uid + "\n\n請確認此 UID 是否已在 Firebase Rules 中設定，或是否使用了正確的管理員帳號。");
+                        await signOut(auth);
                     }
-                } catch(e) { alert("登入失敗：帳號或密碼錯誤。"); }
+                } catch(e) { 
+                    alert("登入失敗：帳號或密碼錯誤。(" + e.code + ")"); 
+                }
                 finally { document.getElementById('loading').style.display = 'none'; }
             }
         };
