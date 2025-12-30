@@ -122,9 +122,10 @@
             </h1>
             <div class="w-px h-20 bg-stone-200 mx-auto mt-16 animate-growLine"></div>
         </div>
-        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-3 opacity-40 cursor-pointer" onclick="toggleAdmin()">
-            <span class="text-[9px] tracking-[0.4em] uppercase font-light">Discovery</span>
-            <i data-lucide="arrow-down" class="w-3 h-3 animate-bounce"></i>
+        <!-- 修改後的 Discovery 區塊：提高透明度與字體大小 -->
+        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-3 opacity-70 hover:opacity-100 transition-opacity cursor-pointer z-20" onclick="toggleAdmin()">
+            <span class="text-xs tracking-[0.4em] uppercase font-light text-stone-500">Discovery</span>
+            <i data-lucide="arrow-down" class="w-4 h-4 text-stone-400 animate-bounce"></i>
         </div>
     </section>
 
@@ -231,7 +232,7 @@
         // ==========================================
         // 管理員密碼 (請在此處修改您的專屬密碼)
         // ==========================================
-        const ADMIN_PASSWORD = "Tt09230723"; 
+        const ADMIN_PASSWORD = "1234"; 
 
         // 偵測環境變數或使用手動配置
         const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : myFirebaseConfig;
