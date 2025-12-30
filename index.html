@@ -70,26 +70,30 @@
         .ai-spirit-box { max-width: 700px; margin: 0 auto; padding: 4rem 2rem; border: 1px dashed #e5e7eb; border-radius: 1.5rem; background: rgba(255, 255, 255, 0.5); }
         .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.98); z-index: 2000; display: none; align-items: center; justify-content: center; font-size: 0.8rem; letter-spacing: 0.3em; }
         
-        /* === iPhone Safari 關鍵修正：確保容器不擠壓 iframe === */
+        /* === 修正重點 1: 優化 CSS === */
+        /* 移除原本強制 iframe width:100% 的設定，這在 iOS 會導致高度計算錯誤無法播放 */
         .ig-embed-container { 
             width: 100%; 
+            min-width: 300px; /* 給予最小寬度避免塌陷 */
             display: block; 
             background: #fff; 
             margin-bottom: 1.5rem;
             position: relative;
-            z-index: 10; /* 提升層級 */
+            z-index: 10;
         }
+        
         .ig-embed-container blockquote { 
             margin: 0 auto !important; 
             width: 100% !important; 
             border: 0 !important; 
             padding: 0 !important;
-            min-width: 100% !important; /* 強制寬度 */
         }
+
         .ig-embed-container iframe {
-            width: 100% !important;
-            min-width: 100% !important; /* 避免 iPhone 縮小 iframe */
+            /* 關鍵：移除 min-width 和 width 的 !important 強制設定 */
+            /* 讓 IG 的 JS 能夠根據容器自動調整正確的 iframe 尺寸 */
             max-width: 100% !important;
+            display: block !important;
         }
     </style>
 </head>
@@ -163,7 +167,7 @@
             <div id="collections-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16 max-w-7xl mx-auto"></div>
         </section>
 
-        <!-- 社群區塊 (修復核心：手機版改為單欄) -->
+        <!-- 社群區塊 -->
         <section id="social" class="py-24 md:py-40 px-8 bg-white">
             <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16">
                 <div class="w-full md:w-2/5 space-y-12">
@@ -174,8 +178,6 @@
                     </div>
                 </div>
                 
-                <!-- 關鍵修正：grid-cols-1 (手機單欄) md:grid-cols-2 (電腦雙欄) -->
-                <!-- 這給了 IG iframe 足夠的寬度 (100% of screen)，解決了點擊失效問題 -->
                 <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                     <div class="space-y-6">
                         <div id="ig-slot-1" class="ig-embed-container shadow-sm"></div>
@@ -345,7 +347,13 @@
             
             for(let i=1; i<=4; i++) { renderIgSlot(`ig-slot-${i}`, siteConfig[`igEmbed${i}`], siteConfig[`igImg${i}`]); }
             
-            if (window.instgrm) window.instgrm.Embeds.process();
+            // === 修正重點 2: 增加延遲與檢查 ===
+            // 避免因為 DOM 還沒完全準備好或 embed.js 未載入導致的處理失敗
+            setTimeout(() => {
+                if (window.instgrm && window.instgrm.Embeds) {
+                    window.instgrm.Embeds.process();
+                }
+            }, 500);
             
             const brand = siteConfig.brandName || "奧兒絲朵";
             const sub = siteConfig.heroSub || "靈石與您的故事";
