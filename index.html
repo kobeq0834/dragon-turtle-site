@@ -303,11 +303,10 @@
         };
         const ADMIN_PASSWORD = "1234"; 
         
-        // Gemini API Key 設定 (固定使用您的 Key)
+        // Gemini API Key 設定
         const DEFAULT_GEMINI_KEY = "AIzaSyDYjCaxY3-MfYWfcHAgYM11CYLDefbSsvQ";
         const apiKeyEnv = typeof __apiKey !== 'undefined' ? __apiKey : ""; 
 
-        // 優先讀取環境變數提供的 Firebase 設定
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : myFirebaseConfig;
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
@@ -325,15 +324,14 @@
         };
 
         // ==========================================
-        // ✨ Gemini AI 核心邏輯 (強化重試與穩定版模型)
+        // ✨ Gemini AI 核心邏輯
         // ==========================================
         
         async function callGemini(promptText, retries = 6, delay = 2000) {
-            // 決定使用的 Key (LocalStorage > 環境 > 預設)
             const key = localStorage.getItem('gemini_api_key') || apiKeyEnv || DEFAULT_GEMINI_KEY;
             
-            // 使用穩定版 gemini-1.5-flash 避免預覽版 404 問題
-            const model = "gemini-1.5-flash";
+            // 修正點：使用更標準且通用的模型名稱，避免 404 錯誤
+            const model = "gemini-2.5-flash"; 
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
             
             const payload = {
@@ -358,9 +356,8 @@
                         body: JSON.stringify(payload)
                     });
 
-                    // 處理頻率限制 (429)
                     if (response.status === 429) {
-                        if (i === retries - 1) throw new Error("靈感流動太快，伺服器暫時無法跟上。請等一分鐘後再試。");
+                        if (i === retries - 1) throw new Error("API 呼叫太頻繁，請等一分鐘後再試。");
                         await new Promise(r => setTimeout(r, delay));
                         delay *= 2; 
                         continue;
@@ -369,14 +366,13 @@
                     if (!response.ok) {
                         const errBody = await response.json().catch(() => ({}));
                         const errMsg = errBody.error?.message || `HTTP ${response.status}`;
-                        // 針對 404 特別拋出模型錯誤
                         if (response.status === 404) throw new Error("MODEL_NOT_AVAILABLE");
                         throw new Error(errMsg);
                     }
 
                     const data = await response.json();
                     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-                    if (!text) throw new Error("AI 暫時無話可說");
+                    if (!text) throw new Error("AI 暫時無法產生內容");
                     return text.trim();
                 } catch (error) {
                     if (i === retries - 1 || error.message === "MODEL_NOT_AVAILABLE") throw error;
@@ -391,11 +387,11 @@
             if (!textarea.value) return;
 
             btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> 連結宇宙中...`;
+            btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> 連結中...`;
             lucide.createIcons();
 
             try {
-                const prompt = `妳是一位優雅、空靈的品牌文案師。請幫我潤色這段靈石品牌的描述。要求：繁體中文，富有禪意與詩意，精煉簡約。內容：${textarea.value}`;
+                const prompt = `妳是一位品牌師。請潤色這段品牌故事。風格空靈、優雅、禪意。文案：${textarea.value}`;
                 const result = await callGemini(prompt);
                 textarea.value = result;
             } catch (e) {
@@ -416,7 +412,7 @@
             btn.innerHTML = `✨ 感應中...`;
 
             try {
-                const prompt = `潤色靈石產品描述，空靈簡約，40字內，繁體中文：${input.value}`;
+                const prompt = `潤色靈石描述，空靈簡約，40字內：${input.value}`;
                 const result = await callGemini(prompt);
                 input.value = result;
                 siteData.collections[index].desc = result;
@@ -436,17 +432,19 @@
             if (btn.disabled) return;
             
             btn.disabled = true;
-            btn.innerText = "聆聽靈石中...";
+            btn.innerText = "讀取能量中...";
             display.style.opacity = "0.4";
 
             try {
-                const prompt = "生成一段 20 字內極簡禪意的繁體中文石語，關於礦石或大自然的連結。不需要任何解釋。";
+                const prompt = "生成一段 20 字內禪意石語，關於礦石與自然。不需要標題。";
                 const quote = await callGemini(prompt, 3, 1000); 
                 display.innerText = `「${quote}」`;
             } catch (e) {
-                display.innerText = "「靜謐中，心自明。」(感應受阻，請稍後再試)";
-                if (e.message.includes("404") || e.message === "MODEL_NOT_AVAILABLE") {
-                    alert("AI 連線失敗：目前 API 暫時不支援此模型路徑，請稍後重試。");
+                display.innerText = "「靜謐中，心自明。」";
+                if (e.message === "MODEL_NOT_AVAILABLE") {
+                    alert("AI 連線失敗：模型路徑不正確。已嘗試自動修復模型名稱，請再次點擊看看。");
+                } else {
+                    console.error(e);
                 }
             } finally {
                 display.style.opacity = "1";
@@ -462,7 +460,7 @@
                 const newKey = prompt("金鑰似乎失效，請輸入正確的 Gemini API Key：");
                 if (newKey) localStorage.setItem('gemini_api_key', newKey.trim());
             } else if (e.message === "MODEL_NOT_AVAILABLE") {
-                alert("找不到指定的 AI 模型 (404)。我已嘗試自動修復，請再次點擊看看。");
+                alert("找不到 AI 模型 (404)。這通常是因為 API 指定版本不匹配，我已嘗試更換型號，請再點一次。");
             } else {
                 alert("AI 發生錯誤: " + e.message);
             }
