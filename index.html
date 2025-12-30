@@ -91,11 +91,11 @@
         .upload-btn:hover { background: #e5e7eb; }
 
         .ai-spirit-box {
-            max-width: 500px;
+            max-width: 700px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 4rem 2rem;
             border: 1px dashed #e5e7eb;
-            border-radius: 1rem;
+            border-radius: 1.5rem;
             background: rgba(255, 255, 255, 0.5);
             transition: all 0.5s;
         }
@@ -130,9 +130,9 @@
             </div>
 
             <div class="hidden md:flex space-x-12 items-center">
-                <button onclick="scrollToSection('collections')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em]">收藏系列</button>
-                <button onclick="scrollToSection('about')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em]">品牌故事</button>
-                <button onclick="scrollToSection('social')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em]">追蹤我們</button>
+                <button onclick="scrollToSection('collections')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em] uppercase">收藏系列</button>
+                <button onclick="scrollToSection('about')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em] uppercase">品牌故事</button>
+                <button onclick="scrollToSection('social')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em] uppercase">追蹤我們</button>
                 
                 <div class="flex items-center space-x-5 border-l border-stone-200 pl-8 opacity-60 hover:opacity-100 transition-opacity">
                     <a id="nav-ig-link" href="#" target="_blank" class="text-stone-500 hover:text-stone-800 transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
@@ -151,9 +151,9 @@
         <button class="absolute top-8 right-8 text-stone-600" onclick="toggleMenu()">
             <i data-lucide="x" class="w-8 h-8"></i>
         </button>
-        <button onclick="scrollToSection('collections')" class="text-xl tracking-[0.4em] text-stone-600">收藏系列</button>
-        <button onclick="scrollToSection('about')" class="text-xl tracking-[0.4em] text-stone-600">品牌故事</button>
-        <button onclick="scrollToSection('social')" class="text-xl tracking-[0.4em] text-stone-600">追蹤我們</button>
+        <button onclick="scrollToSection('collections')" class="text-xl tracking-[0.4em] text-stone-600 uppercase">收藏系列</button>
+        <button onclick="scrollToSection('about')" class="text-xl tracking-[0.4em] text-stone-600 uppercase">品牌故事</button>
+        <button onclick="scrollToSection('social')" class="text-xl tracking-[0.4em] text-stone-600 uppercase">追蹤我們</button>
     </div>
 
     <!-- 首頁視覺區塊 -->
@@ -175,21 +175,23 @@
     <!-- 品牌故事區塊 -->
     <section id="about" class="py-40 px-8 bg-white">
         <div class="max-w-3xl mx-auto text-center">
-            <!-- 已優化尺寸，適合展示 LINE QR Code -->
+            <!-- 優化後的 QR Code 區域：點擊即可跳轉網址，解決 Android 長按辨識問題 -->
             <div class="mb-12">
-                <img id="about-icon-display" src="" class="w-48 md:w-64 mx-auto object-contain rounded-lg" alt="品牌圖示/QR Code">
+                <a id="about-link-display" href="#" target="_blank" class="block cursor-pointer hover:opacity-80 transition-opacity">
+                    <img id="about-icon-display" src="" class="w-48 md:w-64 mx-auto object-contain rounded-lg shadow-sm" alt="QR Code">
+                </a>
             </div>
-            <h2 id="about-title-display" class="text-xl font-light tracking-[0.4em] text-stone-800 mb-16">關於 奧兒絲朵</h2>
+            <h2 id="about-title-display" class="text-xl font-light tracking-[0.4em] text-stone-800 mb-16 uppercase">About Our Story</h2>
             <p id="about-text-display" class="text-stone-500 leading-[2.8] tracking-[0.25em] text-sm md:text-base font-extralight whitespace-pre-line text-justify md:text-center">
                 載入中...
             </p>
             
-            <!-- ✨ 每日石語互動區 -->
-            <div class="mt-20 ai-spirit-box">
-                <p id="ai-quote" class="text-xs text-stone-400 italic tracking-widest mb-6">
+            <!-- ✨ 每日石語互動區 (放大感應版) -->
+            <div class="mt-32 ai-spirit-box">
+                <p id="ai-quote" class="text-sm md:text-base text-stone-400 italic tracking-[0.3em] mb-12 leading-relaxed">
                     「每一塊石頭都有它的頻率，等待與您共鳴。」
                 </p>
-                <button id="btn-daily-quote" onclick="generateDailyQuote()" class="text-[10px] tracking-[0.3em] uppercase px-6 py-2 border border-stone-200 hover:border-stone-800 transition-all">
+                <button id="btn-daily-quote" onclick="generateDailyQuote()" class="text-xs md:text-sm tracking-[0.4em] uppercase px-10 py-4 border border-stone-200 hover:border-stone-800 transition-all">
                     獲取今日石語 ✨
                 </button>
             </div>
@@ -207,19 +209,19 @@
     <section id="social" class="py-40 px-8 bg-white">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-24">
             <div class="w-full md:w-2/5 space-y-16">
-                <h2 id="social-title-display" class="text-3xl font-extralight tracking-[0.3em] text-stone-800">隨時，共享日常</h2>
+                <h2 id="social-title-display" class="text-3xl font-extralight tracking-[0.3em] text-stone-800 uppercase">Follow Us</h2>
                 <div class="space-y-4">
                     <a id="ig-link-display" href="#" target="_blank" class="flex items-center justify-between group py-5 border-b border-stone-100">
-                        <span id="ig-text-display" class="text-xs tracking-[0.2em] text-stone-500 uppercase">Instagram / @our_story_gem</span>
+                        <span id="ig-text-display" class="text-xs tracking-[0.2em] text-stone-500 uppercase">Instagram</span>
                         <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300 group-hover:translate-x-1 transition-transform"></i>
                     </a>
                     <a id="fb-link-display" href="#" target="_blank" class="flex items-center justify-between group py-5 border-b border-stone-100">
-                        <span id="fb-text-display" class="text-xs tracking-[0.2em] text-stone-500 uppercase">Facebook / 奧兒絲朵 Our Story</span>
+                        <span id="fb-text-display" class="text-xs tracking-[0.2em] text-stone-500 uppercase">Facebook</span>
                         <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300 group-hover:translate-x-1 transition-transform"></i>
                     </a>
                 </div>
             </div>
-            <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-2 gap-6">
+            <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-2 gap-6 text-center">
                  <div class="space-y-6">
                     <div class="aspect-[3/4] overflow-hidden rounded-sm bg-stone-100 shadow-sm"><img src="https://images.unsplash.com/photo-1512168221867-0485ba5e561e?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-90" alt=""></div>
                     <div class="aspect-square overflow-hidden rounded-sm bg-stone-100 shadow-sm"><img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-90" alt=""></div>
@@ -241,40 +243,42 @@
         
         <div class="space-y-12">
             <section class="space-y-4">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">首頁區塊</h4>
-                <input type="text" id="edit-brand-name" placeholder="品牌名稱 (左上角)">
-                <textarea id="edit-hero-title" rows="2" placeholder="首頁大標題"></textarea>
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">Brand Header</h4>
+                <input type="text" id="edit-brand-name" placeholder="品牌名稱 (Logo)">
+            </section>
+
+            <section class="space-y-4">
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">Hero Section</h4>
+                <textarea id="edit-hero-title" rows="2" placeholder="首頁標題"></textarea>
                 <input type="text" id="edit-hero-sub" placeholder="首頁小標題">
-                <div class="flex flex-col space-y-2">
-                    <label class="upload-btn text-center">上傳首頁背景照片<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'hero')"></label>
+                <label class="upload-btn text-center w-full shadow-sm">更換首頁背景圖<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'hero')"></label>
+            </section>
+
+            <section class="space-y-4">
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">Brand Story</h4>
+                <input type="text" id="edit-about-title" placeholder="故事標題">
+                <textarea id="edit-about-text" rows="5" placeholder="品牌故事內容"></textarea>
+                <div class="p-4 bg-stone-50 rounded-lg space-y-3">
+                    <label class="text-[10px] uppercase text-stone-400">QR Code 區塊設定</label>
+                    <label class="upload-btn text-center w-full text-[10px] shadow-sm m-0">更換圖示/QR Code<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'about_icon')"></label>
+                    <input type="text" id="edit-about-link" placeholder="圖片導向網址 (LINE/IG 連結)">
                 </div>
             </section>
 
             <section class="space-y-4">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">關於我們</h4>
-                <input type="text" id="edit-about-title" placeholder="關於標題">
-                <textarea id="edit-about-text" rows="5" placeholder="關於文案描述"></textarea>
-                <div class="flex flex-col space-y-2">
-                    <label class="upload-btn text-center text-[10px]">更換區塊圖示/QR Code<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'about_icon')"></label>
-                </div>
-            </section>
-
-            <section class="space-y-4">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">社群連結 (帳號與連結)</h4>
-                <input type="text" id="edit-ig-handle" placeholder="Instagram 帳號名稱 (如 @our_story_gem)">
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">Social Media</h4>
+                <input type="text" id="edit-ig-handle" placeholder="Instagram 帳號">
                 <input type="text" id="edit-ig-url" placeholder="Instagram 個人檔案完整網址">
-                <input type="text" id="edit-fb-handle" placeholder="Facebook 帳號名稱">
+                <input type="text" id="edit-fb-handle" placeholder="Facebook 帳號">
                 <input type="text" id="edit-fb-url" placeholder="Facebook 粉絲專頁完整網址">
             </section>
 
             <section class="space-y-6">
                 <div class="flex justify-between items-center">
-                    <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">收藏展示清單</h4>
-                    <button onclick="addNewCollectionItem()" class="text-[10px] bg-stone-900 text-white px-4 py-1.5 rounded-full hover:bg-stone-700 transition-all">＋ 新增靈石</button>
+                    <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">Collection Items</h4>
+                    <button onclick="addNewCollectionItem()" class="text-[10px] bg-stone-900 text-white px-4 py-1.5 rounded-full uppercase">＋ Add Stone</button>
                 </div>
-                <div id="edit-collections-list" class="space-y-6">
-                    <!-- 動態生成 -->
-                </div>
+                <div id="edit-collections-list" class="space-y-6"></div>
             </section>
 
             <div class="sticky bottom-0 bg-white pt-4 pb-8 border-t z-50">
@@ -318,7 +322,7 @@
         const db = getFirestore(app);
 
         // ==========================================
-        // ✨ 非 AI 儀式感石語系統
+        // ✨ 非 AI 儀式感石語系統 (會話鎖定)
         // ==========================================
         const quotesPool = [
             "每一顆靈石，都在訴說宇宙的秘密。",
@@ -362,7 +366,7 @@
         };
 
         // ==========================================
-        // 📂 資料處理與管理
+        // 📂 資料處理與管理邏輯
         // ==========================================
         let siteConfig = { 
             brandName: "奧兒絲朵",
@@ -371,7 +375,8 @@
             heroImg: "",
             aboutTitle: "關於 奧兒絲朵",
             aboutText: "",
-            aboutIcon: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200",
+            aboutIcon: "",
+            aboutLink: "",
             igHandle: "@our_story_gem",
             igUrl: "#",
             fbHandle: "奧兒絲朵 Our Story",
@@ -401,7 +406,7 @@
                     if (target === 'hero') siteConfig.heroImg = base64;
                     else if (target === 'about_icon') siteConfig.aboutIcon = base64;
                     else collectionsList[index].img = base64;
-                    alert("照片處理完畢，請點擊底部的儲存按鈕。");
+                    alert("照片上傳就緒！");
                 };
                 img.src = e.target.result;
             };
@@ -451,14 +456,16 @@
             document.getElementById('about-title-display').innerText = siteConfig.aboutTitle;
             document.getElementById('about-text-display').innerText = siteConfig.aboutText;
             if (siteConfig.aboutIcon) document.getElementById('about-icon-display').src = siteConfig.aboutIcon;
+            
+            // 重要：更新 QR Code 導向連結
+            const qrLink = siteConfig.aboutLink || "#";
+            document.getElementById('about-link-display').href = qrLink;
 
             const igUrl = siteConfig.igUrl || "#";
             const fbUrl = siteConfig.fbUrl || "#";
-            
             document.getElementById('nav-ig-link').href = igUrl;
             document.getElementById('ig-link-display').href = igUrl;
             document.getElementById('ig-text-display').innerText = `Instagram / ${siteConfig.igHandle}`;
-            
             document.getElementById('nav-fb-link').href = fbUrl;
             document.getElementById('fb-link-display').href = fbUrl;
             document.getElementById('fb-text-display').innerText = `Facebook / ${siteConfig.fbHandle}`;
@@ -468,6 +475,7 @@
             document.getElementById('edit-hero-sub').value = siteConfig.heroSub;
             document.getElementById('edit-about-title').value = siteConfig.aboutTitle;
             document.getElementById('edit-about-text').value = siteConfig.aboutText;
+            document.getElementById('edit-about-link').value = siteConfig.aboutLink || "";
             document.getElementById('edit-ig-handle').value = siteConfig.igHandle;
             document.getElementById('edit-ig-url').value = siteConfig.igUrl || "";
             document.getElementById('edit-fb-handle').value = siteConfig.fbHandle;
@@ -500,21 +508,21 @@
                     <input type="text" value="${item.name}" placeholder="名稱" onchange="updateLocalItem(${index}, 'name', this.value)">
                     <input type="text" value="${item.sub}" placeholder="副標" onchange="updateLocalItem(${index}, 'sub', this.value)">
                     <textarea placeholder="描述" onchange="updateLocalItem(${index}, 'desc', this.value)">${item.desc}</textarea>
-                    <label class="upload-btn w-full text-center m-0 text-[10px]">更換照片 (獨立儲存空間)<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label>
+                    <label class="upload-btn w-full text-center m-0 text-[10px]">更換照片 (獨立空間)<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label>
                 </div>
             `).join('');
             lucide.createIcons();
         }
 
         window.addNewCollectionItem = () => {
-            collectionsList.unshift({ id: 'temp_' + Date.now(), name: "新項目", desc: "", sub: "Collection Series", img: "", createdAt: Date.now(), isNew: true });
+            collectionsList.unshift({ id: 'temp_' + Date.now(), name: "新收藏", desc: "", sub: "Collection Series", img: "", createdAt: Date.now(), isNew: true });
             renderAdminList();
         };
 
         window.updateLocalItem = (index, field, value) => { collectionsList[index][field] = value; };
 
         window.deleteItem = async (id) => {
-            if (!confirm("確定移除？")) return;
+            if (!confirm("確定移除此展示？")) return;
             if (id.startsWith('temp_')) { collectionsList = collectionsList.filter(i => i.id !== id); renderAdminList(); }
             else { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'galleryItems', id)); }
         };
@@ -532,6 +540,7 @@
                     aboutTitle: document.getElementById('edit-about-title').value,
                     aboutText: document.getElementById('edit-about-text').value,
                     aboutIcon: siteConfig.aboutIcon,
+                    aboutLink: document.getElementById('edit-about-link').value,
                     igHandle: document.getElementById('edit-ig-handle').value,
                     igUrl: document.getElementById('edit-ig-url').value,
                     fbHandle: document.getElementById('edit-fb-handle').value,
