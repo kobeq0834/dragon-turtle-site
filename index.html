@@ -22,11 +22,13 @@
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.05); } }
         @keyframes growLine { from { height: 0; opacity: 0; } to { height: 80px; opacity: 1; } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
         .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }
         .animate-fadeInUp { animation: fadeInUp 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .animate-slowZoom { animation: slowZoom 30s linear infinite alternate; }
         .animate-growLine { animation: growLine 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .animate-spin { animation: spin 1s linear infinite; }
         
         .delay-100 { animation-delay: 0.3s; }
         
@@ -55,7 +57,7 @@
             top: 0;
             right: 0;
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
             height: 100%;
             background: white;
             z-index: 100;
@@ -67,10 +69,34 @@
         input, textarea {
             width: 100%;
             border: 1px solid #e5e7eb;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
             border-radius: 4px;
             font-size: 0.875rem;
+            background: #fafaf9;
+        }
+        
+        .ai-btn {
+            font-size: 0.75rem;
+            color: #8b5cf6;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            transition: opacity 0.2s;
+        }
+        .ai-btn:hover { opacity: 0.7; }
+        .ai-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* AI 互動小框樣式 */
+        .ai-spirit-box {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 2rem;
+            border: 1px dashed #e5e7eb;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.5);
+            transition: all 0.5s;
         }
     </style>
 </head>
@@ -123,7 +149,7 @@
             <div class="w-px h-20 bg-stone-200 mx-auto mt-16 animate-growLine"></div>
         </div>
         
-        <!-- 下滑提示箭頭 (移除了 Discovery 按鈕) -->
+        <!-- 下滑提示箭頭 -->
         <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-3 z-20 opacity-40">
             <i data-lucide="chevron-down" class="w-5 h-5 text-stone-400 animate-bounce"></i>
         </div>
@@ -139,6 +165,16 @@
             <p id="about-text" class="text-stone-500 leading-[2.8] tracking-[0.25em] text-sm md:text-base font-extralight whitespace-pre-line text-justify md:text-center">
                 載入中...
             </p>
+            
+            <!-- ✨ Gemini 每日石語互動區 -->
+            <div class="mt-20 ai-spirit-box">
+                <p id="ai-quote" class="text-xs text-stone-400 italic tracking-widest mb-6">
+                    「每一塊石頭都有它的頻率，等待與您共鳴。」
+                </p>
+                <button id="btn-daily-quote" onclick="generateDailyQuote()" class="text-[10px] tracking-[0.3em] uppercase px-6 py-2 border border-stone-200 hover:border-stone-800 transition-all">
+                    獲取今日石語 ✨
+                </button>
+            </div>
         </div>
     </section>
 
@@ -193,8 +229,12 @@
             <section>
                 <label class="text-[10px] uppercase tracking-widest text-stone-400 block mb-2">首頁標題</label>
                 <textarea id="edit-hero-title" rows="3"></textarea>
+                
                 <label class="text-[10px] uppercase tracking-widest text-stone-400 block mb-2">關於我們內容</label>
                 <textarea id="edit-about-text" rows="6"></textarea>
+                <button onclick="polishAboutAI()" class="ai-btn" id="btn-polish-about">
+                    <i data-lucide="sparkles" class="w-3 h-3"></i> AI 潤色文案 ✨
+                </button>
             </section>
 
             <section id="edit-collections-list">
@@ -216,20 +256,20 @@
             </div>
             <div class="pt-4 flex flex-col items-center space-y-4">
                 <p class="text-[9px] tracking-[0.2em] text-stone-300 uppercase">© 2025 OUR STORY. CURATED FOR YOUR SOUL.</p>
-                <!-- 頁尾管理員登入按鈕 (保留) -->
+                <!-- 頁尾管理員登入按鈕 -->
                 <button onclick="toggleAdmin()" class="text-[9px] tracking-[0.2em] text-stone-200 hover:text-stone-500 transition-colors uppercase border-b border-transparent hover:border-stone-400 pb-0.5">Admin Login</button>
             </div>
         </div>
     </footer>
 
-    <!-- Firebase SDK -->
+    <!-- Firebase & Gemini SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ==========================================
-        // Firebase 配置資訊
+        // 配置資訊
         // ==========================================
         const myFirebaseConfig = {
             apiKey: "AIzaSyDruZNMUyiJNcyoksYIBDHv5F1SiiG2Mss",
@@ -239,11 +279,8 @@
             messagingSenderId: "651350028652",
             appId: "1:651350028652:web:44db9f6bd7d1b502578349"
         };
-
-        // ==========================================
-        // 管理員密碼
-        // ==========================================
-        const ADMIN_PASSWORD = "Tt09230723"; 
+        const ADMIN_PASSWORD = "1234"; 
+        const GEMINI_API_KEY = ""; // 執行環境會自動提供
 
         const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : myFirebaseConfig;
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'our-story-main';
@@ -262,6 +299,107 @@
             ]
         };
 
+        // ==========================================
+        // ✨ Gemini AI 核心邏輯
+        // ==========================================
+        async function callGemini(prompt, retries = 5, delay = 1000) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { temperature: 0.7, maxOutputTokens: 500 }
+            };
+
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) throw new Error('API Error');
+                    const result = await response.json();
+                    return result.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                } catch (error) {
+                    if (i === retries - 1) throw error;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2; // 指數回退
+                }
+            }
+        }
+
+        // AI 潤色功能 (後台)
+        window.polishAboutAI = async () => {
+            const btn = document.getElementById('btn-polish-about');
+            const textarea = document.getElementById('edit-about-text');
+            const originalText = textarea.value;
+            if (!originalText) return;
+
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> AI 思考中...`;
+            lucide.createIcons();
+
+            try {
+                const prompt = `你是一位高級品牌文案師。請幫我潤色這段關於「奧兒絲朵 (Our Story)」靈石品牌的描述。要求：語言要優雅、空靈、簡約、富有詩意，強調靈魂與自然的連結，不要有過多商業推銷感。字數保持在200字以內。原始文案：${originalText}`;
+                const polished = await callGemini(prompt);
+                textarea.value = polished.trim();
+            } catch (error) {
+                console.error(error);
+                alert('AI 暫時無法連線，請稍後再試。');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="sparkles" class="w-3 h-3"></i> AI 潤色文案 ✨`;
+                lucide.createIcons();
+            }
+        };
+
+        window.polishProductAI = async (index) => {
+            const btn = document.getElementById(`btn-polish-prod-${index}`);
+            const input = document.getElementById(`edit-prod-desc-${index}`);
+            const originalText = input.value;
+            if (!originalText) return;
+
+            btn.disabled = true;
+            btn.innerHTML = `✨ AI 處理中...`;
+
+            try {
+                const prompt = `請幫我潤色這段產品描述。這是一個靈石收藏品（可能是隕石、水晶或守望雕刻）。風格要空靈、文藝。字數在50字以內。原句：${originalText}`;
+                const polished = await callGemini(prompt);
+                input.value = polished.trim();
+                siteData.collections[index].desc = polished.trim();
+            } catch (error) {
+                console.error(error);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="sparkles" class="w-3 h-3"></i> AI ✨`;
+                lucide.createIcons();
+            }
+        };
+
+        // 每日石語功能 (前台)
+        window.generateDailyQuote = async () => {
+            const btn = document.getElementById('btn-daily-quote');
+            const display = document.getElementById('ai-quote');
+            
+            btn.disabled = true;
+            btn.innerText = "正在感應靈石能量...";
+            display.style.opacity = "0.5";
+
+            try {
+                const prompt = "請生成一段極簡、充滿靈性且空靈的「每日石語」，內容關於隕石、水晶或大自然的啟示。字數在30字以內。例如：宇宙的星塵，在您呼吸間悄然綻放。";
+                const quote = await callGemini(prompt);
+                display.innerText = `「${quote.trim()}」`;
+            } catch (error) {
+                console.error(error);
+            } finally {
+                display.style.opacity = "1";
+                btn.disabled = false;
+                btn.innerText = "獲取今日石語 ✨";
+            }
+        };
+
+        // ==========================================
+        // 核心網站邏輯
+        // ==========================================
         async function init() {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -297,7 +435,7 @@
             document.getElementById('about-text').innerText = siteData.about.text;
 
             const container = document.getElementById('collections-container');
-            container.innerHTML = siteData.collections.map(item => `
+            container.innerHTML = siteData.collections.map((item, index) => `
                 <div class="group flex flex-col items-center">
                     <div class="relative overflow-hidden aspect-[4/5] w-full mb-10 shadow-sm transition-shadow hover:shadow-xl duration-1000 bg-stone-200">
                         <img src="${item.img}" class="w-full h-full object-cover opacity-95 transition-all duration-[2000ms] group-hover:scale-105 group-hover:opacity-100" alt="">
@@ -316,7 +454,10 @@
                 <div class="border-t pt-4 mt-4">
                     <label class="text-[10px] font-bold uppercase tracking-widest text-stone-600 block mb-2">收藏項目 ${index + 1}</label>
                     <input type="text" value="${item.name}" onchange="window.updateLocalItem(${index}, 'name', this.value)" placeholder="名稱">
-                    <textarea onchange="window.updateLocalItem(${index}, 'desc', this.value)" placeholder="描述">${item.desc}</textarea>
+                    <textarea id="edit-prod-desc-${index}" onchange="window.updateLocalItem(${index}, 'desc', this.value)" placeholder="描述">${item.desc}</textarea>
+                    <button onclick="window.polishProductAI(${index})" class="ai-btn" id="btn-polish-prod-${index}">
+                        <i data-lucide="sparkles" class="w-3 h-3"></i> AI ✨
+                    </button>
                     <input type="text" value="${item.img}" onchange="window.updateLocalItem(${index}, 'img', this.value)" placeholder="圖片網址">
                 </div>
             `).join('');
