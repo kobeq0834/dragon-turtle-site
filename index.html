@@ -4,31 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- === SEO 搜尋優化 (正式網址版) === -->
+    <!-- === SEO 搜尋優化 (初始預設值) === -->
     <title>奧兒絲朵 | 靈石與您的故事 - 隕石、水晶、龍龜專業收藏</title>
-    <meta name="description" content="奧兒絲朵（Our Story）致力於提供高品質天然靈石收藏，包括天鐵隕石、能量水晶、精雕龍龜。每一顆靈石都是連結內心深處的故事，找尋屬於您的生命頻率。">
+    <meta name="description" id="meta-desc" content="奧兒絲朵（Our Story）致力於提供高品質天然靈石收藏，包括天鐵隕石、能量水晶、精雕龍龜。每一顆靈石都是連結內心深處的故事，找尋屬於您的生命頻率。">
     <meta name="keywords" content="奧兒絲朵,靈石,隕石,水晶,龍龜,能量石,美學品牌,天鐵,捷克隕石,淨化磁場,能量水晶,龍龜收藏">
     <meta name="author" content="奧兒絲朵 Our Story">
     
-    <!-- 標準連結：告訴 Google 這是唯一官網 -->
+    <!-- 標準連結 -->
     <link rel="canonical" href="https://our-story.com.tw/">
 
-    <!-- Open Graph 分享預覽 (LINE/FB/IG) -->
-    <meta property="og:title" content="奧兒絲朵 | 靈石與您的故事">
-    <meta property="og:description" content="每一顆靈石都有它的頻率。探索奧兒絲朵的精選收藏，找尋觸動心靈的能量瞬間。">
+    <!-- Open Graph 分享預覽 (動態標籤 ID) -->
+    <meta property="og:title" id="og-title" content="奧兒絲朵 | 靈石與您的故事">
+    <meta property="og:description" id="og-desc" content="每一顆靈石都有它的頻率。探索奧兒絲朵的精選收藏。">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://our-story.com.tw/">
     <meta property="og:image" content="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1200">
     <meta property="og:site_name" content="奧兒絲朵 Our Story">
     
-    <!-- 結構化資料 (Schema.org) -->
+    <!-- 結構化資料 -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Brand",
       "name": "奧兒絲朵 Our Story",
-      "alternateName": "奧兒絲朵",
-      "description": "專業精選天然靈石與美學品牌，提供隕石、水晶、龍龜等精美收藏。",
+      "description": "專業精選天然靈石與美學品牌",
       "logo": "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200",
       "url": "https://our-story.com.tw/"
     }
@@ -37,14 +36,12 @@
     <!-- Tailwind CSS & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Instagram 官方嵌入腳本 -->
     <script async src="//www.instagram.com/embed.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500&display=swap');
         body { font-family: 'Noto Sans TC', sans-serif; background-color: #FAF9F6; color: #555555; scroll-behavior: smooth; }
         
-        /* 動畫效果 */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.05); } }
@@ -58,13 +55,10 @@
         #mobile-menu { display: none; opacity: 0; transition: opacity 0.5s ease; }
         #mobile-menu.active { display: flex; opacity: 1; }
         
-        /* 管理面板樣式 */
         .admin-panel { display: none; position: fixed; top: 0; right: 0; width: 100%; max-width: 450px; height: 100%; background: white; z-index: 100; box-shadow: -10px 0 30px rgba(0,0,0,0.1); overflow-y: auto; padding: 2.5rem; }
         .admin-panel.active { display: block; }
         
         input, textarea { width: 100%; border: 1px solid #e5e7eb; padding: 0.85rem; margin-bottom: 0.5rem; border-radius: 6px; font-size: 0.875rem; background: #fafaf9; }
-        input:focus, textarea:focus { outline: none; border-color: #888; }
-        
         .upload-btn { display: inline-block; background: #f3f4f6; padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.75rem; color: #374151; cursor: pointer; border: 1px solid #d1d5db; margin-bottom: 0.5rem; text-align: center; width: 100%; }
         
         .ai-spirit-box { max-width: 700px; margin: 0 auto; padding: 4rem 2rem; border: 1px dashed #e5e7eb; border-radius: 2rem; background: rgba(255, 255, 255, 0.5); }
@@ -76,7 +70,6 @@
 </head>
 <body class="font-light">
 
-    <!-- 加載中疊加層 -->
     <div id="loading" class="loading-overlay" aria-hidden="true">
         <div class="flex flex-col items-center">
             <i data-lucide="loader" class="w-8 h-8 animate-spin mb-4 text-stone-400"></i>
@@ -99,7 +92,7 @@
                     <a id="nav-fb-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i data-lucide="facebook" class="w-4 h-4"></i></a>
                 </div>
             </div>
-            <button class="md:hidden text-stone-600" onclick="toggleMenu()" aria-label="開啟選單"><i data-lucide="menu" class="w-6 h-6"></i></button>
+            <button class="md:hidden text-stone-600" onclick="toggleMenu()" aria-label="Menu"><i data-lucide="menu" class="w-6 h-6"></i></button>
         </div>
     </nav>
 
@@ -123,7 +116,7 @@
             </div>
         </header>
 
-        <!-- 品牌故事 / QR Code -->
+        <!-- 品牌故事 -->
         <section id="about" class="py-40 px-8 bg-white text-center">
             <div class="max-w-3xl mx-auto">
                 <div class="mb-12">
@@ -141,12 +134,12 @@
             </div>
         </section>
 
-        <!-- 靈石展示牆 -->
+        <!-- 靈石展示 -->
         <section id="collections" class="py-24 px-6 md:px-20 bg-[#FAF9F6]">
             <div id="collections-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 max-w-7xl mx-auto"></div>
         </section>
 
-        <!-- 社群區塊 (含影像牆) -->
+        <!-- 社群區塊 -->
         <section id="social" class="py-40 px-8 bg-white overflow-hidden">
             <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-24">
                 <div class="w-full md:w-2/5 space-y-16">
@@ -175,21 +168,20 @@
         </div>
         
         <div class="space-y-10 pb-32">
-            <!-- 配置區塊 -->
             <section class="space-y-3">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">基本配置</h4>
-                <input type="text" id="edit-brand-name" placeholder="Logo 顯示名稱">
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">基本配置 (影響 SEO)</h4>
+                <input type="text" id="edit-brand-name" placeholder="Logo 名稱">
                 <textarea id="edit-hero-title" rows="2" placeholder="首頁大標題"></textarea>
-                <input type="text" id="edit-hero-sub" placeholder="首頁副標題">
+                <input type="text" id="edit-hero-sub" placeholder="首頁副標題 (SEO標籤)">
                 <label class="upload-btn">更換首頁背景<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'hero')"></label>
             </section>
 
             <section class="space-y-3">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">品牌故事 & QR Code</h4>
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">故事 & 摘要 (SEO描述)</h4>
                 <textarea id="edit-about-text" rows="5" placeholder="故事內容"></textarea>
                 <div class="p-4 bg-stone-50 rounded-lg space-y-3">
                     <label class="upload-btn w-full m-0">更換 QR Code 圖片<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'about_icon')"></label>
-                    <input type="text" id="edit-about-link" placeholder="圖片跳轉連結 (LINE/IG)">
+                    <input type="text" id="edit-about-link" placeholder="圖片跳轉連結">
                 </div>
             </section>
 
@@ -270,7 +262,7 @@
         const auth = getAuth(app);
         const db = initializeFirestore(app, { experimentalForceLongPolling: true });
 
-        // 石語系統
+        // 石語系統池
         const quotesPool = ["每一顆靈石，都在訴說宇宙的秘密。", "靜謐之中，感受大地的呼吸。", "光影折射，映照出靈魂的純粹。", "穿越億萬年的星塵，只為與你相遇。", "心如明鏡，塵埃自落。", "在石頭的溫潤中，找回內心的平靜。", "礦石的低語，是時間留下的情書。", "擁抱自然，與萬物共鳴。", "純粹的光，照亮未曾察覺的角落。", "靜聽石語，找尋失落的記憶。", "大地之母的饋贈，值得溫柔以待。", "靈魂的頻率，在色彩中閃耀。", "靜默，是最高級的溝通方式。", "不刻意渲染，美自會浮現。", "每一道裂痕，都是成長的印記。", "與石結緣，即是與自己重逢。", "星辰隕落，化作掌心的溫度。", "在忙碌的世界中，保有一方淨土。", "心之所向，便是能量所在。", "靈石無言，卻最懂你的心。"];
         const sessionQuote = quotesPool[Math.floor(Math.random() * quotesPool.length)];
 
@@ -311,7 +303,6 @@
         async function init() {
             document.getElementById('loading').style.display = 'flex';
             try {
-                // 背景嘗試以遊客權限連線資料庫
                 onAuthStateChanged(auth, (user) => {
                     const panel = document.getElementById('admin-panel');
                     const btn = document.getElementById('admin-action-btn');
@@ -350,10 +341,30 @@
             if (embedUrl && embedUrl.trim() !== "") {
                 container.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14"></blockquote>`;
             } else if (fallbackImg) {
-                container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 hover:scale-105" alt="奧兒絲朵 Instagram 作品牆">`;
+                container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 hover:scale-105" alt="奧兒絲朵作品展示">`;
             } else {
                 container.innerHTML = `<div class="w-full h-full bg-stone-100 flex items-center justify-center text-stone-300 text-[10px]">影像載入中</div>`;
             }
+        }
+
+        // === 新增：動態 SEO 同步功能 ===
+        function syncSEO(config) {
+            // 1. 同步瀏覽器標籤標題
+            const brand = config.brandName || "奧兒絲朵";
+            const sub = config.heroSub || "靈石與您的故事";
+            document.title = `${brand} | ${sub} - 專業收藏`;
+
+            // 2. 同步 Meta Description (摘要)
+            const desc = config.aboutText ? config.aboutText.substring(0, 150) + "..." : "專業精選天然靈石與美學品牌。";
+            const metaDesc = document.getElementById('meta-desc');
+            if (metaDesc) metaDesc.setAttribute('content', desc);
+
+            // 3. 同步 Open Graph (社群分享)
+            const ogTitle = document.getElementById('og-title');
+            if (ogTitle) ogTitle.setAttribute('content', `${brand} | ${sub}`);
+            
+            const ogDesc = document.getElementById('og-desc');
+            if (ogDesc) ogDesc.setAttribute('content', desc);
         }
 
         function renderFrontEnd() {
@@ -378,7 +389,10 @@
             for(let i=1; i<=4; i++) { renderIgSlot(`ig-slot-${i}`, siteConfig[`igEmbed${i}`], siteConfig[`igImg${i}`]); }
             if (window.instgrm) window.instgrm.Embeds.process();
             
-            // 安全同步編輯內容
+            // 呼叫動態 SEO 同步
+            syncSEO(siteConfig);
+            
+            // 安全同步編輯框
             safeSetVal('edit-brand-name', siteConfig.brandName);
             safeSetVal('edit-hero-title', siteConfig.heroTitle);
             safeSetVal('edit-hero-sub', siteConfig.heroSub);
@@ -397,7 +411,7 @@
             container.innerHTML = collectionsList.map(item => `
                 <article class="group flex flex-col items-center animate-fadeInUp">
                     <div class="aspect-[4/5] w-full overflow-hidden bg-stone-200">
-                        <img src="${item.img}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 group-hover:scale-110" alt="奧兒絲朵靈石清單：${item.name}">
+                        <img src="${item.img}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 group-hover:scale-110" alt="奧兒絲朵：${item.name}">
                     </div>
                     <h3 class="text-base font-light mt-6 tracking-widest text-stone-800 uppercase">${item.name}</h3>
                     <p class="text-xs text-stone-400 mt-2 tracking-widest">${item.desc}</p>
@@ -452,7 +466,7 @@
                     await setDoc(itemRef, cleanItem);
                 }
                 alert("已成功發佈變更！後台介面維持開啟。");
-            } catch (e) { alert("發佈失敗 (請檢查 Firestore Rules 規則): " + e.message); }
+            } catch (e) { alert("發佈失敗: " + e.message); }
             finally { document.getElementById('loading').style.display = 'none'; }
         };
 
@@ -470,16 +484,14 @@
                 try {
                     const cred = await signInWithEmailAndPassword(auth, email, pass);
                     const loggedInUid = cred.user.uid.trim();
-                    
                     if (loggedInUid === ADMIN_UID) {
                         alert("身分核對成功！管理模式已開啟。");
                         panel.classList.add('active');
                         document.body.style.overflow = 'hidden';
                     } else {
-                        alert("驗證成功，但該帳號不具備管理權限。\n\n目前登入 UID 為:\n" + loggedInUid + "\n\n系統預期 UID 為:\n" + ADMIN_UID);
-                        await signOut(auth);
+                        alert("驗證成功，但該帳號不具備管理權限。"); await signOut(auth);
                     }
-                } catch(e) { alert("登入失敗：帳號或密碼錯誤。(" + e.code + ")"); }
+                } catch(e) { alert("登入失敗：帳號或密碼錯誤。"); }
                 finally { document.getElementById('loading').style.display = 'none'; }
             }
         };
@@ -491,11 +503,7 @@
         
         window.scrollToSection = (id) => {
             const e = document.getElementById(id);
-            if (e) { 
-                window.scrollTo({ top: e.offsetTop - 80, behavior: 'smooth' }); 
-                document.getElementById('mobile-menu').classList.remove('active'); 
-                document.body.style.overflow = ''; 
-            }
+            if (e) { window.scrollTo({ top: e.offsetTop - 80, behavior: 'smooth' }); document.getElementById('mobile-menu').classList.remove('active'); document.body.style.overflow = ''; }
         };
         
         window.toggleMenu = () => {
