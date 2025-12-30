@@ -304,10 +304,15 @@
         // ✨ Gemini AI 核心邏輯 (強化重試與排隊機制)
         // ==========================================
         
-        async function callGemini(promptText, retries = 5, delay = 2000) {
-            const key = localStorage.getItem('gemini_api_key') || geminiKey;
+        // 用來追蹤 AI 是否正在處理中，防止重複點擊造成的配額浪費
+        let isAiBusy = false;
+
+        async function callGemini(promptText, retries = 5, initialDelay = 3000) {
+            if (isAiBusy) {
+                throw new Error("AI 正在深度思考中，請稍候...");
+            }
             
-            // 重要：鎖定為環境中最穩定的型號
+            const key = localStorage.getItem('gemini_api_key') || geminiKey;
             const modelName = "gemini-2.5-flash-preview-09-2025";
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${key}`;
             
@@ -322,6 +327,7 @@
                 ]
             };
 
+            let delay = initialDelay;
             for (let i = 0; i < retries; i++) {
                 try {
                     const response = await fetch(url, {
@@ -330,12 +336,20 @@
                         body: JSON.stringify(payload)
                     });
 
-                    // 處理 429 頻率限制
+                    // 處理 429 頻率限制 (Quota Exceeded)
                     if (response.status === 429) {
-                        console.warn(`頻率受限，正在自動等待重試 (第 ${i + 1} 次)...`);
-                        if (i === retries - 1) throw new Error("API 呼叫太頻繁，Google 暫時不提供服務，請一分鐘後再試。");
+                        const errorResponse = await response.json();
+                        const isQuotaMsg = errorResponse.error?.message?.toLowerCase().includes("quota");
+                        
+                        console.warn(`頻率受限 (${isQuotaMsg ? '配額滿' : '太頻繁'})，自動等待重試 (第 ${i + 1} 次)...`);
+                        
+                        if (i === retries - 1) {
+                            throw new Error("宇宙能量流動過於頻繁，請等待一分鐘後再次點擊。");
+                        }
+                        
+                        // 等待更長的時間
                         await new Promise(r => setTimeout(r, delay));
-                        delay *= 2; // 指數級別等待 (2s, 4s, 8s, 16s)
+                        delay *= 2.5; // 指數級別等待 (3s, 7.5s, 18s, 45s)
                         continue;
                     }
                     
@@ -346,33 +360,40 @@
 
                     const result = await response.json();
                     const output = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                    if (!output) throw new Error("AI 回傳內容為空。");
+                    if (!output) throw new Error("AI 已讀不回。可能是被過濾器擋住了。");
                     return output.trim();
                 } catch (error) {
-                    if (i === retries - 1 || error.message.includes("403") || error.message.includes("key")) throw error;
+                    // 若是認證錯誤，不重試
+                    if (error.message.includes("403") || error.message.includes("key")) throw error;
+                    // 最後一次重試失敗才拋出
+                    if (i === retries - 1) throw error;
+                    // 其他網路問題等一秒重試
                     await new Promise(r => setTimeout(r, 1000));
                 }
             }
         }
 
         window.polishAboutAI = async () => {
+            if (isAiBusy) return;
             const btn = document.getElementById('btn-polish-about');
             const textarea = document.getElementById('edit-about-text');
             if (!textarea.value) return;
 
+            isAiBusy = true;
             btn.disabled = true;
             const originalHtml = btn.innerHTML;
-            btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> 正在感應...`;
+            btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> 連結靈性中...`;
             lucide.createIcons();
 
             try {
-                const prompt = `妳是一位空靈、詩意且專業的品牌文案師。請潤色這段關於「奧兒絲朵」靈石品牌的品牌故事描述。要求：繁體中文，語氣優雅、詩意且簡約，強調靈魂與大自然的連結，限制 150 字內。原稿：${textarea.value}`;
+                const prompt = `妳是一位空靈、詩意且專業的品牌文案師。請幫我潤色這段關於「奧兒絲朵」靈石品牌的品牌故事描述。要求：繁體中文，語氣優雅、詩意且簡約，強調靈魂與大自然的連結，限制 150 字內。直接輸出結果。原稿：${textarea.value}`;
                 const result = await callGemini(prompt);
                 textarea.value = result;
                 siteData.about.text = result;
             } catch (e) {
-                alert("感應失敗：" + e.message);
+                alert("感應感應異常：" + e.message);
             } finally {
+                isAiBusy = false;
                 btn.disabled = false;
                 btn.innerHTML = originalHtml;
                 lucide.createIcons();
@@ -380,22 +401,26 @@
         };
 
         window.polishProductAI = async (index) => {
+            if (isAiBusy) return;
             const btn = document.getElementById(`btn-polish-prod-${index}`);
             const input = document.getElementById(`edit-prod-desc-${index}`);
             if (!input.value) return;
 
+            isAiBusy = true;
             btn.disabled = true;
             const originalHtml = btn.innerHTML;
-            btn.innerHTML = `✨ AI...`;
+            btn.innerHTML = `✨ 感應...`;
 
             try {
-                const prompt = `潤色靈石描述。繁體中文、空靈簡約、40字內：${input.value}`;
+                const prompt = `潤色靈石產品描述。繁體中文、空靈簡約風格、40字內，直接輸出內容：${input.value}`;
                 const result = await callGemini(prompt);
                 input.value = result;
                 siteData.collections[index].desc = result;
             } catch (e) {
                 console.error(e);
+                alert("感應受阻，請稍後。");
             } finally {
+                isAiBusy = false;
                 btn.disabled = false;
                 btn.innerHTML = originalHtml;
                 lucide.createIcons();
@@ -403,28 +428,40 @@
         };
 
         window.generateDailyQuote = async () => {
+            if (isAiBusy) return;
             const btn = document.getElementById('btn-daily-quote');
             const display = document.getElementById('ai-quote');
             
+            isAiBusy = true;
             btn.disabled = true;
             btn.innerText = "感應靈石能量中...";
             display.style.opacity = "0.5";
 
             try {
-                const seed = Math.floor(Math.random() * 1000);
-                const prompt = `生成一段極簡、充滿靈性且富有禪意的繁體中文「每日石語」，關於隕石、水晶或自然的啟示，限制 25 字內。隨機因子：${seed}`;
-                const quote = await callGemini(prompt);
+                // 加入隨機性因子強制生成新內容
+                const seed = Math.floor(Math.random() * 100000);
+                const prompt = `生成一段極簡、充滿靈性且富有禪意的繁體中文「每日石語」，關於隕石、水晶或自然的啟示，限制 25 字以內。直接輸出石語內容。隨機碼：${seed}`;
+                const quote = await callGemini(prompt, 5, 2000);
                 display.innerText = `「${quote}」`;
             } catch (e) {
-                display.innerText = `「感應受阻：${e.message}」`;
+                // 如果是配額超出，顯示更具體的引導
+                if (e.message.includes("配額") || e.message.includes("頻繁")) {
+                    display.innerText = "「靜候靈光，稍後再試。」";
+                } else {
+                    display.innerText = "「靜謐中，心自明。」";
+                }
+                console.error("AI Error:", e.message);
             } finally {
                 display.style.opacity = "1";
                 btn.disabled = false;
                 btn.innerText = "獲取今日石語 ✨";
+                isAiBusy = false;
             }
         };
 
-        // Firebase 初始化
+        // ==========================================
+        // Firebase 邏輯
+        // ==========================================
         async function init() {
             try {
                 const initAuth = async () => {
