@@ -115,7 +115,6 @@
                 <button onclick="scrollToSection('social')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em]">追蹤我們</button>
                 
                 <div class="flex items-center space-x-5 border-l border-stone-200 pl-8 opacity-60 hover:opacity-100 transition-opacity">
-                    <!-- 社群連結 -->
                     <a href="https://www.instagram.com/__our.story__" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-stone-800 transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
                     <a href="https://www.facebook.com/profile.php?id=61559138616942" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-stone-800 transition-colors"><i data-lucide="facebook" class="w-4 h-4"></i></a>
                     <a href="https://line.me/R/ti/p/@291pcwxm" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-stone-800 transition-colors">
@@ -303,10 +302,11 @@
         };
         const ADMIN_PASSWORD = "1234"; 
         
-        // Gemini API Key 設定
+        // Gemini API Key 設定 (固定使用您的 Key)
         const DEFAULT_GEMINI_KEY = "AIzaSyDYjCaxY3-MfYWfcHAgYM11CYLDefbSsvQ";
         const apiKeyEnv = typeof __apiKey !== 'undefined' ? __apiKey : ""; 
 
+        // 優先讀取環境變數提供的 Firebase 設定
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : myFirebaseConfig;
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
@@ -327,18 +327,18 @@
         // ✨ Gemini AI 核心邏輯
         // ==========================================
         
-        async function callGemini(promptText, retries = 6, delay = 2000) {
+        async function callGemini(promptText, customRetries = 3, customDelay = 1500) {
             const key = localStorage.getItem('gemini_api_key') || apiKeyEnv || DEFAULT_GEMINI_KEY;
             
-            // 修正點：使用更標準且通用的模型名稱，避免 404 錯誤
-            const model = "gemini-2.5-flash"; 
+            // 重要：在 Canvas 環境中使用此穩定預覽模型名稱
+            const model = "gemini-2.5-flash-preview-09-2025"; 
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
             
             const payload = {
                 contents: [{ parts: [{ text: promptText }] }],
                 generationConfig: { 
                     temperature: 0.8, 
-                    maxOutputTokens: 600 
+                    maxOutputTokens: 800 
                 },
                 safetySettings: [
                     { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
@@ -348,7 +348,8 @@
                 ]
             };
 
-            for (let i = 0; i < retries; i++) {
+            let currentDelay = customDelay;
+            for (let i = 0; i < customRetries; i++) {
                 try {
                     const response = await fetch(url, {
                         method: 'POST',
@@ -357,9 +358,9 @@
                     });
 
                     if (response.status === 429) {
-                        if (i === retries - 1) throw new Error("API 呼叫太頻繁，請等一分鐘後再試。");
-                        await new Promise(r => setTimeout(r, delay));
-                        delay *= 2; 
+                        if (i === customRetries - 1) throw new Error("API 呼叫太頻繁，請等一分鐘後再試。");
+                        await new Promise(r => setTimeout(r, currentDelay));
+                        currentDelay *= 2; 
                         continue;
                     }
 
@@ -375,8 +376,8 @@
                     if (!text) throw new Error("AI 暫時無法產生內容");
                     return text.trim();
                 } catch (error) {
-                    if (i === retries - 1 || error.message === "MODEL_NOT_AVAILABLE") throw error;
-                    await new Promise(r => setTimeout(r, 1500));
+                    if (i === customRetries - 1 || error.message === "MODEL_NOT_AVAILABLE") throw error;
+                    await new Promise(r => setTimeout(r, 1000));
                 }
             }
         }
@@ -386,19 +387,24 @@
             const textarea = document.getElementById('edit-about-text');
             if (!textarea.value) return;
 
+            const originalBtnHtml = btn.innerHTML;
             btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> 連結中...`;
+            btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> 連結宇宙中...`;
             lucide.createIcons();
 
             try {
-                const prompt = `妳是一位品牌師。請潤色這段品牌故事。風格空靈、優雅、禪意。文案：${textarea.value}`;
-                const result = await callGemini(prompt);
-                textarea.value = result;
+                const prompt = `妳是一位優雅、空靈的品牌文案師。請幫我潤色這段品牌故事描述。要求：繁體中文，富有禪意與詩意，精煉簡約。內容：${textarea.value}`;
+                const result = await callGemini(prompt, 3, 1000);
+                if (result) {
+                    textarea.value = result;
+                    siteData.about.text = result; // 同步更新數據
+                }
             } catch (e) {
+                console.error("Polish Error:", e);
                 handleAIError(e);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="sparkles" class="w-3 h-3"></i> AI 潤色文案 ✨`;
+                btn.innerHTML = originalBtnHtml;
                 lucide.createIcons();
             }
         };
@@ -408,19 +414,23 @@
             const input = document.getElementById(`edit-prod-desc-${index}`);
             if (!input.value) return;
 
+            const originalBtnHtml = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = `✨ 感應中...`;
 
             try {
-                const prompt = `潤色靈石描述，空靈簡約，40字內：${input.value}`;
-                const result = await callGemini(prompt);
-                input.value = result;
-                siteData.collections[index].desc = result;
+                const prompt = `潤色靈石產品描述，空靈簡約，40字內，繁體中文：${input.value}`;
+                const result = await callGemini(prompt, 3, 1000);
+                if (result) {
+                    input.value = result;
+                    siteData.collections[index].desc = result; // 同步更新數據
+                }
             } catch (e) {
-                console.error(e);
+                console.error("Product Polish Error:", e);
+                alert("感應失敗：" + e.message);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="sparkles" class="w-3 h-3"></i> AI ✨`;
+                btn.innerHTML = originalBtnHtml;
                 lucide.createIcons();
             }
         };
@@ -432,19 +442,19 @@
             if (btn.disabled) return;
             
             btn.disabled = true;
-            btn.innerText = "讀取能量中...";
+            btn.innerText = "感應頻率中...";
             display.style.opacity = "0.4";
 
             try {
-                const prompt = "生成一段 20 字內禪意石語，關於礦石與自然。不需要標題。";
+                const prompt = "生成一段 20 字內禪意繁體中文石語，關於礦石與自然的連結。不需要標題。";
                 const quote = await callGemini(prompt, 3, 1000); 
                 display.innerText = `「${quote}」`;
             } catch (e) {
                 display.innerText = "「靜謐中，心自明。」";
                 if (e.message === "MODEL_NOT_AVAILABLE") {
-                    alert("AI 連線失敗：模型路徑不正確。已嘗試自動修復模型名稱，請再次點擊看看。");
+                    alert("AI 連線失敗：找不到模型。請再次點擊看看。");
                 } else {
-                    console.error(e);
+                    console.error("Quote Error:", e);
                 }
             } finally {
                 display.style.opacity = "1";
@@ -460,7 +470,7 @@
                 const newKey = prompt("金鑰似乎失效，請輸入正確的 Gemini API Key：");
                 if (newKey) localStorage.setItem('gemini_api_key', newKey.trim());
             } else if (e.message === "MODEL_NOT_AVAILABLE") {
-                alert("找不到 AI 模型 (404)。這通常是因為 API 指定版本不匹配，我已嘗試更換型號，請再點一次。");
+                alert("找不到 AI 模型 (404)。環境路徑解析異常，請重新整理頁面。");
             } else {
                 alert("AI 發生錯誤: " + e.message);
             }
