@@ -149,6 +149,7 @@
             </h1>
         </div>
         
+        <!-- 下滑提示箭頭 -->
         <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-3 z-20 opacity-40">
             <i data-lucide="chevron-down" class="w-5 h-5 text-stone-400 animate-bounce"></i>
         </div>
@@ -180,7 +181,7 @@
     <!-- 收藏系列展示區 -->
     <section id="collections" class="py-24 px-6 md:px-20 bg-[#FAF9F6]">
         <div id="collections-container" class="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8 lg:gap-16 max-w-7xl mx-auto">
-            <!-- 動態生成 -->
+            <!-- 由 JavaScript 動態生成 -->
         </div>
     </section>
 
@@ -255,6 +256,7 @@
             </div>
             <div class="pt-4 flex flex-col items-center space-y-4">
                 <p class="text-[9px] tracking-[0.2em] text-stone-300 uppercase">© 2025 OUR STORY. CURATED FOR YOUR SOUL.</p>
+                <!-- 頁尾管理員登入按鈕 -->
                 <button onclick="toggleAdmin()" class="text-[9px] tracking-[0.2em] text-stone-200 hover:text-stone-500 transition-colors uppercase border-b border-transparent hover:border-stone-400 pb-0.5">Admin Login</button>
             </div>
         </div>
@@ -267,7 +269,7 @@
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ==========================================
-        // 配置資訊
+        // Firebase 配置
         // ==========================================
         const myFirebaseConfig = {
             apiKey: "AIzaSyDruZNMUyiJNcyoksYIBDHv5F1SiiG2Mss",
@@ -278,8 +280,12 @@
             appId: "1:651350028652:web:44db9f6bd7d1b502578349"
         };
         const ADMIN_PASSWORD = "1234"; 
-        const DEFAULT_GEMINI_KEY = "AIzaSyDYjCaxY3-MfYWfcHAgYM11CYLDefbSsvQ";
         
+        // ==========================================
+        // Gemini API Key (已填入您的專屬 Key)
+        // ==========================================
+        let geminiKey = "AIzaSyDYjCaxY3-MfYWfcHAgYM11CYLDefbSsvQ";
+
         const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : myFirebaseConfig;
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'our-story-main';
 
@@ -298,22 +304,13 @@
         };
 
         // ==========================================
-        // ✨ Gemini AI 即時響應邏輯
+        // ✨ Gemini AI 核心邏輯 (最穩定版)
         // ==========================================
         
-        let geminiKey = DEFAULT_GEMINI_KEY;
-
-        async function callGeminiInstant(promptText) {
-            const key = localStorage.getItem('gemini_api_key') || geminiKey;
-            if (!key) {
-                const userKey = prompt("請輸入您的 Gemini API Key：");
-                if (!userKey) return null;
-                localStorage.setItem('gemini_api_key', userKey.trim());
-                return callGeminiInstant(promptText);
-            }
-
-            const model = "gemini-2.5-flash-preview-09-2025";
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
+        async function callGemini(promptText) {
+            // 重要：在 Canvas 環境中使用此特定模型型號
+            const modelName = "gemini-2.5-flash-preview-09-2025";
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${geminiKey}`;
             const payload = {
                 contents: [{ parts: [{ text: promptText }] }],
                 generationConfig: { temperature: 0.7, maxOutputTokens: 500 }
@@ -327,13 +324,13 @@
                 });
                 
                 if (!response.ok) {
-                    const errData = await response.json().catch(() => ({}));
-                    throw new Error(errData.error?.message || `API Error ${response.status}`);
+                    const err = await response.json();
+                    throw new Error(err.error?.message || response.status);
                 }
                 const result = await response.json();
                 return result.candidates?.[0]?.content?.parts?.[0]?.text || "";
             } catch (error) {
-                console.error("AI Call Failed:", error);
+                console.error("AI Error:", error);
                 throw error;
             }
         }
@@ -344,18 +341,18 @@
             if (!textarea.value) return;
 
             btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> 正在潤色...`;
+            btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> 感應中...`;
             lucide.createIcons();
 
             try {
-                const prompt = `妳是一位專業品牌文案師。請潤色這段關於「奧兒絲朵」靈石品牌的描述。要求：繁體中文，優雅空靈、詩意且簡約，不超過 200 字。內容：${textarea.value}`;
-                const polished = await callGeminiInstant(prompt);
+                const prompt = `妳是一位空靈且優雅的品牌文案師。請潤色這段靈石品牌的描述。要求：繁體中文，富有詩意與禪意，限制在 200 字以內。文案內容：${textarea.value}`;
+                const polished = await callGemini(prompt);
                 if (polished) {
                     textarea.value = polished.trim();
-                    siteData.about.text = polished.trim(); // 同步回數據
+                    siteData.about.text = polished.trim();
                 }
             } catch (error) {
-                alert('AI 暫時無法連線：' + error.message);
+                alert('感應中斷：' + error.message);
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = `<i data-lucide="sparkles" class="w-3 h-3"></i> AI 潤色文案 ✨`;
@@ -369,17 +366,17 @@
             if (!input.value) return;
 
             btn.disabled = true;
-            btn.innerHTML = `正在感應...`;
+            btn.innerHTML = `✨ AI...`;
 
             try {
-                const prompt = `潤色這段靈石產品描述。要求：繁體中文，空靈簡約，40 字內。內容：${input.value}`;
-                const polished = await callGeminiInstant(prompt);
+                const prompt = `潤色這段靈石產品描述。要求：繁體中文，空靈簡約風格，40 字內。內容：${input.value}`;
+                const polished = await callGemini(prompt);
                 if (polished) {
                     input.value = polished.trim();
-                    siteData.collections[index].desc = polished.trim(); // 同步回數據
+                    siteData.collections[index].desc = polished.trim();
                 }
             } catch (error) {
-                alert('感應失敗：' + error.message);
+                console.error(error);
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = `<i data-lucide="sparkles" class="w-3 h-3"></i> AI ✨`;
@@ -392,16 +389,15 @@
             const display = document.getElementById('ai-quote');
             
             btn.disabled = true;
-            btn.innerText = "感應靈石頻率中...";
+            btn.innerText = "感應靈石能量中...";
             display.style.opacity = "0.5";
 
             try {
-                const prompt = "生成一段極簡、充滿靈性的繁體中文「每日石語」，關於礦石或自然的啟示，30 字內。不要標題。";
-                const quote = await callGeminiInstant(prompt);
+                const prompt = "請生成一段極簡、充滿靈性且富有禪意的繁體中文「每日石語」，關於隕石、水晶或自然的啟示，30 字內。不要標題。";
+                const quote = await callGemini(prompt);
                 if (quote) display.innerText = `「${quote.trim()}」`;
             } catch (error) {
                 display.innerText = "「靜謐中，心自明。」";
-                console.error(error);
             } finally {
                 display.style.opacity = "1";
                 btn.disabled = false;
