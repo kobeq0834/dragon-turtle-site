@@ -122,10 +122,13 @@
             </h1>
             <div class="w-px h-20 bg-stone-200 mx-auto mt-16 animate-growLine"></div>
         </div>
-        <!-- 修改後的 Discovery 區塊：提高透明度與字體大小 -->
-        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-3 opacity-70 hover:opacity-100 transition-opacity cursor-pointer z-20" onclick="toggleAdmin()">
-            <span class="text-xs tracking-[0.4em] uppercase font-light text-stone-500">Discovery</span>
-            <i data-lucide="arrow-down" class="w-4 h-4 text-stone-400 animate-bounce"></i>
+        
+        <!-- 更新後的入口：改為明顯的膠囊按鈕設計 -->
+        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-3 z-20 group cursor-pointer" onclick="toggleAdmin()">
+            <button class="px-8 py-2.5 bg-white/40 backdrop-blur-md border border-stone-200/50 rounded-full text-[10px] tracking-[0.5em] uppercase font-medium text-stone-600 group-hover:bg-white group-hover:text-stone-800 transition-all shadow-sm">
+                Discovery
+            </button>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-stone-400 animate-bounce"></i>
         </div>
     </section>
 
@@ -136,7 +139,7 @@
                 <img id="about-icon" src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200" class="w-16 mx-auto" alt="品牌故事圖示">
             </div>
             <h2 class="text-xl font-light tracking-[0.4em] text-stone-800 mb-16">關於 奧兒絲朵</h2>
-            <p id="about-text" class="text-stone-500 leading-[2.8] tracking-[0.25em] text-sm md:text-base font-extralight whitespace-pre-line">
+            <p id="about-text" class="text-stone-500 leading-[2.8] tracking-[0.25em] text-sm md:text-base font-extralight whitespace-pre-line text-justify md:text-center">
                 載入中...
             </p>
         </div>
@@ -157,24 +160,24 @@
                 <div class="space-y-4">
                     <a href="#" class="flex items-center justify-between group py-5 border-b border-stone-100">
                         <span id="ig-handle" class="text-xs tracking-[0.2em] text-stone-500 uppercase">Instagram / @our_story_gem</span>
-                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300"></i>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300 group-hover:translate-x-1 transition-transform"></i>
                     </a>
                 </div>
             </div>
             <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-2 gap-6">
                  <div class="space-y-6">
-                    <div class="aspect-[3/4] overflow-hidden rounded-sm bg-stone-100">
+                    <div class="aspect-[3/4] overflow-hidden rounded-sm bg-stone-100 shadow-sm">
                         <img src="https://images.unsplash.com/photo-1512168221867-0485ba5e561e?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000 opacity-90" alt="水晶原礦">
                     </div>
-                    <div class="aspect-square overflow-hidden rounded-sm bg-stone-100">
+                    <div class="aspect-square overflow-hidden rounded-sm bg-stone-100 shadow-sm">
                         <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000 opacity-90" alt="晨光靈石">
                     </div>
                 </div>
                 <div class="space-y-6 pt-12">
-                    <div class="aspect-square overflow-hidden rounded-sm bg-stone-100">
+                    <div class="aspect-square overflow-hidden rounded-sm bg-stone-100 shadow-sm">
                         <img src="https://images.unsplash.com/photo-1523554888454-841f72e27df2?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000 opacity-90" alt="職人手感">
                     </div>
-                    <div class="aspect-[3/4] overflow-hidden rounded-sm bg-stone-100">
+                    <div class="aspect-[3/4] overflow-hidden rounded-sm bg-stone-100 shadow-sm">
                         <img src="https://images.unsplash.com/photo-1515549832467-8783363e19b6?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000 opacity-90" alt="結晶簇">
                     </div>
                 </div>
@@ -207,8 +210,19 @@
 
     <!-- 頁腳 -->
     <footer class="py-24 px-8 bg-white border-t border-stone-50 text-center">
-        <span class="text-xl font-medium tracking-[0.5em] text-stone-800">奧兒絲朵</span>
-        <p class="text-[9px] tracking-[0.2em] text-stone-300 mt-8">© 2025 OUR STORY. CURATED FOR YOUR SOUL.</p>
+        <div class="max-w-7xl mx-auto flex flex-col items-center space-y-10">
+            <span class="text-xl font-medium tracking-[0.5em] text-stone-800">奧兒絲朵</span>
+            <div class="flex space-x-12 text-[9px] tracking-[0.3em] text-stone-400 uppercase font-medium">
+                <a href="#" class="hover:text-stone-800 transition-colors">Philosophy</a>
+                <a href="#" class="hover:text-stone-800 transition-colors">Privacy</a>
+                <a href="#" class="hover:text-stone-800 transition-colors">Contact</a>
+            </div>
+            <div class="pt-4 flex flex-col items-center space-y-4">
+                <p class="text-[9px] tracking-[0.2em] text-stone-300 uppercase">© 2025 OUR STORY. CURATED FOR YOUR SOUL.</p>
+                <!-- 第二個明顯入口：頁尾管理員登入 -->
+                <button onclick="toggleAdmin()" class="text-[9px] tracking-[0.2em] text-stone-200 hover:text-stone-500 transition-colors uppercase border-b border-transparent hover:border-stone-400 pb-0.5">Admin Login</button>
+            </div>
+        </div>
     </footer>
 
     <!-- Firebase SDK -->
@@ -218,7 +232,7 @@
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ==========================================
-        // Firebase 配置資訊 (已更新為您的專案)
+        // Firebase 配置資訊
         // ==========================================
         const myFirebaseConfig = {
             apiKey: "AIzaSyDruZNMUyiJNcyoksYIBDHv5F1SiiG2Mss",
@@ -230,11 +244,10 @@
         };
 
         // ==========================================
-        // 管理員密碼 (請在此處修改您的專屬密碼)
+        // 管理員密碼
         // ==========================================
         const ADMIN_PASSWORD = "1234"; 
 
-        // 偵測環境變數或使用手動配置
         const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : myFirebaseConfig;
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'our-story-main';
 
@@ -242,7 +255,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // 預設網站資料結構
         let siteData = {
             hero: { title: "奧兒絲朵\n靈石與您的故事", sub: "Every stone has its own story", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1920" },
             about: { text: "奧兒絲朵（Our Story），始於對大自然原始生命力的敬畏。\n我們不刻意渲染功能，而是希望透過靈石本身的質地與光影，\n連結您內心深處那份未曾言說的故事。\n在這裡，每一顆隕石與水晶，都是時光留給您的溫柔獻禮。" },
@@ -255,14 +267,12 @@
 
         async function init() {
             try {
-                // 1. 執行身份驗證
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
                     await signInAnonymously(auth);
                 }
 
-                // 2. 監聽 Auth 狀態，驗證成功後抓取資料
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                         const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'siteContent', 'main');
@@ -271,21 +281,19 @@
                                 siteData = snapshot.data();
                                 renderSite();
                             } else {
-                                // 若專案資料庫是空的，則寫入初始預設資料
                                 setDoc(docRef, siteData);
                                 renderSite();
                             }
                         }, (error) => {
-                            console.error("Firebase 讀取權限錯誤，請檢查資料庫 Rules 設定:", error);
+                            console.error("Firestore Error:", error);
                         });
                     }
                 });
             } catch (err) {
-                console.error("Firebase 初始化失敗:", err);
+                console.error("Firebase Init Error:", err);
             }
         }
 
-        // 將抓取到的資料渲染至 HTML
         function renderSite() {
             document.getElementById('hero-title').innerText = siteData.hero.title;
             document.getElementById('hero-sub').innerText = siteData.hero.sub;
@@ -303,7 +311,6 @@
                 </div>
             `).join('');
 
-            // 更新後台面板的欄位
             document.getElementById('edit-hero-title').value = siteData.hero.title;
             document.getElementById('edit-about-text').value = siteData.about.text;
             
@@ -319,7 +326,6 @@
             lucide.createIcons();
         }
 
-        // 儲存修改至 Firebase
         window.saveSiteData = async () => {
             if (!auth.currentUser) return;
             siteData.hero.title = document.getElementById('edit-hero-title').value;
@@ -330,7 +336,7 @@
                 alert('內容已成功發佈！頁面將自動更新。');
                 window.toggleAdmin();
             } catch (e) {
-                alert('儲存失敗，請檢查規則設定：' + e.message);
+                alert('儲存失敗：' + e.message);
             }
         };
 
@@ -338,11 +344,10 @@
             siteData.collections[index][field] = value;
         };
 
-        // 管理後台切換邏輯 (密碼保護)
         window.toggleAdmin = () => {
             const panel = document.getElementById('admin-panel');
             if (!panel.classList.contains('active')) {
-                const pass = prompt("進入管理模式，請輸入密碼：");
+                const pass = prompt("進入管理員模式，請輸入密碼：");
                 if (pass === ADMIN_PASSWORD) {
                     panel.classList.add('active');
                     document.body.style.overflow = 'hidden';
@@ -355,11 +360,9 @@
             }
         };
 
-        // 啟動流程
         init();
         lucide.createIcons();
 
-        // UI 互動效果
         window.addEventListener('scroll', () => {
             const navbar = document.getElementById('navbar');
             if (window.scrollY > 50) navbar.classList.add('nav-scrolled');
