@@ -339,11 +339,17 @@
                 throw new Error("KEY_MISSING");
             }
 
-            // 改用更穩定的 gemini-1.5-flash 模型
+            // 改用更穩定的 gemini-1.5-flash 模型，並加入 safetySettings
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
             const payload = {
                 contents: [{ parts: [{ text: promptText }] }],
-                generationConfig: { temperature: 0.7, maxOutputTokens: 500 }
+                generationConfig: { temperature: 0.7, maxOutputTokens: 500 },
+                safetySettings: [
+                    { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
+                    { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH" },
+                    { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_ONLY_HIGH" },
+                    { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_ONLY_HIGH" }
+                ]
             };
 
             for (let i = 0; i < retries; i++) {
@@ -390,7 +396,7 @@
                 if (polished) {
                     textarea.value = polished.trim();
                 } else {
-                    alert('AI 暫時無法生成內容，請稍後再試。');
+                    alert('AI 暫時無法生成內容（可能內容被過濾），請稍後再試。');
                 }
             } catch (error) {
                 console.error(error);
@@ -421,6 +427,8 @@
                 if (polished) {
                     input.value = polished.trim();
                     siteData.collections[index].desc = polished.trim();
+                } else {
+                    alert('AI 暫時無法生成內容（可能內容被過濾），請稍後再試。');
                 }
             } catch (error) {
                 console.error(error);
