@@ -36,30 +36,43 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500&display=swap');
         body { font-family: 'Noto Sans TC', sans-serif; background-color: #FAF9F6; color: #555555; scroll-behavior: smooth; }
+        
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.05); } }
+        
         .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }
         .animate-fadeInUp { animation: fadeInUp 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .animate-slowZoom { animation: slowZoom 30s linear infinite alternate; }
+        
         .nav-scrolled { background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); padding: 1rem 0; box-shadow: 0 1px 10px rgba(0,0,0,0.05); }
+        
         #mobile-menu { display: none; opacity: 0; transition: opacity 0.5s ease; }
         #mobile-menu.active { display: flex; opacity: 1; }
+        
         .admin-panel { display: none; position: fixed; top: 0; right: 0; width: 100%; max-width: 450px; height: 100%; background: white; z-index: 100; box-shadow: -10px 0 30px rgba(0,0,0,0.1); overflow-y: auto; padding: 2.5rem; }
         .admin-panel.active { display: block; }
+        
         input, textarea { width: 100%; border: 1px solid #e5e7eb; padding: 0.85rem; margin-bottom: 0.5rem; border-radius: 6px; font-size: 0.875rem; background: #fafaf9; }
+        input:focus, textarea:focus { outline: none; border-color: #888; }
+        
         .upload-btn { display: inline-block; background: #f3f4f6; padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.75rem; color: #374151; cursor: pointer; border: 1px solid #d1d5db; margin-bottom: 0.5rem; text-align: center; width: 100%; }
+        .upload-btn:hover { background: #e5e7eb; }
+        
         .ai-spirit-box { max-width: 700px; margin: 0 auto; padding: 4rem 2rem; border: 1px dashed #e5e7eb; border-radius: 2rem; background: rgba(255, 255, 255, 0.5); }
         .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 200; display: none; align-items: center; justify-content: center; font-size: 0.8rem; letter-spacing: 0.3em; }
+        
         .ig-embed-container { width: 100%; min-height: 250px; display: flex; justify-content: center; align-items: flex-start; overflow: hidden; background: #fff; border-radius: 4px; }
+        .ig-embed-container blockquote { margin: 0 !important; width: 100% !important; }
     </style>
 </head>
 <body class="font-light">
 
+    <!-- 加載狀態層 -->
     <div id="loading" class="loading-overlay">
         <div class="flex flex-col items-center">
             <i data-lucide="loader" class="w-8 h-8 animate-spin mb-4 text-stone-400"></i>
-            <span>讀取靈石頻率中...</span>
+            <span>連結時空能量中...</span>
         </div>
     </div>
 
@@ -91,9 +104,10 @@
     </div>
 
     <main>
+        <!-- 主視覺 -->
         <header id="home" class="relative h-screen flex items-center justify-center overflow-hidden bg-white">
             <div class="absolute inset-0 z-0">
-                <img id="hero-img-display" src="" class="w-full h-full object-cover opacity-30 scale-105 animate-slowZoom" alt="">
+                <img id="hero-img-display" src="" class="w-full h-full object-cover opacity-30 scale-105 animate-slowZoom" alt="Our Story Hero">
             </div>
             <div class="relative z-10 text-center px-6">
                 <p id="hero-sub-display" class="text-[10px] tracking-[0.6em] text-stone-400 mb-10 animate-fadeInUp uppercase font-medium">Every stone has its own story</p>
@@ -101,6 +115,7 @@
             </div>
         </header>
 
+        <!-- 關於我們 -->
         <section id="about" class="py-40 px-8 bg-white text-center">
             <div class="max-w-3xl mx-auto">
                 <div class="mb-12">
@@ -117,10 +132,12 @@
             </div>
         </section>
 
+        <!-- 展示列表 -->
         <section id="collections" class="py-24 px-6 md:px-20 bg-[#FAF9F6]">
             <div id="collections-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 max-w-7xl mx-auto"></div>
         </section>
 
+        <!-- 社群區 -->
         <section id="social" class="py-40 px-8 bg-white overflow-hidden">
             <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-24">
                 <div class="w-full md:w-2/5 space-y-16">
@@ -149,16 +166,18 @@
         </div>
         
         <div class="space-y-10 pb-32">
+            <!-- 區塊 1: 品牌設定 -->
             <section class="space-y-3">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">基本品牌資訊</h4>
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">基本配置</h4>
                 <input type="text" id="edit-brand-name" placeholder="Logo 名稱">
                 <textarea id="edit-hero-title" rows="2" placeholder="首頁大標題"></textarea>
                 <input type="text" id="edit-hero-sub" placeholder="首頁小標題">
                 <label class="upload-btn">更換首頁背景圖<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'hero')"></label>
             </section>
 
+            <!-- 區塊 2: 故事與聯絡 -->
             <section class="space-y-3">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">品牌故事 & QR Code</h4>
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">故事內容 & QR Code</h4>
                 <textarea id="edit-about-text" rows="5" placeholder="故事內容"></textarea>
                 <div class="p-4 bg-stone-50 rounded-lg space-y-3">
                     <label class="upload-btn w-full m-0">更換 QR Code 圖片<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'about_icon')"></label>
@@ -166,51 +185,53 @@
                 </div>
             </section>
 
-            <!-- 影像展示管理 (WordPress 方式) -->
+            <!-- 區塊 3: 影像牆管理 -->
             <section class="space-y-3">
                 <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">影像牆 (GALLERY SETUP)</h4>
-                <p class="text-[9px] text-stone-400">輸入 Instagram 貼文網址即可直接嵌入互動方塊。</p>
                 <div class="space-y-4">
-                    <div class="p-4 border rounded-lg bg-stone-50">
+                    <div class="p-3 border rounded">
                         <input type="text" id="edit-ig-embed-1" placeholder="IG 貼文網址 1">
-                        <label class="upload-btn text-[9px] m-0">或上傳備用圖 1<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig1')"></label>
+                        <label class="upload-btn text-[9px] w-full m-0">或備用圖 1<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig1')"></label>
                     </div>
-                    <div class="p-4 border rounded-lg bg-stone-50">
+                    <div class="p-3 border rounded">
                         <input type="text" id="edit-ig-embed-2" placeholder="IG 貼文網址 2">
-                        <label class="upload-btn text-[9px] m-0">或上傳備用圖 2<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig2')"></label>
+                        <label class="upload-btn text-[9px] w-full m-0">或備用圖 2<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig2')"></label>
                     </div>
-                    <div class="p-4 border rounded-lg bg-stone-50">
+                    <div class="p-3 border rounded">
                         <input type="text" id="edit-ig-embed-3" placeholder="IG 貼文網址 3">
-                        <label class="upload-btn text-[9px] m-0">或上傳備用圖 3<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig3')"></label>
+                        <label class="upload-btn text-[9px] w-full m-0">或備用圖 3<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig3')"></label>
                     </div>
-                    <div class="p-4 border rounded-lg bg-stone-50">
+                    <div class="p-3 border rounded">
                         <input type="text" id="edit-ig-embed-4" placeholder="IG 貼文網址 4">
-                        <label class="upload-btn text-[9px] m-0">或上傳備用圖 4<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig4')"></label>
+                        <label class="upload-btn text-[9px] w-full m-0">或備用圖 4<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig4')"></label>
                     </div>
                 </div>
             </section>
 
+            <!-- 區塊 4: 社群資訊 -->
             <section class="space-y-3 border-t pt-8">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">社群連結 (SOCIAL)</h4>
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">社群帳號連結</h4>
                 <input type="text" id="edit-ig-handle" placeholder="IG 帳號 (如: @our_story)">
-                <input type="text" id="edit-ig-url" placeholder="IG 主頁完整連結">
-                <input type="text" id="edit-fb-handle" placeholder="FB 帳號名稱">
-                <input type="text" id="edit-fb-url" placeholder="FB 專頁完整連結">
+                <input type="text" id="edit-ig-url" placeholder="IG 個人主頁連結">
+                <input type="text" id="edit-fb-handle" placeholder="FB 顯示名稱">
+                <input type="text" id="edit-fb-url" placeholder="FB 粉絲專頁連結">
             </section>
 
+            <!-- 區塊 5: 靈石項目 -->
             <section class="space-y-6 border-t pt-8">
                 <div class="flex justify-between items-center">
-                    <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">靈石展示清單</h4>
-                    <button onclick="addNewCollectionItem()" class="text-[9px] bg-stone-800 text-white px-3 py-1 rounded">＋ 新增收藏</button>
+                    <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">收藏清單管理</h4>
+                    <button onclick="addNewCollectionItem()" class="text-[9px] bg-stone-800 text-white px-3 py-1 rounded">＋ 新增靈石</button>
                 </div>
                 <div id="edit-collections-list" class="space-y-4"></div>
             </section>
         </div>
 
+        <!-- 面板固定動作鈕 -->
         <div class="fixed bottom-0 right-0 w-full max-w-[450px] bg-white p-6 border-t z-50 shadow-2xl">
             <div class="grid grid-cols-2 gap-4">
                 <button onclick="saveSiteData()" class="bg-stone-900 text-white py-4 text-xs tracking-widest font-bold uppercase rounded-sm hover:bg-stone-800 transition-all shadow-lg">發佈更新</button>
-                <button onclick="signOutAdmin()" class="bg-stone-50 text-stone-400 py-4 text-xs tracking-widest font-bold uppercase rounded-sm border border-stone-200 hover:text-red-500 hover:border-red-200 transition-all">登出管理員</button>
+                <button onclick="signOutAdmin()" class="bg-stone-50 text-stone-400 py-4 text-xs tracking-widest font-bold uppercase rounded-sm border border-stone-200 hover:text-red-500 hover:border-red-200 transition-all">安全登出</button>
             </div>
         </div>
     </div>
@@ -229,8 +250,8 @@
         import { getAuth, signInWithEmailAndPassword, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot, query, initializeFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // === 最高級防護：綁定您的特定 UID ===
-        const ADMIN_UID = "0MFL33qKcbQIeln2X1wsHOl4ebo2";
+        // === 最高級防護：鎖定您的專屬 UID ===
+        const ADMIN_UID = "0MFL33qKcbQIeln2X1wsHOl4ebo2".trim();
 
         const firebaseConfig = {
             apiKey: "AIzaSyDruZNMUyiJNcyoksYIBDHv5F1SiiG2Mss",
@@ -243,16 +264,16 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        // 使用 Long Polling 提升連線穩定度，解決 10 秒報錯
         const db = initializeFirestore(app, { experimentalForceLongPolling: true });
 
+        // 石語池
         const quotesPool = ["每一顆靈石，都在訴說宇宙的秘密。", "靜謐之中，感受大地的呼吸。", "光影折射，映照出靈魂的純粹。", "穿越億萬年的星塵，只為與你相遇。", "心如明鏡，塵埃自落。", "在石頭的溫潤中，找回內心的平靜。", "礦石的低語，是時間留下的情書。", "擁抱自然，與萬物共鳴。", "純粹的光，照亮未曾察覺的角落。", "靜聽石語，找尋失落的記憶。", "大地之母的饋贈，值得溫柔以待。", "靈魂的頻率，在色彩中閃耀。", "靜默，是最高級的溝通方式。", "不刻意渲染，美自會浮現。", "每一道裂痕，都是成長的印記。", "與石結緣，即是與自己重逢。", "星辰隕落，化作掌心的溫度。", "在忙碌的世界中，保有一方淨土。", "心之所向，便是能量所在。", "靈石無言，卻最懂你的心。"];
         const sessionQuote = quotesPool[Math.floor(Math.random() * quotesPool.length)];
 
         window.generateDailyQuote = () => {
             const btn = document.getElementById('btn-daily-quote');
             const display = document.getElementById('ai-quote');
-            btn.disabled = true; btn.innerText = "讀取能量場...";
+            btn.disabled = true; btn.innerText = "感應場域中...";
             setTimeout(() => { display.innerText = `「${sessionQuote}」`; btn.disabled = false; btn.innerText = "獲取今日石語 ✨"; }, 1200);
         };
 
@@ -275,7 +296,7 @@
                     else if (target === 'about_icon') siteConfig.aboutIcon = base64;
                     else if (target.startsWith('ig')) siteConfig[`igImg${target.slice(2)}`] = base64;
                     else if (target === 'col') collectionsList[index].img = base64;
-                    alert("照片準備就緒，請記得按發佈。");
+                    alert("照片準備就緒，請記得發佈。");
                 };
                 img.src = e.target.result;
             };
@@ -285,13 +306,15 @@
         async function init() {
             document.getElementById('loading').style.display = 'flex';
             try {
-                // 不再強制匿名登入，直接開始監聽資料
+                await signInAnonymously(auth).catch(() => {});
                 onAuthStateChanged(auth, (user) => {
                     const panel = document.getElementById('admin-panel');
                     const btn = document.getElementById('admin-action-btn');
-                    if (user && user.uid === ADMIN_UID) {
-                        panel.classList.add('active'); // 只要身分匹配，強制打開面板
-                        btn.innerText = "管理面板 (已登入)";
+                    // 核心修正：加入 Trim 確保比對不會因為不可見字元失敗
+                    const currentUid = user?.uid?.trim();
+                    if (user && currentUid === ADMIN_UID) {
+                        panel.classList.add('active');
+                        btn.innerText = " 管理面板 (已登入)";
                         renderAdminList();
                     } else {
                         panel.classList.remove('active');
@@ -323,7 +346,7 @@
             if (embedUrl && embedUrl.trim() !== "") {
                 container.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14"></blockquote>`;
             } else if (fallbackImg) {
-                container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 hover:scale-105" alt="Showcase">`;
+                container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 hover:scale-105" alt="Instagram Showcase">`;
             } else {
                 container.innerHTML = `<div class="w-full h-full bg-stone-100 flex items-center justify-center text-stone-300 text-[10px]">影像載入中</div>`;
             }
@@ -351,7 +374,7 @@
             for(let i=1; i<=4; i++) { renderIgSlot(`ig-slot-${i}`, siteConfig[`igEmbed${i}`], siteConfig[`igImg${i}`]); }
             if (window.instgrm) window.instgrm.Embeds.process();
             
-            // 安全同步編輯框內容
+            // 安全同步
             safeSetVal('edit-brand-name', siteConfig.brandName);
             safeSetVal('edit-hero-title', siteConfig.heroTitle);
             safeSetVal('edit-hero-sub', siteConfig.heroSub);
@@ -367,18 +390,26 @@
         function renderCollections() {
             const container = document.getElementById('collections-container');
             if (!container) return;
-            container.innerHTML = collectionsList.map(item => `<article class="group flex flex-col items-center animate-fadeInUp"><div class="aspect-[4/5] w-full overflow-hidden bg-stone-200"><img src="${item.img}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 group-hover:scale-110" alt="${item.name}"></div><h3 class="text-base font-light mt-6 tracking-widest text-stone-800 uppercase">${item.name}</h3><p class="text-xs text-stone-400 mt-2 tracking-widest">${item.desc}</p></article>`).join('');
+            container.innerHTML = collectionsList.map(item => `
+                <article class="group flex flex-col items-center animate-fadeInUp">
+                    <div class="aspect-[4/5] w-full overflow-hidden bg-stone-200">
+                        <img src="${item.img}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 group-hover:scale-110" alt="${item.name}">
+                    </div>
+                    <h3 class="text-base font-light mt-6 tracking-widest text-stone-800 uppercase">${item.name}</h3>
+                    <p class="text-xs text-stone-400 mt-2 tracking-widest">${item.desc}</p>
+                </article>
+            `).join('');
         }
 
         function renderAdminList() {
             const list = document.getElementById('edit-collections-list');
             if (!list) return;
-            list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="updateLocalItem(${index}, 'name', this.value)" placeholder="靈石名稱" class="text-xs font-bold"><textarea onchange="updateLocalItem(${index}, 'desc', this.value)" placeholder="描述" class="text-xs">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">更換照片<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
+            list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="updateLocalItem(${index}, 'name', this.value)" placeholder="項目名稱"><textarea onchange="updateLocalItem(${index}, 'desc', this.value)" placeholder="能量描述">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">換圖<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
             lucide.createIcons();
         }
 
         window.addNewCollectionItem = () => {
-            collectionsList.unshift({ id: 'temp_' + Date.now(), name: "新收藏項目", desc: "請輸入能量描述", img: "", createdAt: Date.now(), isNew: true });
+            collectionsList.unshift({ id: 'temp_' + Date.now(), name: "新靈石項目", desc: "請輸入能量描述", img: "", createdAt: Date.now(), isNew: true });
             renderAdminList();
         };
         window.updateLocalItem = (index, field, value) => { collectionsList[index][field] = value; };
@@ -389,7 +420,7 @@
         };
 
         window.saveSiteData = async () => {
-            if (!auth.currentUser || auth.currentUser.uid !== ADMIN_UID) return alert("權限不足，請登入管理員帳號！");
+            if (!auth.currentUser || auth.currentUser.uid.trim() !== ADMIN_UID) return alert("權限不足：您尚未登入管理員帳號！");
             document.getElementById('loading').style.display = 'flex';
             try {
                 const configRef = doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'main');
@@ -416,14 +447,16 @@
                     const cleanItem = { ...item }; delete cleanItem.id; delete cleanItem.isNew;
                     await setDoc(itemRef, cleanItem);
                 }
-                alert("已成功發佈變更至雲端！後台介面已為您維持開啟。");
-            } catch (e) { alert("發佈失敗 (請檢查資料庫 Rules): " + e.message); }
+                alert("已成功發佈變更！後台介面維持開啟。");
+            } catch (e) { alert("發佈失敗 (請檢查 Firestore Rules 規則): " + e.message); }
             finally { document.getElementById('loading').style.display = 'none'; }
         };
 
         window.toggleAdmin = async () => {
             const panel = document.getElementById('admin-panel');
-            if (auth.currentUser && auth.currentUser.uid === ADMIN_UID) {
+            const currentUid = auth.currentUser?.uid?.trim();
+            
+            if (auth.currentUser && currentUid === ADMIN_UID) {
                 panel.classList.toggle('active');
                 document.body.style.overflow = panel.classList.contains('active') ? 'hidden' : '';
             } else {
@@ -432,12 +465,15 @@
                 document.getElementById('loading').style.display = 'flex';
                 try {
                     const cred = await signInWithEmailAndPassword(auth, email, pass);
-                    if (cred.user.uid === ADMIN_UID) {
+                    const loggedInUid = cred.user.uid.trim();
+                    
+                    if (loggedInUid === ADMIN_UID) {
                         alert("身分核對成功！管理模式已開啟。");
                         panel.classList.add('active'); // 關鍵：立即開啟
                         document.body.style.overflow = 'hidden';
                     } else {
-                        alert("驗證成功，但該帳號不具備管理權限。\n目前 UID 為: " + cred.user.uid);
+                        // 診斷視窗：顯示雙方 ID 方便核對
+                        alert("驗證成功，但該帳號不具備管理權限。\n\n目前登入 UID 為:\n" + loggedInUid + "\n\n系統預期 UID 為:\n" + ADMIN_UID + "\n\n若不符，請將目前的 UID 提供給開發者。");
                         await signOut(auth);
                     }
                 } catch(e) { alert("登入失敗：帳號或密碼錯誤。(" + e.code + ")"); }
