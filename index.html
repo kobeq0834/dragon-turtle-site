@@ -70,29 +70,27 @@
         .ai-spirit-box { max-width: 700px; margin: 0 auto; padding: 4rem 2rem; border: 1px dashed #e5e7eb; border-radius: 1.5rem; background: rgba(255, 255, 255, 0.5); }
         .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.98); z-index: 2000; display: none; align-items: center; justify-content: center; font-size: 0.8rem; letter-spacing: 0.3em; }
         
-        /* === 修正重點 1: 優化 CSS === */
-        /* 移除原本強制 iframe width:100% 的設定，這在 iOS 會導致高度計算錯誤無法播放 */
+        /* === iPhone Safari 最終修復版 CSS === */
+        /* 改用直連 iframe 模式，需要強制指定高度，避免 iOS 判定為 0 高度 */
         .ig-embed-container { 
             width: 100%; 
-            min-width: 300px; /* 給予最小寬度避免塌陷 */
+            /* 這裡設定 580px 是 Reels/直式照片的平均高度，可以確保不會切到太多 */
+            height: 580px;
             display: block; 
             background: #fff; 
             margin-bottom: 1.5rem;
             position: relative;
             z-index: 10;
-        }
-        
-        .ig-embed-container blockquote { 
-            margin: 0 auto !important; 
-            width: 100% !important; 
-            border: 0 !important; 
-            padding: 0 !important;
+            border-radius: 4px;
+            border: 1px solid #eee;
+            overflow: hidden;
         }
 
+        /* 強制 iframe 填滿容器 */
         .ig-embed-container iframe {
-            /* 關鍵：移除 min-width 和 width 的 !important 強制設定 */
-            /* 讓 IG 的 JS 能夠根據容器自動調整正確的 iframe 尺寸 */
-            max-width: 100% !important;
+            width: 100% !important;
+            height: 100% !important;
+            border: none !important;
             display: block !important;
         }
     </style>
@@ -204,10 +202,10 @@
             <input type="text" id="edit-hero-sub" placeholder="副標題">
             <textarea id="edit-about-text" rows="5" placeholder="故事內容"></textarea>
             <input type="text" id="edit-about-link" placeholder="QR 圖片網址">
-            <input type="text" id="edit-ig-embed-1" placeholder="IG 1">
-            <input type="text" id="edit-ig-embed-2" placeholder="IG 2">
-            <input type="text" id="edit-ig-embed-3" placeholder="IG 3">
-            <input type="text" id="edit-ig-embed-4" placeholder="IG 4">
+            <input type="text" id="edit-ig-embed-1" placeholder="IG 1 (貼文網址)">
+            <input type="text" id="edit-ig-embed-2" placeholder="IG 2 (貼文網址)">
+            <input type="text" id="edit-ig-embed-3" placeholder="IG 3 (貼文網址)">
+            <input type="text" id="edit-ig-embed-4" placeholder="IG 4 (貼文網址)">
             <div id="edit-collections-list" class="space-y-4"></div>
             <button onclick="addNewCollectionItem()" class="w-full py-3 bg-stone-100 text-xs">＋ 新增靈石項目</button>
         </div>
@@ -226,8 +224,7 @@
         <button onclick="toggleAdmin()" id="admin-action-btn" class="text-[9px] tracking-[0.2em] text-stone-200 mt-8 uppercase border-b border-transparent hover:border-stone-200 transition-colors">Admin Login</button>
     </footer>
 
-    <!-- Instagram 腳本放置於底部 -->
-    <script async src="//www.instagram.com/embed.js"></script>
+    <!-- 注意：這裡已經移除了 Instagram 的官方 embed.js 腳本，改用下方直連 IFRAME 方式 -->
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -317,17 +314,40 @@
             });
         }
 
+        // === 核心修改：改用 Direct Iframe 強制渲染 ===
+        // 不再使用 blockquote 讓 IG 腳本轉換，而是直接生成 iframe 網址
         function renderIgSlot(slotId, embedUrl, fallbackImg) {
             const container = document.getElementById(slotId);
             if (!container) return;
-            if (embedUrl && embedUrl.trim() !== "") {
+            
+            // 1. 從輸入的網址抓取 Post ID (如 DCe_XyOz)
+            // 支援 /p/ (貼文), /reel/ (短片), /tv/ (IGTV)
+            const match = embedUrl ? embedUrl.match(/(?:p|reel|tv)\/([a-zA-Z0-9_-]+)/) : null;
+            const postId = match ? match[1] : null;
+
+            if (postId) {
+                // 2. 組合 iframe 網址
+                // 加 /embed/captioned/ 可以讓版面比較完整
+                const iframeSrc = `https://www.instagram.com/p/${postId}/embed/captioned/`;
+                
+                // 3. 直接寫入 iframe，強制開啟 playsinline 與 autoplay 權限
                 container.innerHTML = `
-                    <blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14" style="background:#FFF; border:0; margin:0; width:100%;">
-                        <div style="padding:16px;"> <a href="${embedUrl}" target="_blank" style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" rel="noopener noreferrer">載入貼文中...</a></div>
-                    </blockquote>
+                    <iframe 
+                        src="${iframeSrc}" 
+                        class="w-full h-full"
+                        style="min-height: 580px; width: 100%; border:0;"
+                        scrolling="yes" 
+                        allowtransparency="true" 
+                        allow="encrypted-media; autoplay; clipboard-write; picture-in-picture"
+                        frameborder="0"
+                    ></iframe>
                 `;
             } else if (fallbackImg) {
+                // 4. 如果沒有網址或抓不到 ID，顯示備用圖片
                 container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover" alt="">`;
+            } else {
+                // 5. 空狀態
+                container.innerHTML = `<div class="w-full h-full bg-stone-50 flex items-center justify-center text-xs text-stone-300">等待設定</div>`;
             }
         }
 
@@ -345,15 +365,10 @@
             if (siteConfig.aboutIcon) safeSetSrc('about-icon-display', siteConfig.aboutIcon);
             safeSetHref('about-link-display', siteConfig.aboutLink);
             
+            // 呼叫 Direct Iframe 渲染
             for(let i=1; i<=4; i++) { renderIgSlot(`ig-slot-${i}`, siteConfig[`igEmbed${i}`], siteConfig[`igImg${i}`]); }
             
-            // === 修正重點 2: 增加延遲與檢查 ===
-            // 避免因為 DOM 還沒完全準備好或 embed.js 未載入導致的處理失敗
-            setTimeout(() => {
-                if (window.instgrm && window.instgrm.Embeds) {
-                    window.instgrm.Embeds.process();
-                }
-            }, 500);
+            // 注意：這裡移除了 window.instgrm.Embeds.process()，因為我們現在手動處理 iframe
             
             const brand = siteConfig.brandName || "奧兒絲朵";
             const sub = siteConfig.heroSub || "靈石與您的故事";
