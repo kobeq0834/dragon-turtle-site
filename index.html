@@ -306,10 +306,10 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot, query, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ==========================================
-        // 配置與初始狀態
+        // 配置與初始狀態 (恢復原始漂亮的圖片連結)
         // ==========================================
         const myFirebaseConfig = {
             apiKey: "AIzaSyDruZNMUyiJNcyoksYIBDHv5F1SiiG2Mss",
@@ -329,18 +329,25 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // 全域資料包
+        // 恢復全域預設資料
         let siteConfig = { 
             brandName: "奧兒絲朵",
             heroTitle: "奧兒絲朵\n靈石與您的故事", 
             heroSub: "Every stone has its own story",
-            heroImg: "",
+            heroImg: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1920",
             aboutTitle: "關於 奧兒絲朵",
-            aboutText: "",
-            aboutIcon: "",
+            aboutText: "奧兒絲朵（Our Story），始於對大自然原始生命力的敬畏。\n我們不刻意渲染功能，而是希望透過靈石本身的質地與光影，\n連結您內心深處那份未曾言說的故事。\n在這裡，每一顆隕石與水晶，都是時光留給您的溫柔獻禮。",
+            aboutIcon: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200",
             igHandle: "@our_story_gem",
             fbHandle: "奧兒絲朵 Our Story"
         };
+
+        const defaultCollections = [
+            { name: "星辰系列：隕石", sub: "Celestial Echoes", desc: "穿越銀河的溫潤，將宇宙的呢喃私藏於掌心。", img: "https://images.unsplash.com/photo-1506318137071-a8e063b4b574?auto=format&fit=crop&q=80&w=1200", createdAt: Date.now() - 100 },
+            { name: "大地系列：水晶", sub: "Earth Whispers", desc: "純粹的光影折射，映照出靈魂最深處的平靜。", img: "https://images.unsplash.com/photo-1515405295579-ba7b45403062?auto=format&fit=crop&q=80&w=1200", createdAt: Date.now() - 200 },
+            { name: "守望系列：龍龜", sub: "Serene Guardians", desc: "古老工藝的柔和線條，靜謐守護每一段珍貴時光。", img: "https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&q=80&w=1200", createdAt: Date.now() - 300 }
+        ];
+
         let collectionsList = []; 
         let isAiBusy = false;
 
@@ -355,7 +362,7 @@
                 generationConfig: { temperature: 0.9, maxOutputTokens: 600 }
             };
             const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-            if (!response.ok) throw new Error("API Connection Error");
+            if (!response.ok) throw new Error("AI 連線失敗");
             const result = await response.json();
             return result.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
         }
@@ -365,14 +372,14 @@
             const textarea = document.getElementById('edit-about-text');
             if (!textarea.value || isAiBusy) return;
             isAiBusy = true; btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> 正在感應時空頻率...`;
+            btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> 正在感應...`;
             lucide.createIcons();
             try {
                 const result = await callGemini(`妳是一位專業品牌文案師。請潤色這段靈石品牌的品牌故事，使其風格空靈、優雅、富有詩意，不超過 150 字，直接輸出繁體中文：${textarea.value}`);
                 textarea.value = result;
                 siteConfig.aboutText = result;
-            } catch (e) { alert("AI 感應中斷，請稍後重試。"); }
-            finally { isAiBusy = false; btn.disabled = false; btn.innerHTML = `<i data-lucide="sparkles" class="w-3 h-3"></i> AI 潤色品牌故事 ✨`; lucide.createIcons(); }
+            } catch (e) { alert("AI 感應中斷。"); }
+            finally { isAiBusy = false; btn.disabled = false; btn.innerHTML = `<i data-lucide="sparkles" class="w-3 h-3"></i> AI 潤色故事內容 ✨`; lucide.createIcons(); }
         };
 
         window.generateDailyQuote = async () => {
@@ -389,7 +396,7 @@
         };
 
         // ==========================================
-        // 🖼️ 圖片壓縮 (單張嚴格限制在 600KB 以下)
+        // 🖼️ 圖片壓縮與處理
         // ==========================================
         window.handleImageUpload = (input, target, index = null) => {
             const file = input.files[0];
@@ -413,7 +420,7 @@
                     if (target === 'hero') siteConfig.heroImg = base64;
                     else if (target === 'about_icon') siteConfig.aboutIcon = base64;
                     else collectionsList[index].img = base64;
-                    alert(`照片壓縮完畢 (${Math.round(base64.length/1024)}KB)。請記得最後點擊『儲存』。`);
+                    alert("照片處理完畢！請記得點擊『Save & Publish』。");
                 };
                 img.src = e.target.result;
             };
@@ -433,24 +440,29 @@
                 };
                 await initAuth();
 
-                onAuthStateChanged(auth, (user) => {
+                onAuthStateChanged(auth, async (user) => {
                     if (!user) return;
                     
-                    // 監聽配置
+                    // 1. 監聽全域文字與首頁配置
                     const configRef = doc(db, 'artifacts', appId, 'public', 'data', 'siteSettings', 'main');
                     onSnapshot(configRef, (snap) => {
                         if (snap.exists()) {
-                            siteConfig = snap.data();
-                            renderFrontEndText();
+                            siteConfig = { ...siteConfig, ...snap.data() };
                         }
+                        renderFrontEndText();
                     });
 
-                    // 監聽展示項
+                    // 2. 監聽展示項
                     const collRef = collection(db, 'artifacts', appId, 'public', 'data', 'galleryItems');
-                    onSnapshot(collRef, (snap) => {
-                        collectionsList = [];
-                        snap.forEach(d => collectionsList.push({ id: d.id, ...d.data() }));
-                        collectionsList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                    onSnapshot(collRef, async (snap) => {
+                        if (snap.empty) {
+                            // 若雲端無資料，則載入預設圖片並引導儲存
+                            collectionsList = defaultCollections.map(item => ({ ...item, id: 'def_' + Math.random() }));
+                        } else {
+                            collectionsList = [];
+                            snap.forEach(d => collectionsList.push({ id: d.id, ...d.data() }));
+                            collectionsList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                        }
                         renderFrontEndCollections();
                         if (document.getElementById('admin-panel').classList.contains('active')) renderAdminList();
                     });
@@ -465,11 +477,11 @@
             document.getElementById('footer-brand-display').innerText = siteConfig.brandName;
             document.getElementById('hero-title-display').innerText = siteConfig.heroTitle;
             document.getElementById('hero-sub-display').innerText = siteConfig.heroSub;
-            document.getElementById('hero-img-display').src = siteConfig.heroImg || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1920";
+            document.getElementById('hero-img-display').src = siteConfig.heroImg;
             
             document.getElementById('about-title-display').innerText = siteConfig.aboutTitle;
             document.getElementById('about-text-display').innerText = siteConfig.aboutText;
-            if (siteConfig.aboutIcon) document.getElementById('about-icon-display').src = siteConfig.aboutIcon;
+            document.getElementById('about-icon-display').src = siteConfig.aboutIcon;
 
             document.getElementById('ig-text-display').innerText = `Instagram / ${siteConfig.igHandle}`;
             document.getElementById('fb-text-display').innerText = `Facebook / ${siteConfig.fbHandle}`;
@@ -486,18 +498,14 @@
 
         function renderFrontEndCollections() {
             const container = document.getElementById('collections-container');
-            if (collectionsList.length === 0) {
-                container.innerHTML = `<p class="col-span-full text-center text-stone-300 py-20 tracking-widest text-xs">暫無收藏展示</p>`;
-                return;
-            }
             container.innerHTML = collectionsList.map(item => `
                 <div class="group flex flex-col items-center animate-fadeInUp">
                     <div class="relative overflow-hidden aspect-[4/5] w-full mb-10 shadow-sm bg-stone-200">
                         <img src="${item.img}" class="w-full h-full object-cover opacity-95 transition-all duration-[2000ms] group-hover:scale-105" alt="">
                     </div>
                     <p class="text-[9px] tracking-[0.4em] text-stone-400 mb-3 uppercase font-medium">${item.sub || ''}</p>
-                    <h3 class="text-base font-light tracking-[0.3em] text-stone-800 mb-4">${item.name}</h3>
-                    <p class="text-xs text-stone-400 leading-relaxed font-light text-center max-w-[240px] tracking-widest">${item.desc}</p>
+                    <h3 class="text-base font-light tracking-[0.3em] text-stone-800 mb-4">${item.name || '未命名項目'}</h3>
+                    <p class="text-xs text-stone-400 leading-relaxed font-light text-center max-w-[240px] tracking-widest">${item.desc || ''}</p>
                 </div>
             `).join('');
         }
@@ -510,14 +518,14 @@
                     <input type="text" value="${item.name}" placeholder="產品名稱" onchange="updateLocalItem(${index}, 'name', this.value)">
                     <input type="text" value="${item.sub}" placeholder="小標" onchange="updateLocalItem(${index}, 'sub', this.value)">
                     <textarea placeholder="描述" onchange="updateLocalItem(${index}, 'desc', this.value)">${item.desc}</textarea>
-                    <label class="upload-btn w-full text-center m-0">更換照片<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label>
+                    <label class="upload-btn w-full text-center m-0">更換此項照片<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label>
                 </div>
             `).join('');
             lucide.createIcons();
         }
 
         window.addNewCollectionItem = () => {
-            collectionsList.unshift({ id: 'temp_' + Date.now(), name: "新靈石項目", desc: "", sub: "Collection Series", img: "", createdAt: Date.now(), isNew: true });
+            collectionsList.unshift({ id: 'temp_' + Date.now(), name: "新項目", desc: "請輸入描述", sub: "Collection Series", img: "https://images.unsplash.com/photo-1523554888454-841f72e27df2?auto=format&fit=crop&q=80&w=800", createdAt: Date.now(), isNew: true });
             renderAdminList();
         };
 
@@ -525,15 +533,18 @@
 
         window.deleteItem = async (id) => {
             if (!confirm("確定移除？")) return;
-            if (id.startsWith('temp_')) { collectionsList = collectionsList.filter(i => i.id !== id); renderAdminList(); }
-            else { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'galleryItems', id)); }
+            if (id.startsWith('temp_') || id.startsWith('def_')) { 
+                collectionsList = collectionsList.filter(i => i.id !== id); renderAdminList(); 
+            } else { 
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'galleryItems', id)); 
+            }
         };
 
         window.saveSiteData = async () => {
             if (!auth.currentUser) return;
             document.getElementById('loading').style.display = 'flex';
             try {
-                // 1. 文字配置
+                // 1. 儲存文字配置
                 const configRef = doc(db, 'artifacts', appId, 'public', 'data', 'siteSettings', 'main');
                 await setDoc(configRef, {
                     brandName: document.getElementById('edit-brand-name').value,
@@ -547,15 +558,15 @@
                     fbHandle: document.getElementById('edit-fb-handle').value
                 });
 
-                // 2. 收藏項
+                // 2. 儲存展示項
                 for (const item of collectionsList) {
-                    const id = item.isNew ? doc(collection(db, 'dummy')).id : item.id;
+                    const id = (item.isNew || item.id.startsWith('def_')) ? doc(collection(db, 'dummy')).id : item.id;
                     const itemRef = doc(db, 'artifacts', appId, 'public', 'data', 'galleryItems', id);
                     const cleanItem = { ...item }; delete cleanItem.id; delete cleanItem.isNew;
                     await setDoc(itemRef, cleanItem);
                 }
-                alert('所有修改已同步至雲端並發佈！'); window.toggleAdmin();
-            } catch (e) { alert('儲存異常：' + e.message); }
+                alert('內容已成功發佈！所有變更已同步。'); window.toggleAdmin();
+            } catch (e) { alert('儲存發生異常：' + e.message); }
             finally { document.getElementById('loading').style.display = 'none'; }
         };
 
