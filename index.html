@@ -4,39 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- === SEO 搜尋優化 === -->
+    <!-- === SEO 搜尋優化 (正式網址版) === -->
     <title>奧兒絲朵 | 靈石與您的故事 - 隕石、水晶、龍龜專業收藏</title>
-    <meta name="description" content="奧兒絲朵（Our Story）提供精選天鐵隕石、能量水晶、精雕龍龜。每一顆靈石都是連結內心深處的故事，找尋屬於您的生命頻率。">
-    <meta name="keywords" content="奧兒絲朵,靈石,隕石,水晶,龍龜,能量石,天鐵,捷克隕石,淨化磁場">
+    <meta name="description" content="奧兒絲朵（Our Story）致力於提供高品質天然靈石收藏，包括天鐵隕石、能量水晶、精雕龍龜。每一顆靈石都是連結內心深處的故事，找尋屬於您的生命頻率。">
+    <meta name="keywords" content="奧兒絲朵,靈石,隕石,水晶,龍龜,能量石,美學品牌,天鐵,捷克隕石,淨化磁場,能量水晶,龍龜收藏">
     <meta name="author" content="奧兒絲朵 Our Story">
     
-    <!-- Open Graph 分享預覽 -->
+    <!-- 標準連結：告訴 Google 這是唯一官網 -->
+    <link rel="canonical" href="https://our-story.com.tw/">
+
+    <!-- Open Graph 分享預覽 (LINE/FB/IG) -->
     <meta property="og:title" content="奧兒絲朵 | 靈石與您的故事">
-    <meta property="og:description" content="探索精選收藏。每一顆靈石都有它的頻率，等待與您共鳴。">
+    <meta property="og:description" content="每一顆靈石都有它的頻率。探索奧兒絲朵的精選收藏，找尋觸動心靈的能量瞬間。">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://our-story.com.tw/">
     <meta property="og:image" content="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1200">
+    <meta property="og:site_name" content="奧兒絲朵 Our Story">
     
-    <!-- 結構化資料 -->
+    <!-- 結構化資料 (Schema.org) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Brand",
       "name": "奧兒絲朵 Our Story",
-      "description": "專業精選天然靈石與美學品牌",
-      "logo": "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200"
+      "alternateName": "奧兒絲朵",
+      "description": "專業精選天然靈石與美學品牌，提供隕石、水晶、龍龜等精美收藏。",
+      "logo": "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200",
+      "url": "https://our-story.com.tw/"
     }
     </script>
 
     <!-- Tailwind CSS & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Instagram 官方嵌入指令碼 -->
+    <!-- Instagram 官方嵌入腳本 -->
     <script async src="//www.instagram.com/embed.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500&display=swap');
         body { font-family: 'Noto Sans TC', sans-serif; background-color: #FAF9F6; color: #555555; scroll-behavior: smooth; }
         
+        /* 動畫效果 */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.05); } }
@@ -50,6 +58,7 @@
         #mobile-menu { display: none; opacity: 0; transition: opacity 0.5s ease; }
         #mobile-menu.active { display: flex; opacity: 1; }
         
+        /* 管理面板樣式 */
         .admin-panel { display: none; position: fixed; top: 0; right: 0; width: 100%; max-width: 450px; height: 100%; background: white; z-index: 100; box-shadow: -10px 0 30px rgba(0,0,0,0.1); overflow-y: auto; padding: 2.5rem; }
         .admin-panel.active { display: block; }
         
@@ -57,7 +66,6 @@
         input:focus, textarea:focus { outline: none; border-color: #888; }
         
         .upload-btn { display: inline-block; background: #f3f4f6; padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.75rem; color: #374151; cursor: pointer; border: 1px solid #d1d5db; margin-bottom: 0.5rem; text-align: center; width: 100%; }
-        .upload-btn:hover { background: #e5e7eb; }
         
         .ai-spirit-box { max-width: 700px; margin: 0 auto; padding: 4rem 2rem; border: 1px dashed #e5e7eb; border-radius: 2rem; background: rgba(255, 255, 255, 0.5); }
         .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 200; display: none; align-items: center; justify-content: center; font-size: 0.8rem; letter-spacing: 0.3em; }
@@ -68,11 +76,11 @@
 </head>
 <body class="font-light">
 
-    <!-- 加載狀態層 -->
-    <div id="loading" class="loading-overlay">
+    <!-- 加載中疊加層 -->
+    <div id="loading" class="loading-overlay" aria-hidden="true">
         <div class="flex flex-col items-center">
             <i data-lucide="loader" class="w-8 h-8 animate-spin mb-4 text-stone-400"></i>
-            <span>連結時空能量中...</span>
+            <span>連結靈石時空...</span>
         </div>
     </div>
 
@@ -91,23 +99,23 @@
                     <a id="nav-fb-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i data-lucide="facebook" class="w-4 h-4"></i></a>
                 </div>
             </div>
-            <button class="md:hidden text-stone-600" onclick="toggleMenu()" aria-label="Menu"><i data-lucide="menu" class="w-6 h-6"></i></button>
+            <button class="md:hidden text-stone-600" onclick="toggleMenu()" aria-label="開啟選單"><i data-lucide="menu" class="w-6 h-6"></i></button>
         </div>
     </nav>
 
-    <!-- 行動選單 -->
+    <!-- 行動端選單 -->
     <div id="mobile-menu" class="fixed inset-0 z-[60] bg-white flex flex-col items-center justify-center space-y-10">
-        <button class="absolute top-8 right-8 text-stone-600" onclick="toggleMenu()"><i data-lucide="x" class="w-8 h-8"></i></button>
-        <button onclick="scrollToSection('collections')" class="text-xl tracking-[0.4em] text-stone-600 font-light">收藏系列</button>
-        <button onclick="scrollToSection('about')" class="text-xl tracking-[0.4em] text-stone-600 font-light">品牌故事</button>
-        <button onclick="scrollToSection('social')" class="text-xl tracking-[0.4em] text-stone-600 font-light">追蹤我們</button>
+        <button class="absolute top-8 right-8 text-stone-600" onclick="toggleMenu()" aria-label="關閉選單"><i data-lucide="x" class="w-8 h-8"></i></button>
+        <button onclick="scrollToSection('collections')" class="text-xl tracking-[0.4em] text-stone-600 uppercase font-light">收藏系列</button>
+        <button onclick="scrollToSection('about')" class="text-xl tracking-[0.4em] text-stone-600 font-light uppercase">品牌故事</button>
+        <button onclick="scrollToSection('social')" class="text-xl tracking-[0.4em] text-stone-600 font-light uppercase">追蹤我們</button>
     </div>
 
     <main>
-        <!-- 主視覺 -->
+        <!-- 主視覺 (Hero) -->
         <header id="home" class="relative h-screen flex items-center justify-center overflow-hidden bg-white">
             <div class="absolute inset-0 z-0">
-                <img id="hero-img-display" src="" class="w-full h-full object-cover opacity-30 scale-105 animate-slowZoom" alt="Our Story Hero">
+                <img id="hero-img-display" src="" class="w-full h-full object-cover opacity-30 scale-105 animate-slowZoom" alt="奧兒絲朵品牌背景">
             </div>
             <div class="relative z-10 text-center px-6">
                 <p id="hero-sub-display" class="text-[10px] tracking-[0.6em] text-stone-400 mb-10 animate-fadeInUp uppercase font-medium">Every stone has its own story</p>
@@ -115,29 +123,30 @@
             </div>
         </header>
 
-        <!-- 關於我們 -->
+        <!-- 品牌故事 / QR Code -->
         <section id="about" class="py-40 px-8 bg-white text-center">
             <div class="max-w-3xl mx-auto">
                 <div class="mb-12">
-                    <a id="about-link-display" href="#" target="_blank" rel="noopener noreferrer" class="block hover:opacity-80 transition-opacity">
-                        <img id="about-icon-display" src="" class="w-48 md:w-64 mx-auto object-contain rounded-lg shadow-sm" alt="QR Code">
+                    <a id="about-link-display" href="#" target="_blank" rel="noopener noreferrer" class="block hover:opacity-80 transition-opacity" aria-label="聯繫奧兒絲朵官方客服">
+                        <img id="about-icon-display" src="" class="w-48 md:w-64 mx-auto object-contain rounded-lg shadow-sm" alt="奧兒絲朵客服 QR Code">
                     </a>
                 </div>
                 <h2 id="about-title-display" class="text-xl font-light tracking-[0.4em] text-stone-800 mb-16 uppercase">關於 奧兒絲朵</h2>
                 <p id="about-text-display" class="text-stone-500 leading-[2.8] tracking-[0.25em] text-sm md:text-base font-extralight whitespace-pre-line text-justify md:text-center">載入中...</p>
+                
                 <div class="mt-32 ai-spirit-box">
-                    <p id="ai-quote" class="text-sm md:text-base text-stone-400 italic tracking-[0.3em] mb-12">「每一塊石頭都有它的頻率，等待與您共鳴。」</p>
-                    <button id="btn-daily-quote" onclick="generateDailyQuote()" class="text-[10px] tracking-[0.3em] uppercase px-6 py-2 border border-stone-200 hover:border-stone-800 transition-all">獲取今日石語 ✨</button>
+                    <p id="ai-quote" class="text-sm md:text-base text-stone-400 italic tracking-[0.3em] mb-12 leading-relaxed">「每一塊石頭都有它的頻率，等待與您共鳴。」</p>
+                    <button id="btn-daily-quote" onclick="generateDailyQuote()" class="text-[10px] tracking-[0.3em] uppercase px-6 py-2 border border-stone-200 hover:border-stone-800 transition-all shadow-sm">獲取今日石語 ✨</button>
                 </div>
             </div>
         </section>
 
-        <!-- 展示列表 -->
+        <!-- 靈石展示牆 -->
         <section id="collections" class="py-24 px-6 md:px-20 bg-[#FAF9F6]">
             <div id="collections-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 max-w-7xl mx-auto"></div>
         </section>
 
-        <!-- 社群區 -->
+        <!-- 社群區塊 (含影像牆) -->
         <section id="social" class="py-40 px-8 bg-white overflow-hidden">
             <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-24">
                 <div class="w-full md:w-2/5 space-y-16">
@@ -156,68 +165,64 @@
     </main>
 
     <!-- 管理編輯面板 -->
-    <div id="admin-panel" class="admin-panel">
+    <div id="admin-panel" class="admin-panel" aria-labelledby="admin-title">
         <div class="flex justify-between items-center mb-8 border-b pb-4">
             <div class="flex items-center space-x-2">
                 <div class="w-2 h-2 bg-green-400 rounded-full"></div>
-                <h3 class="font-bold tracking-widest text-stone-800 uppercase">管理者模式已開啟</h3>
+                <h3 id="admin-title" class="font-bold tracking-widest text-stone-800 uppercase">管理員模式</h3>
             </div>
-            <button onclick="toggleAdmin()"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <button onclick="toggleAdmin()" aria-label="關閉管理面板"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
         
         <div class="space-y-10 pb-32">
-            <!-- 區塊 1: 品牌設定 -->
+            <!-- 配置區塊 -->
             <section class="space-y-3">
                 <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">基本配置</h4>
-                <input type="text" id="edit-brand-name" placeholder="Logo 名稱">
+                <input type="text" id="edit-brand-name" placeholder="Logo 顯示名稱">
                 <textarea id="edit-hero-title" rows="2" placeholder="首頁大標題"></textarea>
-                <input type="text" id="edit-hero-sub" placeholder="首頁小標題">
-                <label class="upload-btn">更換首頁背景圖<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'hero')"></label>
+                <input type="text" id="edit-hero-sub" placeholder="首頁副標題">
+                <label class="upload-btn">更換首頁背景<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'hero')"></label>
             </section>
 
-            <!-- 區塊 2: 故事與聯絡 -->
             <section class="space-y-3">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">故事內容 & QR Code</h4>
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">品牌故事 & QR Code</h4>
                 <textarea id="edit-about-text" rows="5" placeholder="故事內容"></textarea>
                 <div class="p-4 bg-stone-50 rounded-lg space-y-3">
                     <label class="upload-btn w-full m-0">更換 QR Code 圖片<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'about_icon')"></label>
-                    <input type="text" id="edit-about-link" placeholder="圖片跳轉網址 (LINE/IG)">
+                    <input type="text" id="edit-about-link" placeholder="圖片跳轉連結 (LINE/IG)">
                 </div>
             </section>
 
-            <!-- 區塊 3: 影像牆管理 -->
             <section class="space-y-3">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">影像牆 (GALLERY SETUP)</h4>
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">影像展示 (IG 連結)</h4>
                 <div class="space-y-4">
-                    <div class="p-3 border rounded">
+                    <div class="p-4 border rounded-lg bg-stone-50">
                         <input type="text" id="edit-ig-embed-1" placeholder="IG 貼文網址 1">
-                        <label class="upload-btn text-[9px] w-full m-0">或備用圖 1<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig1')"></label>
+                        <label class="upload-btn text-[9px] m-0">或上傳備用圖 1<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig1')"></label>
                     </div>
-                    <div class="p-3 border rounded">
+                    <div class="p-4 border rounded-lg bg-stone-50">
                         <input type="text" id="edit-ig-embed-2" placeholder="IG 貼文網址 2">
-                        <label class="upload-btn text-[9px] w-full m-0">或備用圖 2<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig2')"></label>
+                        <label class="upload-btn text-[9px] m-0">或上傳備用圖 2<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig2')"></label>
                     </div>
-                    <div class="p-3 border rounded">
+                    <div class="p-4 border rounded-lg bg-stone-50">
                         <input type="text" id="edit-ig-embed-3" placeholder="IG 貼文網址 3">
-                        <label class="upload-btn text-[9px] w-full m-0">或備用圖 3<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig3')"></label>
+                        <label class="upload-btn text-[9px] m-0">或上傳備用圖 3<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig3')"></label>
                     </div>
-                    <div class="p-3 border rounded">
+                    <div class="p-4 border rounded-lg bg-stone-50">
                         <input type="text" id="edit-ig-embed-4" placeholder="IG 貼文網址 4">
-                        <label class="upload-btn text-[9px] w-full m-0">或備用圖 4<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig4')"></label>
+                        <label class="upload-btn text-[9px] m-0">或上傳備用圖 4<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig4')"></label>
                     </div>
                 </div>
             </section>
 
-            <!-- 區塊 4: 社群資訊 -->
             <section class="space-y-3 border-t pt-8">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">社群帳號連結</h4>
-                <input type="text" id="edit-ig-handle" placeholder="IG 帳號 (如: @our_story)">
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">社群帳號資訊 (Social)</h4>
+                <input type="text" id="edit-ig-handle" placeholder="IG 顯示名稱 (如: @our_story)">
                 <input type="text" id="edit-ig-url" placeholder="IG 個人主頁連結">
                 <input type="text" id="edit-fb-handle" placeholder="FB 顯示名稱">
                 <input type="text" id="edit-fb-url" placeholder="FB 粉絲專頁連結">
             </section>
 
-            <!-- 區塊 5: 靈石項目 -->
             <section class="space-y-6 border-t pt-8">
                 <div class="flex justify-between items-center">
                     <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase font-bold">收藏清單管理</h4>
@@ -227,10 +232,9 @@
             </section>
         </div>
 
-        <!-- 面板固定動作鈕 -->
         <div class="fixed bottom-0 right-0 w-full max-w-[450px] bg-white p-6 border-t z-50 shadow-2xl">
             <div class="grid grid-cols-2 gap-4">
-                <button onclick="saveSiteData()" class="bg-stone-900 text-white py-4 text-xs tracking-widest font-bold uppercase rounded-sm hover:bg-stone-800 transition-all shadow-lg">發佈更新</button>
+                <button onclick="saveSiteData()" class="bg-stone-900 text-white py-4 text-xs tracking-widest font-bold uppercase rounded-sm hover:bg-stone-800 transition-colors shadow-lg">發佈更新</button>
                 <button onclick="signOutAdmin()" class="bg-stone-50 text-stone-400 py-4 text-xs tracking-widest font-bold uppercase rounded-sm border border-stone-200 hover:text-red-500 hover:border-red-200 transition-all">安全登出</button>
             </div>
         </div>
@@ -266,7 +270,7 @@
         const auth = getAuth(app);
         const db = initializeFirestore(app, { experimentalForceLongPolling: true });
 
-        // 石語池
+        // 石語系統
         const quotesPool = ["每一顆靈石，都在訴說宇宙的秘密。", "靜謐之中，感受大地的呼吸。", "光影折射，映照出靈魂的純粹。", "穿越億萬年的星塵，只為與你相遇。", "心如明鏡，塵埃自落。", "在石頭的溫潤中，找回內心的平靜。", "礦石的低語，是時間留下的情書。", "擁抱自然，與萬物共鳴。", "純粹的光，照亮未曾察覺的角落。", "靜聽石語，找尋失落的記憶。", "大地之母的饋贈，值得溫柔以待。", "靈魂的頻率，在色彩中閃耀。", "靜默，是最高級的溝通方式。", "不刻意渲染，美自會浮現。", "每一道裂痕，都是成長的印記。", "與石結緣，即是與自己重逢。", "星辰隕落，化作掌心的溫度。", "在忙碌的世界中，保有一方淨土。", "心之所向，便是能量所在。", "靈石無言，卻最懂你的心。"];
         const sessionQuote = quotesPool[Math.floor(Math.random() * quotesPool.length)];
 
@@ -280,6 +284,7 @@
         let siteConfig = { brandName: "奧兒絲朵", heroTitle: "", heroSub: "", heroImg: "", aboutText: "", aboutIcon: "", aboutLink: "", igHandle: "", igUrl: "#", fbHandle: "", fbUrl: "#", igEmbed1: "", igEmbed2: "", igEmbed3: "", igEmbed4: "", igImg1: "", igImg2: "", igImg3: "", igImg4: "" };
         let collectionsList = [];
 
+        // 圖片上傳處理
         window.handleImageUpload = (input, target, index = null) => {
             const file = input.files[0]; if (!file) return;
             const reader = new FileReader();
@@ -296,7 +301,7 @@
                     else if (target === 'about_icon') siteConfig.aboutIcon = base64;
                     else if (target.startsWith('ig')) siteConfig[`igImg${target.slice(2)}`] = base64;
                     else if (target === 'col') collectionsList[index].img = base64;
-                    alert("照片準備就緒，請記得發佈。");
+                    alert("照片準備就緒，請記得按發佈更新。");
                 };
                 img.src = e.target.result;
             };
@@ -306,11 +311,10 @@
         async function init() {
             document.getElementById('loading').style.display = 'flex';
             try {
-                await signInAnonymously(auth).catch(() => {});
+                // 背景嘗試以遊客權限連線資料庫
                 onAuthStateChanged(auth, (user) => {
                     const panel = document.getElementById('admin-panel');
                     const btn = document.getElementById('admin-action-btn');
-                    // 核心修正：加入 Trim 確保比對不會因為不可見字元失敗
                     const currentUid = user?.uid?.trim();
                     if (user && currentUid === ADMIN_UID) {
                         panel.classList.add('active');
@@ -346,7 +350,7 @@
             if (embedUrl && embedUrl.trim() !== "") {
                 container.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14"></blockquote>`;
             } else if (fallbackImg) {
-                container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 hover:scale-105" alt="Instagram Showcase">`;
+                container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 hover:scale-105" alt="奧兒絲朵 Instagram 作品牆">`;
             } else {
                 container.innerHTML = `<div class="w-full h-full bg-stone-100 flex items-center justify-center text-stone-300 text-[10px]">影像載入中</div>`;
             }
@@ -374,7 +378,7 @@
             for(let i=1; i<=4; i++) { renderIgSlot(`ig-slot-${i}`, siteConfig[`igEmbed${i}`], siteConfig[`igImg${i}`]); }
             if (window.instgrm) window.instgrm.Embeds.process();
             
-            // 安全同步
+            // 安全同步編輯內容
             safeSetVal('edit-brand-name', siteConfig.brandName);
             safeSetVal('edit-hero-title', siteConfig.heroTitle);
             safeSetVal('edit-hero-sub', siteConfig.heroSub);
@@ -393,7 +397,7 @@
             container.innerHTML = collectionsList.map(item => `
                 <article class="group flex flex-col items-center animate-fadeInUp">
                     <div class="aspect-[4/5] w-full overflow-hidden bg-stone-200">
-                        <img src="${item.img}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 group-hover:scale-110" alt="${item.name}">
+                        <img src="${item.img}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 group-hover:scale-110" alt="奧兒絲朵靈石清單：${item.name}">
                     </div>
                     <h3 class="text-base font-light mt-6 tracking-widest text-stone-800 uppercase">${item.name}</h3>
                     <p class="text-xs text-stone-400 mt-2 tracking-widest">${item.desc}</p>
@@ -404,12 +408,12 @@
         function renderAdminList() {
             const list = document.getElementById('edit-collections-list');
             if (!list) return;
-            list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="updateLocalItem(${index}, 'name', this.value)" placeholder="項目名稱"><textarea onchange="updateLocalItem(${index}, 'desc', this.value)" placeholder="能量描述">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">換圖<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
+            list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors" aria-label="刪除此項目"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="updateLocalItem(${index}, 'name', this.value)" placeholder="靈石名稱" class="text-xs font-bold"><textarea onchange="updateLocalItem(${index}, 'desc', this.value)" placeholder="能量描述" class="text-xs">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">更換照片<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
             lucide.createIcons();
         }
 
         window.addNewCollectionItem = () => {
-            collectionsList.unshift({ id: 'temp_' + Date.now(), name: "新靈石項目", desc: "請輸入能量描述", img: "", createdAt: Date.now(), isNew: true });
+            collectionsList.unshift({ id: 'temp_' + Date.now(), name: "新收藏項目", desc: "請輸入能量描述", img: "", createdAt: Date.now(), isNew: true });
             renderAdminList();
         };
         window.updateLocalItem = (index, field, value) => { collectionsList[index][field] = value; };
@@ -469,11 +473,10 @@
                     
                     if (loggedInUid === ADMIN_UID) {
                         alert("身分核對成功！管理模式已開啟。");
-                        panel.classList.add('active'); // 關鍵：立即開啟
+                        panel.classList.add('active');
                         document.body.style.overflow = 'hidden';
                     } else {
-                        // 診斷視窗：顯示雙方 ID 方便核對
-                        alert("驗證成功，但該帳號不具備管理權限。\n\n目前登入 UID 為:\n" + loggedInUid + "\n\n系統預期 UID 為:\n" + ADMIN_UID + "\n\n若不符，請將目前的 UID 提供給開發者。");
+                        alert("驗證成功，但該帳號不具備管理權限。\n\n目前登入 UID 為:\n" + loggedInUid + "\n\n系統預期 UID 為:\n" + ADMIN_UID);
                         await signOut(auth);
                     }
                 } catch(e) { alert("登入失敗：帳號或密碼錯誤。(" + e.code + ")"); }
