@@ -272,9 +272,11 @@
             </section>
 
             <section class="space-y-4">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">社群連結 (帳號名稱)</h4>
-                <input type="text" id="edit-ig-handle" placeholder="Instagram 帳號 (如 @our_story_gem)">
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-600 border-l-2 border-stone-800 pl-3 uppercase">社群連結 (帳號與連結)</h4>
+                <input type="text" id="edit-ig-handle" placeholder="Instagram 帳號名稱 (如 @our_story_gem)">
+                <input type="text" id="edit-ig-url" placeholder="Instagram 個人檔案完整網址">
                 <input type="text" id="edit-fb-handle" placeholder="Facebook 帳號名稱">
+                <input type="text" id="edit-fb-url" placeholder="Facebook 粉絲專頁完整網址">
             </section>
 
             <section class="space-y-6">
@@ -288,7 +290,7 @@
             </section>
 
             <div class="sticky bottom-0 bg-white pt-4 pb-8 border-t z-50">
-                <button onclick="saveSiteData()" class="w-full bg-stone-900 text-white py-4 text-xs tracking-[0.4em] hover:bg-stone-800 transition-all shadow-xl uppercase">Save & Publish Changes</button>
+                <button onclick="saveSiteData()" class="w-full bg-stone-900 text-white py-4 text-xs tracking-[0.4em] hover:bg-stone-800 transition-all shadow-xl uppercase font-bold">Publish & Save Changes</button>
             </div>
         </div>
     </div>
@@ -308,7 +310,7 @@
         import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot, query, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ==========================================
-        // 配置
+        // 配置與初始狀態
         // ==========================================
         const myFirebaseConfig = {
             apiKey: "AIzaSyDruZNMUyiJNcyoksYIBDHv5F1SiiG2Mss",
@@ -328,7 +330,7 @@
         const db = getFirestore(app);
 
         // ==========================================
-        // ✨ 非 AI 儀式感石語系統 (會話鎖定邏輯)
+        // ✨ 非 AI 儀式感石語系統
         // ==========================================
         const quotesPool = [
             "每一顆靈石，都在訴說宇宙的秘密。",
@@ -353,7 +355,6 @@
             "靈石無言，卻最懂你的心。"
         ];
 
-        // 鎖定本場造訪的石語
         const sessionQuote = quotesPool[Math.floor(Math.random() * quotesPool.length)];
 
         window.generateDailyQuote = () => {
@@ -384,7 +385,9 @@
             aboutText: "",
             aboutIcon: "",
             igHandle: "@our_story_gem",
-            fbHandle: "奧兒絲朵 Our Story"
+            igUrl: "#",
+            fbHandle: "奧兒絲朵 Our Story",
+            fbUrl: "#"
         };
         let collectionsList = [];
 
@@ -461,17 +464,28 @@
             document.getElementById('about-text-display').innerText = siteConfig.aboutText;
             if (siteConfig.aboutIcon) document.getElementById('about-icon-display').src = siteConfig.aboutIcon;
 
+            // 更新所有連結網址
+            const igUrl = siteConfig.igUrl || "#";
+            const fbUrl = siteConfig.fbUrl || "#";
+            
+            document.getElementById('nav-ig-link').href = igUrl;
+            document.getElementById('ig-link-display').href = igUrl;
             document.getElementById('ig-text-display').innerText = `Instagram / ${siteConfig.igHandle}`;
+            
+            document.getElementById('nav-fb-link').href = fbUrl;
+            document.getElementById('fb-link-display').href = fbUrl;
             document.getElementById('fb-text-display').innerText = `Facebook / ${siteConfig.fbHandle}`;
             
-            // 同步編輯框
+            // 同步編輯面板
             document.getElementById('edit-brand-name').value = siteConfig.brandName;
             document.getElementById('edit-hero-title').value = siteConfig.heroTitle;
             document.getElementById('edit-hero-sub').value = siteConfig.heroSub;
             document.getElementById('edit-about-title').value = siteConfig.aboutTitle;
             document.getElementById('edit-about-text').value = siteConfig.aboutText;
             document.getElementById('edit-ig-handle').value = siteConfig.igHandle;
+            document.getElementById('edit-ig-url').value = siteConfig.igUrl || "";
             document.getElementById('edit-fb-handle').value = siteConfig.fbHandle;
+            document.getElementById('edit-fb-url').value = siteConfig.fbUrl || "";
         }
 
         function renderFrontEndCollections() {
@@ -500,7 +514,7 @@
                     <input type="text" value="${item.name}" placeholder="名稱" onchange="updateLocalItem(${index}, 'name', this.value)">
                     <input type="text" value="${item.sub}" placeholder="副標" onchange="updateLocalItem(${index}, 'sub', this.value)">
                     <textarea placeholder="描述" onchange="updateLocalItem(${index}, 'desc', this.value)">${item.desc}</textarea>
-                    <label class="upload-btn w-full text-center m-0 text-[10px]">更換照片 (獨立空間)<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label>
+                    <label class="upload-btn w-full text-center m-0 text-[10px]">更換照片 (獨立儲存空間)<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label>
                 </div>
             `).join('');
             lucide.createIcons();
@@ -533,7 +547,9 @@
                     aboutText: document.getElementById('edit-about-text').value,
                     aboutIcon: siteConfig.aboutIcon,
                     igHandle: document.getElementById('edit-ig-handle').value,
-                    fbHandle: document.getElementById('edit-fb-handle').value
+                    igUrl: document.getElementById('edit-ig-url').value,
+                    fbHandle: document.getElementById('edit-fb-handle').value,
+                    fbUrl: document.getElementById('edit-fb-url').value
                 });
 
                 for (const item of collectionsList) {
@@ -542,7 +558,7 @@
                     const cleanItem = { ...item }; delete cleanItem.id; delete cleanItem.isNew;
                     await setDoc(itemRef, cleanItem);
                 }
-                alert('變更已成功同步！'); window.toggleAdmin();
+                alert('變更已發佈至雲端！'); window.toggleAdmin();
             } catch (e) { alert('儲存失敗：' + e.message); }
             finally { document.getElementById('loading').style.display = 'none'; }
         };
@@ -557,18 +573,14 @@
             } else { panel.classList.remove('active'); document.body.style.overflow = ''; }
         };
 
-        // 重要修正：確保點擊選單項目後，「不論是手機或電腦縮小版」都會自動關閉選單
         window.scrollToSection = (id) => {
             const e = document.getElementById(id);
             if (e) {
-                // 平滑滾動
                 window.scrollTo({ top: e.offsetTop - 80, behavior: 'smooth' });
-                
-                // 強制關閉手機版選單
                 const mobileMenu = document.getElementById('mobile-menu');
                 if (mobileMenu.classList.contains('active')) {
                     mobileMenu.classList.remove('active');
-                    document.body.style.overflow = ''; // 恢復網頁滾動
+                    document.body.style.overflow = ''; 
                 }
             }
         };
@@ -583,7 +595,6 @@
         window.toggleMenu = () => { 
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('active'); 
-            // 如果開啟選單，禁止背景滾動；如果關閉，恢復滾動
             document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
         };
     </script>
