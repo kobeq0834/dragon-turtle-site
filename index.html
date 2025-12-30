@@ -18,22 +18,10 @@
             scroll-behavior: smooth;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slowZoom {
-            from { transform: scale(1); }
-            to { transform: scale(1.05); }
-        }
-        @keyframes growLine {
-            from { height: 0; opacity: 0; }
-            to { height: 80px; opacity: 1; }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.05); } }
+        @keyframes growLine { from { height: 0; opacity: 0; } to { height: 80px; opacity: 1; } }
 
         .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }
         .animate-fadeInUp { animation: fadeInUp 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
@@ -50,7 +38,6 @@
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
-        /* 隱藏行動端選單初值 */
         #mobile-menu {
             display: none;
             opacity: 0;
@@ -60,6 +47,31 @@
             display: flex;
             opacity: 1;
         }
+
+        /* 管理界面樣式 */
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            background: white;
+            z-index: 100;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        .admin-panel.active { display: block; }
+        input, textarea {
+            width: 100%;
+            border: 1px solid #e5e7eb;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
     </style>
 </head>
 <body class="font-light">
@@ -68,10 +80,9 @@
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-700 bg-transparent py-8">
         <div class="max-w-7xl mx-auto px-8 flex justify-between items-center">
             <div class="flex items-center space-x-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                <span class="text-xl font-medium tracking-[0.4em] text-stone-800">奧兒絲朵</span>
+                <span id="nav-brand" class="text-xl font-medium tracking-[0.4em] text-stone-800">奧兒絲朵</span>
             </div>
 
-            <!-- 桌面端導覽選單 -->
             <div class="hidden md:flex space-x-12 items-center">
                 <button onclick="scrollToSection('collections')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em]">收藏系列</button>
                 <button onclick="scrollToSection('about')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em]">品牌故事</button>
@@ -83,14 +94,13 @@
                 </div>
             </div>
 
-            <!-- 行動端選單切換按鈕 -->
             <button class="md:hidden text-stone-600" onclick="toggleMenu()">
                 <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
             </button>
         </div>
     </nav>
 
-    <!-- 行動端全屏選單內容 -->
+    <!-- 行動端選單 -->
     <div id="mobile-menu" class="fixed inset-0 z-[60] bg-white flex flex-col items-center justify-center space-y-10">
         <button class="absolute top-8 right-8 text-stone-600" onclick="toggleMenu()">
             <i data-lucide="x" class="w-8 h-8"></i>
@@ -98,31 +108,21 @@
         <button onclick="scrollToSection('collections')" class="text-xl tracking-[0.4em] text-stone-600">收藏系列</button>
         <button onclick="scrollToSection('about')" class="text-xl tracking-[0.4em] text-stone-600">品牌故事</button>
         <button onclick="scrollToSection('social')" class="text-xl tracking-[0.4em] text-stone-600">追蹤我們</button>
-        <div class="flex space-x-8 pt-6">
-            <i data-lucide="instagram" class="w-7 h-7 text-stone-400"></i>
-            <i data-lucide="facebook" class="w-7 h-7 text-stone-400"></i>
-        </div>
     </div>
 
     <!-- 首頁視覺區塊 -->
     <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden bg-white">
         <div class="absolute inset-0 z-0">
-            <img 
-                src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1920" 
-                class="w-full h-full object-cover opacity-30 scale-105 animate-slowZoom"
-                alt=""
-            >
+            <img id="hero-img" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1920" class="w-full h-full object-cover opacity-30 scale-105 animate-slowZoom" alt="奧兒絲朵主視覺">
         </div>
-        
         <div class="relative z-10 text-center px-6">
-            <p class="text-[10px] tracking-[0.6em] text-stone-400 mb-10 animate-fadeInUp uppercase font-medium">Every stone has its own story</p>
-            <h1 class="text-4xl md:text-5xl font-extralight text-stone-800 mb-10 tracking-[0.4em] leading-[1.8] animate-fadeInUp delay-100">
+            <p id="hero-sub" class="text-[10px] tracking-[0.6em] text-stone-400 mb-10 animate-fadeInUp uppercase font-medium">Every stone has its own story</p>
+            <h1 id="hero-title" class="text-4xl md:text-5xl font-extralight text-stone-800 mb-10 tracking-[0.4em] leading-[1.8] animate-fadeInUp delay-100">
                 奧兒絲朵<br /><span class="text-2xl md:text-3xl tracking-[0.6em] text-stone-400 italic">靈石與您的故事</span>
             </h1>
             <div class="w-px h-20 bg-stone-200 mx-auto mt-16 animate-growLine"></div>
         </div>
-        
-        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-3 opacity-40">
+        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-3 opacity-40 cursor-pointer" onclick="toggleAdmin()">
             <span class="text-[9px] tracking-[0.4em] uppercase font-light">Discovery</span>
             <i data-lucide="arrow-down" class="w-3 h-3 animate-bounce"></i>
         </div>
@@ -132,171 +132,249 @@
     <section id="about" class="py-40 px-8 bg-white">
         <div class="max-w-3xl mx-auto text-center">
             <div class="mb-12 opacity-40">
-                <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200" class="w-16 mx-auto" alt="">
+                <img id="about-icon" src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200" class="w-16 mx-auto" alt="品牌故事圖示">
             </div>
             <h2 class="text-xl font-light tracking-[0.4em] text-stone-800 mb-16">關於 奧兒絲朵</h2>
-            <p class="text-stone-500 leading-[2.8] tracking-[0.25em] text-sm md:text-base font-extralight">
-                奧兒絲朵（Our Story），始於對大自然原始生命力的敬畏。<br />
-                我們不刻意渲染功能，而是希望透過靈石本身的質地與光影，<br />
-                連結您內心深處那份未曾言說的故事。<br />
-                在這裡，每一顆隕石與水晶，都是時光留給您的溫柔獻禮。
+            <p id="about-text" class="text-stone-500 leading-[2.8] tracking-[0.25em] text-sm md:text-base font-extralight whitespace-pre-line">
+                載入中...
             </p>
         </div>
     </section>
 
     <!-- 收藏系列展示區 -->
     <section id="collections" class="py-24 px-6 md:px-20 bg-[#FAF9F6]">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8 lg:gap-16 max-w-7xl mx-auto">
-            <!-- 隕石 -->
-            <div class="group flex flex-col items-center">
-                <div class="relative overflow-hidden aspect-[4/5] w-full mb-10 shadow-sm transition-shadow hover:shadow-xl duration-1000 bg-stone-200">
-                    <img src="https://images.unsplash.com/photo-1506318137071-a8e063b4b574?auto=format&fit=crop&q=80&w=1200" class="w-full h-full object-cover opacity-95 transition-all duration-[2000ms] group-hover:scale-105 group-hover:opacity-100" alt="隕石">
+        <div id="collections-container" class="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8 lg:gap-16 max-w-7xl mx-auto">
+            <!-- 由 JavaScript 動態生成 -->
+        </div>
+    </section>
+
+    <!-- 社群區塊 -->
+    <section id="social" class="py-40 px-8 bg-white">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-24">
+            <div class="w-full md:w-2/5 space-y-16">
+                <h2 class="text-3xl font-extralight tracking-[0.3em] text-stone-800">隨時，共享日常</h2>
+                <div class="space-y-4">
+                    <a href="#" class="flex items-center justify-between group py-5 border-b border-stone-100">
+                        <span id="ig-handle" class="text-xs tracking-[0.2em] text-stone-500 uppercase">Instagram / @our_story_gem</span>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300"></i>
+                    </a>
                 </div>
-                <p class="text-[9px] tracking-[0.4em] text-stone-400 mb-3 uppercase font-medium">Celestial Echoes</p>
-                <h3 class="text-base font-light tracking-[0.3em] text-stone-800 mb-4">星辰系列：隕石</h3>
-                <p class="text-xs text-stone-400 leading-relaxed font-light text-center max-w-[240px] tracking-widest">穿越銀河的溫潤，將宇宙的呢喃私藏於掌心。</p>
             </div>
-            <!-- 水晶 -->
-            <div class="group flex flex-col items-center">
-                <div class="relative overflow-hidden aspect-[4/5] w-full mb-10 shadow-sm transition-shadow hover:shadow-xl duration-1000 bg-stone-200">
-                    <img src="https://images.unsplash.com/photo-1515405295579-ba7b45403062?auto=format&fit=crop&q=80&w=1200" class="w-full h-full object-cover opacity-95 transition-all duration-[2000ms] group-hover:scale-105 group-hover:opacity-100" alt="水晶">
+            <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-2 gap-6">
+                 <div class="space-y-6">
+                    <div class="aspect-[3/4] overflow-hidden rounded-sm bg-stone-100">
+                        <img src="https://images.unsplash.com/photo-1512168221867-0485ba5e561e?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000 opacity-90" alt="水晶原礦">
+                    </div>
+                    <div class="aspect-square overflow-hidden rounded-sm bg-stone-100">
+                        <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000 opacity-90" alt="晨光靈石">
+                    </div>
                 </div>
-                <p class="text-[9px] tracking-[0.4em] text-stone-400 mb-3 uppercase font-medium">Earth Whispers</p>
-                <h3 class="text-base font-light tracking-[0.3em] text-stone-800 mb-4">大地系列：水晶</h3>
-                <p class="text-xs text-stone-400 leading-relaxed font-light text-center max-w-[240px] tracking-widest">純粹的光影折射，映照出靈魂最深處的平靜。</p>
-            </div>
-            <!-- 龍龜 -->
-            <div class="group flex flex-col items-center">
-                <div class="relative overflow-hidden aspect-[4/5] w-full mb-10 shadow-sm transition-shadow hover:shadow-xl duration-1000 bg-stone-200">
-                    <img src="https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&q=80&w=1200" class="w-full h-full object-cover opacity-95 transition-all duration-[2000ms] group-hover:scale-105 group-hover:opacity-100" alt="龍龜">
+                <div class="space-y-6 pt-12">
+                    <div class="aspect-square overflow-hidden rounded-sm bg-stone-100">
+                        <img src="https://images.unsplash.com/photo-1523554888454-841f72e27df2?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000 opacity-90" alt="職人手感">
+                    </div>
+                    <div class="aspect-[3/4] overflow-hidden rounded-sm bg-stone-100">
+                        <img src="https://images.unsplash.com/photo-1515549832467-8783363e19b6?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000 opacity-90" alt="結晶簇">
+                    </div>
                 </div>
-                <p class="text-[9px] tracking-[0.4em] text-stone-400 mb-3 uppercase font-medium">Serene Guardians</p>
-                <h3 class="text-base font-light tracking-[0.3em] text-stone-800 mb-4">守望系列：龍龜</h3>
-                <p class="text-xs text-stone-400 leading-relaxed font-light text-center max-w-[240px] tracking-widest">古老工藝的柔和線條，靜謐守護每一段珍貴時光。</p>
             </div>
         </div>
     </section>
 
-    <!-- 社群與生活美學區塊 -->
-    <section id="social" class="py-40 px-8 bg-white overflow-hidden">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex flex-col md:flex-row items-center gap-24">
-                <div class="w-full md:w-2/5 space-y-16">
-                    <div class="space-y-6">
-                        <h2 class="text-3xl font-extralight tracking-[0.3em] text-stone-800">隨時，共享日常</h2>
-                        <p class="text-stone-400 leading-loose tracking-[0.15em] text-sm font-extralight">
-                            捕捉靈石在日光下的細微變化，<br />
-                            紀錄那些觸動心靈的瞬間。<br />
-                            邀請您一同進入奧兒絲朵的靜謐世界。
-                        </p>
-                    </div>
-                    
-                    <div class="space-y-4">
-                        <a href="#" class="flex items-center justify-between group py-5 border-b border-stone-100 hover:border-stone-400 transition-all">
-                            <div class="flex items-center space-x-5">
-                                <i data-lucide="instagram" class="w-4 h-4 text-stone-400"></i>
-                                <span class="text-xs tracking-[0.2em] text-stone-500 group-hover:text-stone-800 transition-colors uppercase font-medium">Instagram / @our_story_gem</span>
-                            </div>
-                            <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300 group-hover:translate-x-1 transition-transform"></i>
-                        </a>
-                        <a href="#" class="flex items-center justify-between group py-5 border-b border-stone-100 hover:border-stone-400 transition-all">
-                            <div class="flex items-center space-x-5">
-                                <i data-lucide="facebook" class="w-4 h-4 text-stone-400"></i>
-                                <span class="text-xs tracking-[0.2em] text-stone-500 group-hover:text-stone-800 transition-colors uppercase font-medium">Facebook / 奧兒絲朵 Our Story</span>
-                            </div>
-                            <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300 group-hover:translate-x-1 transition-transform"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- 網格影像牆 -->
-                <div class="w-full md:w-3/5 grid grid-cols-2 gap-6">
-                    <div class="space-y-6">
-                        <div class="aspect-[3/4] overflow-hidden rounded-sm bg-stone-100">
-                            <img src="https://images.unsplash.com/photo-1512168221867-0485ba5e561e?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000 opacity-90" alt="">
-                        </div>
-                        <div class="aspect-square overflow-hidden rounded-sm bg-stone-100">
-                            <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000 opacity-90" alt="">
-                        </div>
-                    </div>
-                    <div class="space-y-6 pt-12">
-                        <div class="aspect-square overflow-hidden rounded-sm bg-stone-100">
-                            <img src="https://images.unsplash.com/photo-1523554888454-841f72e27df2?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000 opacity-90" alt="">
-                        </div>
-                        <div class="aspect-[3/4] overflow-hidden rounded-sm bg-stone-100">
-                            <img src="https://images.unsplash.com/photo-1515549832467-8783363e19b6?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000 opacity-90" alt="">
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- 管理面板 -->
+    <div id="admin-panel" class="admin-panel">
+        <div class="flex justify-between items-center mb-8 border-b pb-4">
+            <h3 class="font-bold tracking-widest text-stone-800">網站內容管理</h3>
+            <button onclick="toggleAdmin()"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
-    </section>
+        
+        <div class="space-y-6">
+            <section>
+                <label class="text-[10px] uppercase tracking-widest text-stone-400 block mb-2">首頁標題</label>
+                <textarea id="edit-hero-title" rows="3"></textarea>
+                <label class="text-[10px] uppercase tracking-widest text-stone-400 block mb-2">關於我們內容</label>
+                <textarea id="edit-about-text" rows="6"></textarea>
+            </section>
+
+            <section id="edit-collections-list">
+                <!-- 動態生成的產品編輯表單 -->
+            </section>
+
+            <button onclick="saveSiteData()" class="w-full bg-stone-800 text-white py-4 text-xs tracking-[0.3em] hover:bg-stone-700 transition-colors">儲存並發佈更新</button>
+        </div>
+    </div>
 
     <!-- 頁腳 -->
     <footer class="py-24 px-8 bg-white border-t border-stone-50 text-center">
-        <div class="max-w-7xl mx-auto flex flex-col items-center space-y-12">
-            <span class="text-xl font-medium tracking-[0.5em] text-stone-800">奧兒絲朵</span>
-            <div class="flex space-x-12 text-[9px] tracking-[0.3em] text-stone-400 uppercase font-medium">
-                <a href="#" class="hover:text-stone-800 transition-colors">Philosophy</a>
-                <a href="#" class="hover:text-stone-800 transition-colors">Privacy</a>
-                <a href="#" class="hover:text-stone-800 transition-colors">Contact</a>
-            </div>
-            <p class="text-[9px] tracking-[0.2em] text-stone-300">© 2025 OUR STORY. CURATED FOR YOUR SOUL.</p>
-        </div>
+        <span class="text-xl font-medium tracking-[0.5em] text-stone-800">奧兒絲朵</span>
+        <p class="text-[9px] tracking-[0.2em] text-stone-300 mt-8">© 2025 OUR STORY. CURATED FOR YOUR SOUL.</p>
     </footer>
 
-    <script>
-        // 初始化 Lucide 圖標
-        lucide.createIcons();
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // 導航欄滾動效果
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('nav-scrolled');
-                navbar.classList.remove('py-8');
-                navbar.classList.add('py-4');
-            } else {
-                navbar.classList.remove('nav-scrolled');
-                navbar.classList.add('py-8');
-                navbar.classList.remove('py-4');
-            }
-        });
+        // ==========================================
+        // Firebase 配置資訊 (已更新為您的專案)
+        // ==========================================
+        const myFirebaseConfig = {
+            apiKey: "AIzaSyDruZNMUyiJNcyoksYIBDHv5F1SiiG2Mss",
+            authDomain: "our-story-53723.firebaseapp.com",
+            projectId: "our-story-53723",
+            storageBucket: "our-story-53723.firebasestorage.app",
+            messagingSenderId: "651350028652",
+            appId: "1:651350028652:web:44db9f6bd7d1b502578349"
+        };
 
-        // 滾動至區塊
-        function scrollToSection(id) {
-            const element = document.getElementById(id);
-            if (element) {
-                const offset = 80; // 導航欄高度補償
-                const bodyRect = document.body.getBoundingClientRect().top;
-                const elementRect = element.getBoundingClientRect().top;
-                const elementPosition = elementRect - bodyRect;
-                const offsetPosition = elementPosition - offset;
+        // ==========================================
+        // 管理員密碼 (請在此處修改您的專屬密碼)
+        // ==========================================
+        const ADMIN_PASSWORD = "083403"; 
 
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
+        // 偵測環境變數或使用手動配置
+        const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : myFirebaseConfig;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'our-story-main';
+
+        const app = initializeApp(config);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // 預設網站資料結構
+        let siteData = {
+            hero: { title: "奧兒絲朵\n靈石與您的故事", sub: "Every stone has its own story", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1920" },
+            about: { text: "奧兒絲朵（Our Story），始於對大自然原始生命力的敬畏。\n我們不刻意渲染功能，而是希望透過靈石本身的質地與光影，\n連結您內心深處那份未曾言說的故事。\n在這裡，每一顆隕石與水晶，都是時光留給您的溫柔獻禮。" },
+            collections: [
+                { id: 1, name: "星辰系列：隕石", sub: "Celestial Echoes", desc: "穿越銀河的溫潤，將宇宙的呢喃私藏於掌心。", img: "https://images.unsplash.com/photo-1506318137071-a8e063b4b574?auto=format&fit=crop&q=80&w=1200" },
+                { id: 2, name: "大地系列：水晶", sub: "Earth Whispers", desc: "純粹的光影折射，映照出靈魂最深處的平靜。", img: "https://images.unsplash.com/photo-1515405295579-ba7b45403062?auto=format&fit=crop&q=80&w=1200" },
+                { id: 3, name: "守望系列：龍龜", sub: "Serene Guardians", desc: "古老工藝的柔和線條，靜謐守護每一段珍貴時光。", img: "https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&q=80&w=1200" }
+            ]
+        };
+
+        async function init() {
+            try {
+                // 1. 執行身份驗證
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                // 2. 監聽 Auth 狀態，驗證成功後抓取資料
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'siteContent', 'main');
+                        onSnapshot(docRef, (snapshot) => {
+                            if (snapshot.exists()) {
+                                siteData = snapshot.data();
+                                renderSite();
+                            } else {
+                                // 若專案資料庫是空的，則寫入初始預設資料
+                                setDoc(docRef, siteData);
+                                renderSite();
+                            }
+                        }, (error) => {
+                            console.error("Firebase 讀取權限錯誤，請檢查資料庫 Rules 設定:", error);
+                        });
+                    }
                 });
-            }
-            // 如果選單開啟中則關閉
-            const menu = document.getElementById('mobile-menu');
-            if (menu.classList.contains('active')) {
-                toggleMenu();
+            } catch (err) {
+                console.error("Firebase 初始化失敗:", err);
             }
         }
 
-        // 行動端選單切換
-        function toggleMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('active');
+        // 將抓取到的資料渲染至 HTML
+        function renderSite() {
+            document.getElementById('hero-title').innerText = siteData.hero.title;
+            document.getElementById('hero-sub').innerText = siteData.hero.sub;
+            document.getElementById('about-text').innerText = siteData.about.text;
+
+            const container = document.getElementById('collections-container');
+            container.innerHTML = siteData.collections.map(item => `
+                <div class="group flex flex-col items-center">
+                    <div class="relative overflow-hidden aspect-[4/5] w-full mb-10 shadow-sm transition-shadow hover:shadow-xl duration-1000 bg-stone-200">
+                        <img src="${item.img}" class="w-full h-full object-cover opacity-95 transition-all duration-[2000ms] group-hover:scale-105 group-hover:opacity-100" alt="">
+                    </div>
+                    <p class="text-[9px] tracking-[0.4em] text-stone-400 mb-3 uppercase font-medium">${item.sub}</p>
+                    <h3 class="text-base font-light tracking-[0.3em] text-stone-800 mb-4">${item.name}</h3>
+                    <p class="text-xs text-stone-400 leading-relaxed font-light text-center max-w-[240px] tracking-widest">${item.desc}</p>
+                </div>
+            `).join('');
+
+            // 更新後台面板的欄位
+            document.getElementById('edit-hero-title').value = siteData.hero.title;
+            document.getElementById('edit-about-text').value = siteData.about.text;
             
-            // 防止選單開啟時背景滾動
-            if (menu.classList.contains('active')) {
-                document.body.style.overflow = 'hidden';
+            const editList = document.getElementById('edit-collections-list');
+            editList.innerHTML = siteData.collections.map((item, index) => `
+                <div class="border-t pt-4 mt-4">
+                    <label class="text-[10px] font-bold uppercase tracking-widest text-stone-600 block mb-2">收藏項目 ${index + 1}</label>
+                    <input type="text" value="${item.name}" onchange="window.updateLocalItem(${index}, 'name', this.value)" placeholder="名稱">
+                    <textarea onchange="window.updateLocalItem(${index}, 'desc', this.value)" placeholder="描述">${item.desc}</textarea>
+                    <input type="text" value="${item.img}" onchange="window.updateLocalItem(${index}, 'img', this.value)" placeholder="圖片網址">
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // 儲存修改至 Firebase
+        window.saveSiteData = async () => {
+            if (!auth.currentUser) return;
+            siteData.hero.title = document.getElementById('edit-hero-title').value;
+            siteData.about.text = document.getElementById('edit-about-text').value;
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'siteContent', 'main');
+                await setDoc(docRef, siteData);
+                alert('內容已成功發佈！頁面將自動更新。');
+                window.toggleAdmin();
+            } catch (e) {
+                alert('儲存失敗，請檢查規則設定：' + e.message);
+            }
+        };
+
+        window.updateLocalItem = (index, field, value) => {
+            siteData.collections[index][field] = value;
+        };
+
+        // 管理後台切換邏輯 (密碼保護)
+        window.toggleAdmin = () => {
+            const panel = document.getElementById('admin-panel');
+            if (!panel.classList.contains('active')) {
+                const pass = prompt("進入管理模式，請輸入密碼：");
+                if (pass === ADMIN_PASSWORD) {
+                    panel.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                } else if (pass !== null) {
+                    alert("密碼不正確");
+                }
             } else {
+                panel.classList.remove('active');
                 document.body.style.overflow = '';
             }
-        }
+        };
+
+        // 啟動流程
+        init();
+        lucide.createIcons();
+
+        // UI 互動效果
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) navbar.classList.add('nav-scrolled');
+            else navbar.classList.remove('nav-scrolled');
+        });
+
+        window.scrollToSection = (id) => {
+            const element = document.getElementById(id);
+            if (element) {
+                window.scrollTo({ top: element.offsetTop - 80, behavior: 'smooth' });
+            }
+        };
+
+        window.toggleMenu = () => {
+            document.getElementById('mobile-menu').classList.toggle('active');
+        };
     </script>
 </body>
 </html>
