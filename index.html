@@ -114,7 +114,7 @@
             </div>
         </header>
 
-        <!-- 品牌故事 -->
+        <!-- 關於我們 -->
         <section id="about" class="py-40 px-8 bg-white text-center">
             <div class="max-w-3xl mx-auto">
                 <div class="mb-12">
@@ -181,7 +181,7 @@
             </section>
 
             <section class="space-y-3">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">Gallery (影像嵌入)</h4>
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">影像展示 (IG 嵌入)</h4>
                 <div class="space-y-4">
                     <div class="p-4 border rounded-lg bg-stone-50">
                         <input type="text" id="edit-ig-embed-1" placeholder="IG 連結 1">
@@ -202,7 +202,7 @@
                 </div>
             </section>
 
-            <!-- 社群連結管理 (補齊欄位避免報錯) -->
+            <!-- 社群連結管理 -->
             <section class="space-y-3 border-t pt-8">
                 <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">社群資訊 (Social)</h4>
                 <input type="text" id="edit-ig-handle" placeholder="IG 帳號 (如: @our_story)">
@@ -241,6 +241,7 @@
         import { getAuth, signInWithEmailAndPassword, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot, query, initializeFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // === 最高級防護：鎖定您的 UID ===
         const ADMIN_UID = "dIQchefYFDc2Kl1V9S4dWehdR7I3";
 
         const firebaseConfig = {
@@ -285,7 +286,7 @@
                     else if (target === 'about_icon') siteConfig.aboutIcon = base64;
                     else if (target.startsWith('ig')) siteConfig[`igImg${target.slice(2)}`] = base64;
                     else if (target === 'col') collectionsList[index].img = base64;
-                    alert("圖片就緒，記得發佈更新。");
+                    alert("照片準備就緒！請記得 Publish 儲存。");
                 };
                 img.src = e.target.result;
             };
@@ -295,13 +296,17 @@
         async function init() {
             document.getElementById('loading').style.display = 'flex';
             try {
+                // 嘗試背景登入以讀取資料
                 await signInAnonymously(auth).catch(() => {});
+                
                 onAuthStateChanged(auth, (user) => {
                     const panel = document.getElementById('admin-panel');
                     const btn = document.getElementById('admin-action-btn');
+                    
                     if (user && user.uid === ADMIN_UID) {
+                        // 關鍵修正：登入成功後確保面版開啟
                         panel.classList.add('active');
-                        btn.innerText = "管理介面 (已登入)";
+                        btn.innerText = " 管理介面 (已登入)";
                         renderAdminList();
                     } else {
                         panel.classList.remove('active');
@@ -353,21 +358,18 @@
             for(let i=1; i<=4; i++) { renderIgSlot(`ig-slot-${i}`, siteConfig[`igEmbed${i}`], siteConfig[`igImg${i}`]); }
             if (window.instgrm) window.instgrm.Embeds.process();
             
-            // 同步後台 (安全設定：若標籤不存在則不報錯)
-            if(document.getElementById('edit-brand-name')) document.getElementById('edit-brand-name').value = siteConfig.brandName;
-            if(document.getElementById('edit-hero-title')) document.getElementById('edit-hero-title').value = siteConfig.heroTitle;
-            if(document.getElementById('edit-hero-sub')) document.getElementById('edit-hero-sub').value = siteConfig.heroSub;
-            if(document.getElementById('edit-about-text')) document.getElementById('edit-about-text').value = siteConfig.aboutText;
-            if(document.getElementById('edit-about-link')) document.getElementById('edit-about-link').value = siteConfig.aboutLink || "";
-            if(document.getElementById('edit-ig-handle')) document.getElementById('edit-ig-handle').value = siteConfig.igHandle;
-            if(document.getElementById('edit-ig-url')) document.getElementById('edit-ig-url').value = siteConfig.igUrl;
-            if(document.getElementById('edit-fb-handle')) document.getElementById('edit-fb-handle').value = siteConfig.fbHandle;
-            if(document.getElementById('edit-fb-url')) document.getElementById('edit-fb-url').value = siteConfig.fbUrl;
-            
-            for(let i=1; i<=4; i++) { 
-                const el = document.getElementById(`edit-ig-embed-${i}`);
-                if(el) el.value = siteConfig[`igEmbed${i}`] || ""; 
-            }
+            // 安全同步編輯框內容
+            const setVal = (id, val) => { if(document.getElementById(id)) document.getElementById(id).value = val || ""; };
+            setVal('edit-brand-name', siteConfig.brandName);
+            setVal('edit-hero-title', siteConfig.heroTitle);
+            setVal('edit-hero-sub', siteConfig.heroSub);
+            setVal('edit-about-text', siteConfig.aboutText);
+            setVal('edit-about-link', siteConfig.aboutLink);
+            setVal('edit-ig-handle', siteConfig.igHandle);
+            setVal('edit-ig-url', siteConfig.igUrl);
+            setVal('edit-fb-handle', siteConfig.fbHandle);
+            setVal('edit-fb-url', siteConfig.fbUrl);
+            for(let i=1; i<=4; i++) { setVal(`edit-ig-embed-${i}`, siteConfig[`igEmbed${i}`]); }
         }
 
         function renderCollections() {
@@ -420,7 +422,7 @@
                     const cleanItem = { ...item }; delete cleanItem.id; delete cleanItem.isNew;
                     await setDoc(itemRef, cleanItem);
                 }
-                alert("已發佈更新！");
+                alert("已成功同步變更！");
             } catch (e) { alert("失敗: " + e.message); }
             finally { document.getElementById('loading').style.display = 'none'; }
         };
@@ -434,12 +436,18 @@
                 const email = prompt("管理員 Email:"); if (!email) return;
                 const pass = prompt("密碼:"); if (!pass) return;
                 try {
-                    await signInWithEmailAndPassword(auth, email, pass);
+                    const cred = await signInWithEmailAndPassword(auth, email, pass);
+                    if (cred.user.uid === ADMIN_UID) {
+                        alert("身分核對成功！管理模式已開啟。");
+                    } else {
+                        alert("驗證成功，但您不具備管理權限。");
+                        await signOut(auth);
+                    }
                 } catch(e) { alert("帳號或密碼錯誤。"); }
             }
         };
 
-        window.signOutAdmin = () => { signOut(auth).then(() => { alert("已登出。"); window.location.reload(); }); };
+        window.signOutAdmin = () => { signOut(auth).then(() => { alert("已安全登出。"); window.location.reload(); }); };
         window.scrollToSection = (id) => {
             const e = document.getElementById(id);
             if (e) { window.scrollTo({ top: e.offsetTop - 80, behavior: 'smooth' }); document.getElementById('mobile-menu').classList.remove('active'); document.body.style.overflow = ''; }
