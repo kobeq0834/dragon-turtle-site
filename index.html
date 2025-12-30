@@ -281,10 +281,10 @@
         const ADMIN_PASSWORD = "1234"; 
         
         // ==========================================
-        // Gemini API Key (這裡我們使用固定名稱 defaultGeminiKey 來避免變數衝突)
+        // Gemini API Key 處理
         // ==========================================
-        const defaultGeminiKey = "AIzaSyDYjCaxY3-MfYWfcHAgYM11CYLDefbSsvQ"; 
-        let geminiKey = defaultGeminiKey;
+        const DEFAULT_GEMINI_KEY = "AIzaSyDYjCaxY3-MfYWfcHAgYM11CYLDefbSsvQ";
+        let activeGeminiKey = DEFAULT_GEMINI_KEY;
 
         const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : myFirebaseConfig;
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'our-story-main';
@@ -307,43 +307,22 @@
         // ✨ Gemini AI 核心邏輯
         // ==========================================
         
-        function getGeminiKey() {
-            // 1. 優先使用您提供的預設 Key (防呆處理)
-            if (defaultGeminiKey && defaultGeminiKey.length > 10) return defaultGeminiKey;
-
-            // 2. 檢查記憶體變數
-            if (geminiKey && geminiKey.length > 10) return geminiKey;
-
-            // 3. 檢查 LocalStorage
-            const storedKey = localStorage.getItem('gemini_api_key');
-            if (storedKey && storedKey.length > 10) {
-                geminiKey = storedKey;
-                return storedKey;
-            }
-
-            // 4. 詢問用戶 (如果沒有預設Key才問)
-            const userKey = prompt("請輸入您的 Gemini API Key 以啟用 AI 功能：\n(輸入後瀏覽器會自動記憶，無需重複輸入)");
-            if (userKey && userKey.trim().length > 0) {
-                const cleanedKey = userKey.trim();
-                geminiKey = cleanedKey;
-                localStorage.setItem('gemini_api_key', cleanedKey);
-                return cleanedKey;
-            }
-            return null;
+        function getResolvedKey() {
+            // 優先序：LocalStorage > 寫死的 DEFAULT_GEMINI_KEY
+            const stored = localStorage.getItem('gemini_api_key');
+            if (stored && stored.length > 10) return stored;
+            return DEFAULT_GEMINI_KEY;
         }
 
-        async function callGemini(promptText, retries = 5, delay = 1000) {
-            const key = getGeminiKey();
-            if (!key) {
-                // 明確回傳錯誤碼而非 null
-                throw new Error("KEY_MISSING");
-            }
-
-            // 改用更穩定的 gemini-1.5-flash 模型，並加入 safetySettings
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
+        async function callGemini(promptText, retries = 3) {
+            const key = getResolvedKey();
+            // 404 通常源自模型名稱或端點錯誤，這裡強制檢查路徑格式
+            const modelName = "gemini-1.5-flash";
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${key}`;
+            
             const payload = {
                 contents: [{ parts: [{ text: promptText }] }],
-                generationConfig: { temperature: 0.7, maxOutputTokens: 500 },
+                generationConfig: { temperature: 0.7, maxOutputTokens: 800 },
                 safetySettings: [
                     { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
                     { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH" },
@@ -361,19 +340,19 @@
                     });
                     
                     if (!response.ok) {
-                        if (response.status === 400 || response.status === 403) {
-                            localStorage.removeItem('gemini_api_key');
-                            throw new Error("API Key 無效或權限不足");
-                        }
-                        const errText = await response.text();
-                        throw new Error(`API Error: ${response.status}`);
+                        const errBody = await response.text();
+                        if (response.status === 404) throw new Error("MODEL_NOT_FOUND");
+                        if (response.status === 403 || response.status === 400) throw new Error("KEY_INVALID");
+                        throw new Error(`HTTP_${response.status}`);
                     }
+                    
                     const result = await response.json();
-                    return result.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (!text) throw new Error("EMPTY_RESPONSE");
+                    return text.trim();
                 } catch (error) {
                     if (i === retries - 1) throw error;
-                    await new Promise(resolve => setTimeout(resolve, delay));
-                    delay *= 2; 
+                    await new Promise(r => setTimeout(r, 1000 * (i + 1)));
                 }
             }
         }
@@ -383,28 +362,22 @@
             const btn = document.getElementById('btn-polish-about');
             const textarea = document.getElementById('edit-about-text');
             const originalText = textarea.value;
-            if (!originalText) return;
+            if (!originalText || originalText.length < 5) {
+                alert('請先輸入至少一段簡單的文案內容。');
+                return;
+            }
 
             btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> AI 思考中...`;
+            btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> AI 構思中...`;
             lucide.createIcons();
 
             try {
-                const prompt = `你是一位高級品牌文案師。請幫我潤色這段關於「奧兒絲朵 (Our Story)」靈石品牌的描述。要求：語言要優雅、空靈、簡約、富有詩意，強調靈魂與自然的連結，不要有過多商業推銷感。字數保持在200字以內。原始文案：${originalText}`;
+                const prompt = `你是一位專業的品牌文案設計師。請幫我潤色這段關於「奧兒絲朵 (Our Story)」靈石品牌的描述。要求：口吻要空靈、優雅、精煉，強調靈石與靈魂的連結。請直接輸出潤色後的繁體中文文案，不要包含任何解釋。原始文案：${originalText}`;
                 const polished = await callGemini(prompt);
-                
-                if (polished) {
-                    textarea.value = polished.trim();
-                } else {
-                    alert('AI 暫時無法生成內容（可能內容被過濾），請稍後再試。');
-                }
+                textarea.value = polished;
             } catch (error) {
                 console.error(error);
-                if (error.message === "KEY_MISSING") {
-                    alert('未檢測到 API Key，請檢查程式碼設定。');
-                } else {
-                    alert('AI 處理失敗：' + error.message);
-                }
+                handleAIError(error);
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = `<i data-lucide="sparkles" class="w-3 h-3"></i> AI 潤色文案 ✨`;
@@ -422,21 +395,13 @@
             btn.innerHTML = `✨ AI 處理中...`;
 
             try {
-                const prompt = `請幫我潤色這段產品描述。這是一個靈石收藏品（可能是隕石、水晶或守望雕刻）。風格要空靈、文藝。字數在50字以內。原句：${originalText}`;
+                const prompt = `請幫我潤色這段靈石產品描述。風格要空靈簡約，不超過40字。原始描述：${originalText}`;
                 const polished = await callGemini(prompt);
-                if (polished) {
-                    input.value = polished.trim();
-                    siteData.collections[index].desc = polished.trim();
-                } else {
-                    alert('AI 暫時無法生成內容（可能內容被過濾），請稍後再試。');
-                }
+                input.value = polished;
+                siteData.collections[index].desc = polished;
             } catch (error) {
                 console.error(error);
-                if (error.message === "KEY_MISSING") {
-                    alert('未檢測到 API Key。');
-                } else {
-                    alert('AI 處理失敗：' + error.message);
-                }
+                handleAIError(error);
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = `<i data-lucide="sparkles" class="w-3 h-3"></i> AI ✨`;
@@ -444,27 +409,36 @@
             }
         };
 
+        function handleAIError(error) {
+            if (error.message === "MODEL_NOT_FOUND") {
+                alert("AI 錯誤 (404)：模型路徑不正確。這通常是 API 暫時性問題，請稍後再試。");
+            } else if (error.message === "KEY_INVALID") {
+                const newKey = prompt("金鑰似乎失效或無效，請輸入新的 Gemini API Key：");
+                if (newKey) {
+                    localStorage.setItem('gemini_api_key', newKey.trim());
+                    alert("金鑰已更新，請再點擊一次功能按鈕。");
+                }
+            } else {
+                alert("AI 連線失敗：" + error.message);
+            }
+        }
+
         // 每日石語功能 (前台)
         window.generateDailyQuote = async () => {
             const btn = document.getElementById('btn-daily-quote');
             const display = document.getElementById('ai-quote');
             
             btn.disabled = true;
-            btn.innerText = "正在感應靈石能量...";
+            btn.innerText = "感應中...";
             display.style.opacity = "0.5";
 
             try {
-                const prompt = "請生成一段極簡、充滿靈性且空靈的「每日石語」，內容關於隕石、水晶或大自然的啟示。字數在30字以內。例如：宇宙的星塵，在您呼吸間悄然綻放。";
+                const prompt = "生成一段極簡、充滿靈性的每日石語，內容關於礦石或大自然的啟示，30字以內。";
                 const quote = await callGemini(prompt);
-                
-                if (quote) {
-                    display.innerText = `「${quote.trim()}」`;
-                } else {
-                    display.innerText = "「靜謐中，心自明。」(AI 靈感暫缺)";
-                }
+                display.innerText = `「${quote}」`;
             } catch (error) {
                 console.error(error);
-                display.innerText = "「靜謐中，心自明。」(AI 暫時休息中)";
+                display.innerText = "「靜謐中，心自明。」(AI 感應受阻)";
             } finally {
                 display.style.opacity = "1";
                 btn.disabled = false;
