@@ -75,19 +75,6 @@
             font-size: 0.875rem;
             background: #fafaf9;
         }
-        
-        .ai-btn {
-            font-size: 0.75rem;
-            color: #8b5cf6;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            transition: opacity 0.2s;
-            cursor: pointer;
-        }
-        .ai-btn:hover { opacity: 0.7; }
-        .ai-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .upload-btn {
             display: inline-block;
@@ -196,7 +183,7 @@
                 載入中...
             </p>
             
-            <!-- ✨ AI 互動區 -->
+            <!-- ✨ 每日石語互動區 -->
             <div class="mt-20 ai-spirit-box">
                 <p id="ai-quote" class="text-xs text-stone-400 italic tracking-widest mb-6">
                     「每一塊石頭都有它的頻率，等待與您共鳴。」
@@ -269,7 +256,7 @@
                 <div class="flex flex-col space-y-2">
                     <label class="upload-btn text-center text-[10px]">更換區塊小圖示<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'about_icon')"></label>
                 </div>
-                <button onclick="polishAboutAI()" class="ai-btn" id="btn-polish-about"><i data-lucide="sparkles" class="w-3 h-3"></i> AI 潤色故事內容 ✨</button>
+                <!-- 移除 AI 潤色按鈕 -->
             </section>
 
             <section class="space-y-4">
@@ -309,7 +296,7 @@
         import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot, query, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ==========================================
-        // 配置與初始狀態 (恢復原始漂亮的圖片連結)
+        // 配置與初始狀態
         // ==========================================
         const myFirebaseConfig = {
             apiKey: "AIzaSyDruZNMUyiJNcyoksYIBDHv5F1SiiG2Mss",
@@ -320,7 +307,6 @@
             appId: "1:651350028652:web:44db9f6bd7d1b502578349"
         };
         const ADMIN_PASSWORD = "1234";
-        const geminiKey = "AIzaSyDYjCaxY3-MfYWfcHAgYM11CYLDefbSsvQ";
 
         const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : myFirebaseConfig;
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'our-story-53723';
@@ -329,7 +315,55 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // 恢復全域預設資料
+        // ==========================================
+        // ✨ 非 AI 石語池 (會話鎖定)
+        // ==========================================
+        const quotesPool = [
+            "每一顆靈石，都在訴說宇宙的秘密。",
+            "靜謐之中，感受大地的呼吸。",
+            "光影折射，映照出靈魂的純粹。",
+            "穿越億萬年的星塵，只為與你相遇。",
+            "心如明鏡，塵埃自落。",
+            "在石頭的溫潤中，找回內心的平靜。",
+            "礦石的低語，是時間留下的情書。",
+            "擁抱自然，與萬物共鳴。",
+            "純粹的光，照亮未曾察覺的角落。",
+            "靜聽石語，找尋失落的記憶。",
+            "大地之母的饋贈，值得溫柔以待。",
+            "靈魂的頻率，在色彩中閃耀。",
+            "靜默，是最高級的溝通方式。",
+            "不刻意渲染，美自會浮現。",
+            "每一道裂痕，都是成長的印記。",
+            "與石結緣，即是與自己重逢。",
+            "星辰隕落，化作掌心的溫度。",
+            "在忙碌的世界中，保有一方淨土。",
+            "心之所向，便是能量所在。",
+            "靈石無言，卻最懂你的心。"
+        ];
+
+        // 頁面加載時鎖定一句隨機石語
+        const sessionQuote = quotesPool[Math.floor(Math.random() * quotesPool.length)];
+
+        window.generateDailyQuote = () => {
+            const btn = document.getElementById('btn-daily-quote');
+            const display = document.getElementById('ai-quote');
+            
+            btn.disabled = true;
+            btn.innerText = "感應時空能量中...";
+            display.style.opacity = "0.3";
+
+            // 模擬感應儀式感的等待時間
+            setTimeout(() => {
+                display.innerText = `「${sessionQuote}」`;
+                display.style.opacity = "1";
+                btn.disabled = false;
+                btn.innerText = "獲取今日石語 ✨";
+            }, 1200);
+        };
+
+        // ==========================================
+        // 📂 資料處理與管理 (移除 AI 潤色邏輯)
+        // ==========================================
         let siteConfig = { 
             brandName: "奧兒絲朵",
             heroTitle: "奧兒絲朵\n靈石與您的故事", 
@@ -348,56 +382,8 @@
             { name: "守望系列：龍龜", sub: "Serene Guardians", desc: "古老工藝的柔和線條，靜謐守護每一段珍貴時光。", img: "https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&q=80&w=1200", createdAt: Date.now() - 300 }
         ];
 
-        let collectionsList = []; 
-        let isAiBusy = false;
+        let collectionsList = [];
 
-        // ==========================================
-        // ✨ Gemini AI 核心邏輯
-        // ==========================================
-        async function callGemini(promptText) {
-            const model = "gemini-2.5-flash-preview-09-2025";
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
-            const payload = {
-                contents: [{ parts: [{ text: promptText }] }],
-                generationConfig: { temperature: 0.9, maxOutputTokens: 600 }
-            };
-            const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-            if (!response.ok) throw new Error("AI 連線失敗");
-            const result = await response.json();
-            return result.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
-        }
-
-        window.polishAboutAI = async () => {
-            const btn = document.getElementById('btn-polish-about');
-            const textarea = document.getElementById('edit-about-text');
-            if (!textarea.value || isAiBusy) return;
-            isAiBusy = true; btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader" class="w-3 h-3 animate-spin"></i> 正在感應...`;
-            lucide.createIcons();
-            try {
-                const result = await callGemini(`妳是一位專業品牌文案師。請潤色這段靈石品牌的品牌故事，使其風格空靈、優雅、富有詩意，不超過 150 字，直接輸出繁體中文：${textarea.value}`);
-                textarea.value = result;
-                siteConfig.aboutText = result;
-            } catch (e) { alert("AI 感應中斷。"); }
-            finally { isAiBusy = false; btn.disabled = false; btn.innerHTML = `<i data-lucide="sparkles" class="w-3 h-3"></i> AI 潤色故事內容 ✨`; lucide.createIcons(); }
-        };
-
-        window.generateDailyQuote = async () => {
-            if (isAiBusy) return;
-            const btn = document.getElementById('btn-daily-quote');
-            const display = document.getElementById('ai-quote');
-            isAiBusy = true; btn.disabled = true;
-            display.style.opacity = "0.5";
-            try {
-                const quote = await callGemini(`生成一段極簡且充滿靈性的繁體中文「每日石語」，關於靈魂或大自然的連結，限制 20 字內。隨機碼：${Math.random()}`);
-                display.innerText = `「${quote}」`;
-            } catch (e) { display.innerText = "「靜謐中，心自明。」"; }
-            finally { display.style.opacity = "1"; btn.disabled = false; isAiBusy = false; }
-        };
-
-        // ==========================================
-        // 🖼️ 圖片壓縮與處理
-        // ==========================================
         window.handleImageUpload = (input, target, index = null) => {
             const file = input.files[0];
             if (!file) return;
@@ -420,16 +406,13 @@
                     if (target === 'hero') siteConfig.heroImg = base64;
                     else if (target === 'about_icon') siteConfig.aboutIcon = base64;
                     else collectionsList[index].img = base64;
-                    alert("照片處理完畢！請記得點擊『Save & Publish』。");
+                    alert("照片準備就緒，請點擊底部的儲存按鈕。");
                 };
                 img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         };
 
-        // ==========================================
-        // 📂 Firebase & Data Handling
-        // ==========================================
         async function init() {
             document.getElementById('loading').style.display = 'flex';
             try {
@@ -443,20 +426,15 @@
                 onAuthStateChanged(auth, async (user) => {
                     if (!user) return;
                     
-                    // 1. 監聽全域文字與首頁配置
                     const configRef = doc(db, 'artifacts', appId, 'public', 'data', 'siteSettings', 'main');
                     onSnapshot(configRef, (snap) => {
-                        if (snap.exists()) {
-                            siteConfig = { ...siteConfig, ...snap.data() };
-                        }
+                        if (snap.exists()) { siteConfig = { ...siteConfig, ...snap.data() }; }
                         renderFrontEndText();
                     });
 
-                    // 2. 監聽展示項
                     const collRef = collection(db, 'artifacts', appId, 'public', 'data', 'galleryItems');
                     onSnapshot(collRef, async (snap) => {
                         if (snap.empty) {
-                            // 若雲端無資料，則載入預設圖片並引導儲存
                             collectionsList = defaultCollections.map(item => ({ ...item, id: 'def_' + Math.random() }));
                         } else {
                             collectionsList = [];
@@ -477,16 +455,15 @@
             document.getElementById('footer-brand-display').innerText = siteConfig.brandName;
             document.getElementById('hero-title-display').innerText = siteConfig.heroTitle;
             document.getElementById('hero-sub-display').innerText = siteConfig.heroSub;
-            document.getElementById('hero-img-display').src = siteConfig.heroImg;
+            if (siteConfig.heroImg) document.getElementById('hero-img-display').src = siteConfig.heroImg;
             
             document.getElementById('about-title-display').innerText = siteConfig.aboutTitle;
             document.getElementById('about-text-display').innerText = siteConfig.aboutText;
-            document.getElementById('about-icon-display').src = siteConfig.aboutIcon;
+            if (siteConfig.aboutIcon) document.getElementById('about-icon-display').src = siteConfig.aboutIcon;
 
             document.getElementById('ig-text-display').innerText = `Instagram / ${siteConfig.igHandle}`;
             document.getElementById('fb-text-display').innerText = `Facebook / ${siteConfig.fbHandle}`;
             
-            // 更新後台輸入框
             document.getElementById('edit-brand-name').value = siteConfig.brandName;
             document.getElementById('edit-hero-title').value = siteConfig.heroTitle;
             document.getElementById('edit-hero-sub').value = siteConfig.heroSub;
@@ -504,7 +481,7 @@
                         <img src="${item.img}" class="w-full h-full object-cover opacity-95 transition-all duration-[2000ms] group-hover:scale-105" alt="">
                     </div>
                     <p class="text-[9px] tracking-[0.4em] text-stone-400 mb-3 uppercase font-medium">${item.sub || ''}</p>
-                    <h3 class="text-base font-light tracking-[0.3em] text-stone-800 mb-4">${item.name || '未命名項目'}</h3>
+                    <h3 class="text-base font-light tracking-[0.3em] text-stone-800 mb-4">${item.name || '項目'}</h3>
                     <p class="text-xs text-stone-400 leading-relaxed font-light text-center max-w-[240px] tracking-widest">${item.desc || ''}</p>
                 </div>
             `).join('');
@@ -544,7 +521,6 @@
             if (!auth.currentUser) return;
             document.getElementById('loading').style.display = 'flex';
             try {
-                // 1. 儲存文字配置
                 const configRef = doc(db, 'artifacts', appId, 'public', 'data', 'siteSettings', 'main');
                 await setDoc(configRef, {
                     brandName: document.getElementById('edit-brand-name').value,
@@ -558,14 +534,13 @@
                     fbHandle: document.getElementById('edit-fb-handle').value
                 });
 
-                // 2. 儲存展示項
                 for (const item of collectionsList) {
                     const id = (item.isNew || item.id.startsWith('def_')) ? doc(collection(db, 'dummy')).id : item.id;
                     const itemRef = doc(db, 'artifacts', appId, 'public', 'data', 'galleryItems', id);
                     const cleanItem = { ...item }; delete cleanItem.id; delete cleanItem.isNew;
                     await setDoc(itemRef, cleanItem);
                 }
-                alert('內容已成功發佈！所有變更已同步。'); window.toggleAdmin();
+                alert('內容已成功發佈！'); window.toggleAdmin();
             } catch (e) { alert('儲存發生異常：' + e.message); }
             finally { document.getElementById('loading').style.display = 'none'; }
         };
