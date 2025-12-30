@@ -247,7 +247,7 @@
                 <label class="text-[10px] uppercase tracking-widest text-stone-400 block mb-2">首頁背景圖片</label>
                 <div class="flex flex-col space-y-2 mb-4">
                     <label class="upload-btn">
-                        從電腦上傳照片 (會自動壓縮)
+                        從電腦上傳照片 (自動壓縮至 1MB 下)
                         <input type="file" id="hero-upload-input" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'hero')">
                     </label>
                     <input type="text" id="edit-hero-img" placeholder="或貼上圖片 URL">
@@ -433,7 +433,7 @@
         };
 
         // ==========================================
-        // 🖼️ 像 WordPress 般的上傳處理 (新增自動壓縮)
+        // 🖼️ 像 WordPress 般的上傳處理 (強化壓縮至 1MB 以下)
         // ==========================================
         window.handleImageUpload = (input, target, index = null) => {
             const file = input.files[0];
@@ -443,52 +443,67 @@
             reader.onload = (e) => {
                 const img = new Image();
                 img.onload = () => {
-                    const MAX_WIDTH = 1200; // 限制最大寬度以節省空間
-                    const MAX_HEIGHT = 1200;
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
-                        }
-                    }
-
-                    const canvas = document.createElement('canvas');
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    // 開始壓縮過程：從畫質 0.7 開始嘗試，直到體積小於 1MB
-                    let quality = 0.85;
-                    let base64Data = canvas.toDataURL('image/jpeg', quality);
+                    // 設定圖片處理參數
+                    let MAX_WIDTH = 1200; 
+                    let MAX_HEIGHT = 1200;
                     
-                    // 如果還是太大 (Base64 會比實際檔案大約 33%)，持續壓縮
-                    while (base64Data.length > 1024 * 1024 * 1.3 && quality > 0.1) {
-                        quality -= 0.1;
-                        base64Data = canvas.toDataURL('image/jpeg', quality);
-                    }
+                    const processImage = (w, h) => {
+                        let width = img.width;
+                        let height = img.height;
 
-                    if (base64Data.length > 1024 * 1024 * 1.3) {
-                        alert("照片過於龐大，自動壓縮後仍超過上限，請先嘗試手動縮小圖片。");
-                        return;
-                    }
+                        if (width > height) {
+                            if (width > w) {
+                                height *= w / width;
+                                width = w;
+                            }
+                        } else {
+                            if (height > h) {
+                                width *= h / height;
+                                height = h;
+                            }
+                        }
+
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // 核心：嚴格迭代壓縮邏輯
+                        let quality = 0.85;
+                        let base64Data = canvas.toDataURL('image/jpeg', quality);
+                        
+                        // Firestore 的單個文件限制是 1,048,576 bytes。
+                        // Base64 編碼會增加體積約 33.3%。
+                        // 為了安全起見，我們將 Base64 字串長度限制在 800,000 字元左右，
+                        // 這樣就算存入數張照片也不會讓整個文件爆掉。
+                        const SAFE_LIMIT = 800 * 1024; 
+
+                        while (base64Data.length > SAFE_LIMIT && quality > 0.1) {
+                            quality -= 0.1;
+                            base64Data = canvas.toDataURL('image/jpeg', quality);
+                        }
+
+                        // 如果品質降到最低還是太大，就縮小尺寸再試一次
+                        if (base64Data.length > SAFE_LIMIT && w > 600) {
+                            return processImage(w * 0.75, h * 0.75);
+                        }
+
+                        return { data: base64Data, finalQuality: quality, finalWidth: width };
+                    };
+
+                    const result = processImage(MAX_WIDTH, MAX_HEIGHT);
+                    const finalSizeKB = Math.round(result.data.length / 1024);
 
                     if (target === 'hero') {
-                        siteData.hero.img = base64Data;
-                        document.getElementById('edit-hero-img').value = base64Data;
+                        siteData.hero.img = result.data;
+                        document.getElementById('edit-hero-img').value = result.data;
                     } else if (target === 'collection') {
-                        siteData.collections[index].img = base64Data;
-                        document.getElementById(`edit-prod-img-${index}`).value = base64Data;
+                        siteData.collections[index].img = result.data;
+                        document.getElementById(`edit-prod-img-${index}`).value = result.data;
                     }
-                    alert(quality < 0.85 ? "照片已自動壓縮至系統限制大小！點擊『發佈』生效。" : "照片上傳成功！點擊『發佈』生效。");
+                    
+                    alert(`上傳成功！已自動優化檔案：\n大小：約 ${finalSizeKB} KB\n品質：${Math.round(result.finalQuality * 100)}%\n點擊下方『發佈』生效。`);
                 };
                 img.src = e.target.result;
             };
@@ -555,7 +570,7 @@
                     </button>
                     <div class="flex flex-col space-y-2 mb-4">
                         <label class="upload-btn text-center">
-                            從電腦替換照片 (會自動壓縮)
+                            從電腦替換照片 (嚴格壓縮至 1MB 下)
                             <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'collection', ${index})">
                         </label>
                         <input type="text" id="edit-prod-img-${index}" value="${item.img}" onchange="window.updateLocalItem(${index}, 'img', this.value)" placeholder="或貼上圖片 URL">
