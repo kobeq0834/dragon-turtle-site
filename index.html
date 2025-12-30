@@ -280,7 +280,7 @@
             appId: "1:651350028652:web:44db9f6bd7d1b502578349"
         };
         const ADMIN_PASSWORD = "1234"; 
-        const GEMINI_API_KEY = ""; // 執行環境會自動提供
+        const apiKey = ""; // 執行環境會自動提供
 
         const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : myFirebaseConfig;
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'our-story-main';
@@ -303,7 +303,7 @@
         // ✨ Gemini AI 核心邏輯
         // ==========================================
         async function callGemini(prompt, retries = 5, delay = 1000) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
             const payload = {
                 contents: [{ parts: [{ text: prompt }] }],
                 generationConfig: { temperature: 0.7, maxOutputTokens: 500 }
@@ -322,7 +322,7 @@
                 } catch (error) {
                     if (i === retries - 1) throw error;
                     await new Promise(resolve => setTimeout(resolve, delay));
-                    delay *= 2; // 指數回退
+                    delay *= 2; 
                 }
             }
         }
