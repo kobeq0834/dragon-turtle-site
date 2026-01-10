@@ -94,24 +94,6 @@
         .stone-card { transition: all 0.5s ease; }
         .stone-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
         .calc-select { appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; }
-
-        /* 紅點通知樣式 (備用) */
-        .notification-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #ef4444;
-            color: white;
-            font-size: 0.6rem;
-            font-weight: bold;
-            min-width: 1.2rem;
-            height: 1.2rem;
-            border-radius: 9999px;
-            position: absolute;
-            top: -5px;
-            right: -10px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
     </style>
 </head>
 <body class="font-normal text-stone-700">
@@ -131,6 +113,7 @@
             </div>
             <div class="hidden md:flex space-x-12 items-center">
                 <button onclick="window.scrollToSection('about')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">品牌故事</button>
+                <button onclick="window.scrollToSection('calculator')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">靈石測驗</button>
                 <button onclick="window.scrollToSection('collections')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">收藏系列</button>
                 <button onclick="window.scrollToSection('social')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">追蹤我們</button>
                 
@@ -229,7 +212,7 @@
             </div>
         </section>
 
-        <!-- 靈石展示 -->
+        <!-- 收藏系列 -->
         <section id="collections" class="py-20 md:py-24 px-6 md:px-20 bg-[#FAF9F6]">
             <div id="collections-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16 max-w-7xl mx-auto"></div>
         </section>
@@ -370,6 +353,10 @@
                 <input type="text" id="edit-ig-url" placeholder="IG 網址">
                 <input type="text" id="edit-fb-handle" placeholder="FB 名稱">
                 <input type="text" id="edit-fb-url" placeholder="FB 網址">
+                <div class="pt-2 border-t border-stone-200">
+                    <label class="text-[9px] text-stone-400 block mb-1">LINE 官方帳號 ID (含@)</label>
+                    <input type="text" id="edit-line-id" placeholder="@291pcwxm" class="bg-green-50 border-green-200">
+                </div>
             </section>
 
             <div id="edit-collections-list" class="space-y-4"></div>
@@ -395,7 +382,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, addDoc, deleteDoc, updateDoc, collection, onSnapshot, query, orderBy, initializeFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot, query, initializeFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // === 1. 定義全域變數與基本功能 ===
         const ADMIN_UID = "0MFL33qKcbQIeln2X1wsHOl4ebo2".trim();
@@ -411,10 +398,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = initializeFirestore(app, { experimentalForceLongPolling: true });
-        
-        // 修正：使用動態 appId 確保權限
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'our-story-53723';
-        let authInstance = auth;
+        let authInstance = auth; // 賦值給全域供按鈕使用
 
         // 全域變數
         let siteConfig = {};
@@ -453,10 +437,10 @@
 
         // --- 靈石測驗資料與邏輯 ---
         const MONTH_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        // 修正後的訊息：只提示成功，並可開啟 Email
+        // 修正後的訊息：提示將開啟 LINE
         const I18N = {
-            zh: { title: "尋找您的命定靈石", desc: `輸入您的<span class="font-bold text-stone-700">國曆 (Solar)</span> 出生日期，<br>系統將自動換算精確的農曆五行，<br>為您連結那顆等待已久的守護石。`, labelYear: "國曆出生年", labelMonth: "國曆月份", labelDay: "國曆日期", btnCalc: "開始轉換並感應", loading: "正在換算農曆五行...", resultTitle: "農曆出生資訊", btnCollection: "查看收藏系列", btnBuy: "洽詢專員購買", btnRetry: "重新測驗", modalTitle: "專員購藏協助", modalDesc: `請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務專注於協助購買挑選，非命理諮詢)</span>`, labelCName: "您的稱呼", labelCContact: "聯絡方式 (手機 / LINE ID)", btnSubmit: "確認送出", alertSent: "資料已傳送成功！\n稍後將有專員與您聯繫。", sending: "資料傳送中...", selectYear: "請選擇年份", selectMonth: "月份", selectDay: "日期", refImg: "示意圖" },
-            en: { title: "Find Your Destined Stone", desc: `Enter your <span class="font-bold text-stone-700">Solar Birth Date</span>.<br>We will calculate your Lunar Elemental Energy<br>to reveal your Guardian Stone.`, labelYear: "Birth Year (Solar)", labelMonth: "Birth Month", labelDay: "Birth Day", btnCalc: "Reveal My Stone", loading: "Calculating Cosmic Energy...", resultTitle: "Your Lunar Profile", btnCollection: "View Collection", btnBuy: "Contact for Purchase", btnRetry: "Retake Quiz", modalTitle: "Purchasing Assistance", modalDesc: `Leave your info, and a specialist will guide you through our collection.<br><span class="text-stone-400 font-light block mt-1">(Assistance for purchase, not fortune telling)</span>`, labelCName: "Your Name", labelCContact: "Contact (Phone / LINE / WhatsApp)", btnSubmit: "Submit", alertSent: "Data sent successfully!\nA specialist will contact you shortly.", sending: "Sending...", selectYear: "Select Year", selectMonth: "Month", selectDay: "Day", refImg: "Reference" }
+            zh: { title: "尋找您的命定靈石", desc: `輸入您的<span class="font-bold text-stone-700">國曆 (Solar)</span> 出生日期，<br>系統將自動換算精確的農曆五行，<br>為您連結那顆等待已久的守護石。`, labelYear: "國曆出生年", labelMonth: "國曆月份", labelDay: "國曆日期", btnCalc: "開始轉換並感應", loading: "正在換算農曆五行...", resultTitle: "農曆出生資訊", btnCollection: "查看收藏系列", btnBuy: "洽詢專員購買", btnRetry: "重新測驗", modalTitle: "專員購藏協助", modalDesc: `請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務專注於協助購買挑選，非命理諮詢)</span>`, labelCName: "您的稱呼", labelCContact: "聯絡方式 (手機 / LINE ID)", btnSubmit: "確認送出", alertSent: "資料已準備就緒！\n\n系統將自動開啟 LINE，請在對話視窗中按下「傳送」鍵，專員就會收到您的需求囉！", sending: "正在開啟 LINE...", selectYear: "請選擇年份", selectMonth: "月份", selectDay: "日期", refImg: "示意圖" },
+            en: { title: "Find Your Destined Stone", desc: `Enter your <span class="font-bold text-stone-700">Solar Birth Date</span>.<br>We will calculate your Lunar Elemental Energy<br>to reveal your Guardian Stone.`, labelYear: "Birth Year (Solar)", labelMonth: "Birth Month", labelDay: "Birth Day", btnCalc: "Reveal My Stone", loading: "Calculating Cosmic Energy...", resultTitle: "Your Lunar Profile", btnCollection: "View Collection", btnBuy: "Contact for Purchase", btnRetry: "Retake Quiz", modalTitle: "Purchasing Assistance", modalDesc: `Leave your info, and a specialist will guide you through our collection.<br><span class="text-stone-400 font-light block mt-1">(Assistance for purchase, not fortune telling)</span>`, labelCName: "Your Name", labelCContact: "Contact (Phone / LINE / WhatsApp)", btnSubmit: "Submit", alertSent: "Ready to send!\n\nLINE will open automatically. Please press the 'Send' button in the chat to contact our specialist.", sending: "Opening LINE...", selectYear: "Select Year", selectMonth: "Month", selectDay: "Day", refImg: "Reference" }
         };
 
         const STONES = {
@@ -526,7 +510,6 @@
             return (m>=1&&m<=3)?'libyan':'pallasite';
         }
 
-        // 渲染結果 - 修正為 object-contain 以自動適應大小
         function renderResult(stone, date) {
             const t = I18N[currentLang];
             const name = stone.name[currentLang];
@@ -546,6 +529,7 @@
                     </div>
                     <div class="p-8">
                         ${subTitle ? `<p class="text-xs text-stone-400 uppercase tracking-widest mb-4 font-bold">${subTitle}</p>` : ''}
+                        <h3 class="text-stone-900 text-2xl font-bold tracking-[0.2em] mb-4">${name}</h3>
                         <p class="text-sm text-stone-600 leading-loose tracking-wide mb-6 text-justify">${desc}</p>
                         <div class="flex justify-center space-x-2 mb-8 flex-wrap gap-y-2">
                             ${tags.map(tag => `<span class="px-3 py-1 bg-white border border-stone-200 rounded-full text-[10px] text-stone-500 tracking-wider">${tag}</span>`).join('')}
@@ -563,8 +547,8 @@
         window.openContactModal = () => document.getElementById('contactModal').classList.remove('hidden');
         window.closeContactModal = () => document.getElementById('contactModal').classList.add('hidden');
         
-        // [修改] 1. 寫入後台 2. 失敗則開啟 Email (Mailto)
-        window.handleContactSubmit = async (e) => {
+        // [修改] 直接跳轉 LINE
+        window.handleContactSubmit = (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
             const originalText = btn.innerText;
@@ -573,57 +557,42 @@
             const stoneTitle = document.querySelector('#resultArea h3')?.innerText || "靈石";
             
             btn.disabled = true; btn.innerText = I18N[currentLang].sending;
-
-            try {
-                // 1. 存入 Firebase 後台 (使用動態 appId)
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'inquiries'), {
-                    name, contact, stone: stoneTitle,
-                    timestamp: Date.now(),
-                    status: 'new'
-                });
-                
-                alert(I18N[currentLang].alertSent);
-                e.target.reset(); 
-                window.closeContactModal();
-            } catch (err) {
-                console.error(err);
-                // Failover: 權限不足時改用 Email
-                if(confirm("網路連線問題，系統將改為開啟您的 Email 軟體傳送，請按確定繼續。")) {
-                     const subject = `[奧兒絲朵] 預約諮詢 - ${name}`;
-                     const body = `您好，我是 ${name}。\n聯絡方式：${contact}\n\n我剛做了靈石測驗，結果是：${stoneTitle}\n想請專員協助介紹與購買，謝謝！`;
-                     window.location.href = `mailto:service@our-story.com.tw?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-                     window.closeContactModal();
-                }
-            } finally {
+            
+            // 讀取後台設定的 LINE ID (優先使用 siteConfig，若無則使用預設值)
+            let lineId = (siteConfig.lineId && siteConfig.lineId.trim() !== "") ? siteConfig.lineId : "@291pcwxm";
+            if (!lineId.startsWith('@')) lineId = '@' + lineId; // 強制補上 @
+            
+            // 構建預設訊息
+            const message = `您好，我是 ${name}。\n聯絡方式：${contact}\n\n我剛做了靈石測驗，結果是：${stoneTitle}\n想請專員協助介紹與購買，謝謝！`;
+            
+            // 產生連結 (官方帳號 deep link)
+            const lineUrl = `https://line.me/R/oaMessage/${lineId}/?${encodeURIComponent(message)}`;
+            
+            // 稍微延遲以確保按鈕狀態改變，然後跳出提示並跳轉
+            setTimeout(() => {
+                if(confirm(I18N[currentLang].alertSent)) {
+                    // 使用 location.href 確保手機喚醒
+                    window.location.href = lineUrl;
+                    
+                    e.target.reset(); 
+                    window.closeContactModal();
+                } 
                 btn.disabled = false; btn.innerText = originalText;
-            }
+            }, 500);
         };
         
         function updateCalcUI() {
-            const t = I18N[currentLang];
-            const safeSetText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
-            const safeSetHTML = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
-            safeSetText('ui-title', t.title); safeSetHTML('ui-desc', t.desc);
-            safeSetText('label-year', t.labelYear); safeSetText('label-month', t.labelMonth); safeSetText('label-day', t.labelDay);
-            safeSetText('btn-calc', t.btnCalc);
-            const loadingEl = document.getElementById('loading-text'); if(loadingEl) loadingEl.innerText = t.loading;
-            safeSetText('modal-title', t.modalTitle); safeSetHTML('modal-desc', t.modalDesc);
-            safeSetText('label-cName', t.labelCName); safeSetText('label-cContact', t.labelCContact);
-            safeSetText('btn-submit', t.btnSubmit);
-            const resultArea = document.getElementById('resultArea');
-            if (resultArea && !resultArea.classList.contains('hidden')) { if(document.getElementById('year').value) window.calculateStone(); }
+            const t = I18N[currentLang]; const safeSetText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; }; const safeSetHTML = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
+            safeSetText('ui-title', t.title); safeSetHTML('ui-desc', t.desc); safeSetText('label-year', t.labelYear); safeSetText('label-month', t.labelMonth); safeSetText('label-day', t.labelDay); safeSetText('btn-calc', t.btnCalc);
+            const loadingEl = document.getElementById('loading-text'); if(loadingEl) loadingEl.innerText = t.loading; safeSetText('modal-title', t.modalTitle); safeSetHTML('modal-desc', t.modalDesc); safeSetText('label-cName', t.labelCName); safeSetText('label-cContact', t.labelCContact); safeSetText('btn-submit', t.btnSubmit);
+            const resultArea = document.getElementById('resultArea'); if (resultArea && !resultArea.classList.contains('hidden')) { if(document.getElementById('year').value) window.calculateStone(); }
         }
 
         function populateDropdowns() {
-            const yearSelect = document.getElementById('year');
-            const monthSelect = document.getElementById('month');
-            const daySelect = document.getElementById('day');
+            const yearSelect = document.getElementById('year'); const monthSelect = document.getElementById('month'); const daySelect = document.getElementById('day');
+            if(!yearSelect || !monthSelect || !daySelect) return;
             const valY = yearSelect.value; const valM = monthSelect.value; const valD = daySelect.value;
-            
-            yearSelect.innerHTML = `<option value="" disabled selected>${I18N[currentLang].selectYear}</option>`;
-            monthSelect.innerHTML = `<option value="" disabled selected>${I18N[currentLang].selectMonth}</option>`;
-            daySelect.innerHTML = `<option value="" disabled selected>${I18N[currentLang].selectDay}</option>`;
-
+            yearSelect.innerHTML = `<option value="" disabled selected>${I18N[currentLang].selectYear}</option>`; monthSelect.innerHTML = `<option value="" disabled selected>${I18N[currentLang].selectMonth}</option>`; daySelect.innerHTML = `<option value="" disabled selected>${I18N[currentLang].selectDay}</option>`;
             for (let i = 2025; i >= 1950; i--) { let o = document.createElement('option'); o.value = i; o.text = currentLang === 'zh' ? `西元 ${i} 年` : `${i}`; yearSelect.appendChild(o); }
             for (let i = 1; i <= 12; i++) { let o = document.createElement('option'); o.value = i; o.text = currentLang === 'zh' ? `${i}月` : MONTH_EN[i-1]; monthSelect.appendChild(o); }
             for (let i = 1; i <= 31; i++) { let o = document.createElement('option'); o.value = i; o.text = currentLang === 'zh' ? `${i}日` : `${i}`; daySelect.appendChild(o); }
@@ -642,45 +611,24 @@
             });
         }
 
+        // 優化後的圖片上傳與壓縮邏輯 (同時限制寬與高)
         window.handleImageUpload = (input, target, extra = null) => {
             const file = input.files[0]; if (!file) return;
             const reader = new FileReader();
             reader.onload = (e) => {
                 const img = new Image();
                 img.onload = () => {
-                    // 雙重限制：寬度或高度都不能超過 800px
-                    let width = img.width;
-                    let height = img.height;
-                    const maxDim = 800;
-
-                    if (width > height) {
-                        if (width > maxDim) {
-                            height *= maxDim / width;
-                            width = maxDim;
-                        }
-                    } else {
-                        if (height > maxDim) {
-                            width *= maxDim / height;
-                            height = maxDim;
-                        }
-                    }
-
-                    const canvas = document.createElement('canvas');
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
+                    let width = img.width; let height = img.height; const maxDim = 800;
+                    if (width > height) { if (width > maxDim) { height *= maxDim / width; width = maxDim; } } else { if (height > maxDim) { width *= maxDim / height; height = maxDim; } }
+                    const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height;
+                    const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height);
                     let base64 = canvas.toDataURL('image/jpeg', 0.8);
-                    
                     if (target === 'hero') siteConfig.heroImg = base64;
                     else if (target === 'about_icon') siteConfig.aboutIcon = base64;
                     else if (target.startsWith('ig')) siteConfig[`igImg${target.slice(2)}`] = base64;
                     else if (target === 'col') collectionsList[extra].img = base64;
-                    else if (target === 'calc_stone') {
-                        if (!calculatorConfig.stones) calculatorConfig.stones = {};
-                        calculatorConfig.stones[extra] = base64;
-                    }
-                    alert("照片準備就緒，請記得按發佈更新。");
+                    else if (target === 'calc_stone') { if (!calculatorConfig.stones) calculatorConfig.stones = {}; calculatorConfig.stones[extra] = base64; }
+                    alert("照片準備就緒，請點擊「發佈更新」。");
                 };
                 img.src = e.target.result;
             };
@@ -695,63 +643,32 @@
         window.deleteItem = async (id) => {
             if (!confirm("確定移除嗎？")) return;
             if (id.startsWith('temp_')) { collectionsList = collectionsList.filter(i => i.id !== id); window.renderAdminList(); }
-            else { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'galleryItems', id)); }
+            else { await deleteDoc(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems', id)); }
         };
 
         window.saveSiteData = async () => {
             if (!authInstance.currentUser || authInstance.currentUser.uid.trim() !== ADMIN_UID) return alert("權限不足！");
             document.getElementById('loading').style.display = 'flex';
             try {
-                const configRef = doc(db, 'artifacts', appId, 'public', 'data', 'siteSettings', 'main');
-                const updateData = { 
-                    ...siteConfig, 
-                    brandName: document.getElementById('edit-brand-name')?.value || siteConfig.brandName, 
-                    heroTitle: document.getElementById('edit-hero-title')?.value || siteConfig.heroTitle, 
-                    heroSub: document.getElementById('edit-hero-sub')?.value || siteConfig.heroSub, 
-                    aboutText: document.getElementById('edit-about-text')?.value || siteConfig.aboutText, 
-                    aboutLink: document.getElementById('edit-about-link')?.value || siteConfig.aboutLink,
-                    igHandle: document.getElementById('edit-ig-handle')?.value || siteConfig.igHandle,
-                    igUrl: document.getElementById('edit-ig-url')?.value || siteConfig.igUrl,
-                    fbHandle: document.getElementById('edit-fb-handle')?.value || siteConfig.fbHandle,
-                    fbUrl: document.getElementById('edit-fb-url')?.value || siteConfig.fbUrl
-                };
-                for(let i=1; i<=4; i++) { 
-                    const val = document.getElementById(`edit-ig-embed-${i}`)?.value;
-                    if(val !== undefined) updateData[`igEmbed${i}`] = val; 
-                }
+                const configRef = doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'main');
+                const updateData = { ...siteConfig, brandName: document.getElementById('edit-brand-name')?.value || siteConfig.brandName, heroTitle: document.getElementById('edit-hero-title')?.value || siteConfig.heroTitle, heroSub: document.getElementById('edit-hero-sub')?.value || siteConfig.heroSub, aboutText: document.getElementById('edit-about-text')?.value || siteConfig.aboutText, aboutLink: document.getElementById('edit-about-link')?.value || siteConfig.aboutLink, igHandle: document.getElementById('edit-ig-handle')?.value || siteConfig.igHandle, igUrl: document.getElementById('edit-ig-url')?.value || siteConfig.igUrl, fbHandle: document.getElementById('edit-fb-handle')?.value || siteConfig.fbHandle, fbUrl: document.getElementById('edit-fb-url')?.value || siteConfig.fbUrl, lineId: document.getElementById('edit-line-id')?.value || siteConfig.lineId };
+                for(let i=1; i<=4; i++) { const val = document.getElementById(`edit-ig-embed-${i}`)?.value; if(val !== undefined) updateData[`igEmbed${i}`] = val; }
                 await setDoc(configRef, updateData);
-
-                if (calculatorConfig && Object.keys(calculatorConfig).length > 0) {
-                    const calcRef = doc(db, 'artifacts', appId, 'public', 'data', 'siteSettings', 'calculator');
-                    await setDoc(calcRef, calculatorConfig);
-                }
-
-                for (const item of collectionsList) {
-                    const id = item.isNew ? doc(collection(db, 'dummy')).id : item.id;
-                    const itemRef = doc(db, 'artifacts', appId, 'public', 'data', 'galleryItems', id);
-                    const cleanItem = { ...item }; delete cleanItem.id; delete cleanItem.isNew;
-                    await setDoc(itemRef, cleanItem);
-                }
-                alert("同步成功！");
-            } catch (e) { alert("失敗: " + e.message); }
+                if (calculatorConfig && Object.keys(calculatorConfig).length > 0) { const calcRef = doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'calculator'); await setDoc(calcRef, calculatorConfig); }
+                for (const item of collectionsList) { const id = item.id.startsWith('temp_') ? doc(collection(db, 'dummy')).id : item.id; const itemRef = doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems', id); const cleanItem = { ...item }; delete cleanItem.id; await setDoc(itemRef, cleanItem); }
+                alert("網站設定同步成功！");
+            } catch (e) { alert("同步失敗，請檢查權限。"); }
             finally { document.getElementById('loading').style.display = 'none'; }
         };
 
         // --- 管理員登入邏輯 (Modal) ---
         window.toggleAdmin = async () => {
             const panel = document.getElementById('admin-panel');
-            const currentUid = authInstance.currentUser?.uid?.trim();
-            
-            if (authInstance.currentUser && currentUid === ADMIN_UID) {
-                panel.classList.toggle('active');
-            } else {
-                document.getElementById('adminLoginModal').classList.remove('hidden');
-            }
+            if (authInstance.currentUser && authInstance.currentUser.uid.trim() === ADMIN_UID) { panel.classList.toggle('active'); } 
+            else { document.getElementById('adminLoginModal').classList.remove('hidden'); }
         };
 
-        window.closeAdminLoginModal = () => {
-            document.getElementById('adminLoginModal').classList.add('hidden');
-        };
+        window.closeAdminLoginModal = () => document.getElementById('adminLoginModal').classList.add('hidden');
 
         window.handleAdminLogin = async (e) => {
             e.preventDefault();
@@ -759,43 +676,22 @@
             const pass = document.getElementById('adminPass').value;
             const btn = e.target.querySelector('button[type="submit"]');
             const originalText = btn.innerText;
-            
-            btn.disabled = true;
-            btn.innerText = "驗證中...";
-
+            btn.disabled = true; btn.innerText = "驗證中...";
             try {
                 const cred = await signInWithEmailAndPassword(authInstance, email, pass);
-                if (cred.user.uid.trim() === ADMIN_UID) {
-                    alert("身分核對成功！");
-                    window.closeAdminLoginModal();
-                    document.getElementById('admin-panel').classList.add('active');
-                    document.getElementById('admin-action-btn').innerText = "管理模式 (已登入)";
-                    window.renderAdminList();
-                } else {
-                    alert("不具備管理權限。"); await signOut(authInstance);
-                }
-            } catch(e) { alert("帳號或密碼錯誤。"); }
-            finally {
-                btn.disabled = false;
-                btn.innerText = originalText;
-            }
+                if (cred.user.uid.trim() === ADMIN_UID) { alert("登入成功！"); window.closeAdminLoginModal(); document.getElementById('admin-panel').classList.add('active'); document.getElementById('admin-action-btn').innerText = "管理模式 (已登入)"; window.renderAdminList(); } 
+                else { alert("權限不足。"); await signOut(authInstance); }
+            } catch(e) { alert("帳號密碼有誤。"); }
+            finally { btn.disabled = false; btn.innerText = originalText; }
         };
 
-        window.signOutAdmin = () => { 
-            if(!confirm("確定要登出管理員身份嗎？")) return;
-            signOut(authInstance).then(() => { alert("已安全登出。"); window.location.reload(); }); 
-        };
+        window.signOutAdmin = () => { if(!confirm("確定要登出管理員身份嗎？")) return; signOut(authInstance).then(() => { alert("已安全登出。"); window.location.reload(); }); };
         
         function renderIgSlot(slotId, embedUrl, fallbackImg) {
-            const container = document.getElementById(slotId);
-            if (!container) return;
-            if (embedUrl && embedUrl.trim() !== "") {
-                container.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14" style="background:#FFF; border:0; margin:0; width:100%;"><div style="padding:16px;"> <a href="${embedUrl}" target="_blank" style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;">View on Instagram</a></div></blockquote>`;
-            } else if (fallbackImg) {
-                container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 hover:scale-105" alt="Showcase">`;
-            } else {
-                container.innerHTML = `<div class="w-full h-full bg-stone-100 flex items-center justify-center text-stone-300 text-[10px]">影像載入中</div>`;
-            }
+            const container = document.getElementById(slotId); if (!container) return;
+            if (embedUrl && embedUrl.trim() !== "") { container.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14" style="background:#FFF; border:0; margin:0; width:100%;"><div style="padding:16px;"> <a href="${embedUrl}" target="_blank" style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;">View on Instagram</a></div></blockquote>`; } 
+            else if (fallbackImg) { container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 hover:scale-105" alt="Showcase">`; } 
+            else { container.innerHTML = `<div class="w-full h-full bg-stone-100 flex items-center justify-center text-stone-300 text-[10px]">影像載入中</div>`; }
         }
 
         function renderFrontEnd() {
@@ -829,31 +725,21 @@
             safeSetVal('edit-ig-url', siteConfig.igUrl);
             safeSetVal('edit-fb-handle', siteConfig.fbHandle);
             safeSetVal('edit-fb-url', siteConfig.fbUrl);
+            safeSetVal('edit-line-id', siteConfig.lineId); // LINE ID
             for(let i=1; i<=4; i++) { safeSetVal(`edit-ig-embed-${i}`, siteConfig[`igEmbed${i}`]); }
         }
 
         function renderCollections() {
-            const container = document.getElementById('collections-container');
-            if (!container) return;
-            container.innerHTML = collectionsList.map(item => `
-                <article class="group flex flex-col items-center">
-                    <div class="aspect-[4/5] w-full overflow-hidden bg-stone-200 shadow-sm">
-                        <img src="${item.img}" class="w-full h-full object-cover transition-all duration-[1500ms] group-hover:scale-110" alt="${item.name}">
-                    </div>
-                    <h3 class="text-base font-medium mt-6 tracking-widest text-stone-900 uppercase">${item.name}</h3>
-                    <p class="text-xs text-stone-500 mt-2 tracking-widest">${item.desc}</p>
-                </article>
-            `).join('');
+            const container = document.getElementById('collections-container'); if (!container) return;
+            container.innerHTML = collectionsList.map(item => `<article class="group flex flex-col items-center"><div class="aspect-[4/5] w-full overflow-hidden bg-stone-200 shadow-sm"><img src="${item.img}" class="w-full h-full object-cover transition-all duration-[1500ms] group-hover:scale-110" alt="${item.name}"></div><h3 class="text-base font-medium mt-6 tracking-widest text-stone-900 uppercase">${item.name}</h3><p class="text-xs text-stone-500 mt-2 tracking-widest">${item.desc}</p></article>`).join('');
         }
 
         window.renderAdminList = function() {
-            const list = document.getElementById('edit-collections-list');
-            if (!list) return;
-            list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="updateLocalItem(${index}, 'name', this.value)" class="text-xs font-bold"><textarea onchange="updateLocalItem(${index}, 'desc', this.value)" class="text-xs">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">換照<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
+            const list = document.getElementById('edit-collections-list'); if (!list) return;
+            list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="window.deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="window.updateLocalItem(${index}, 'name', this.value)" class="text-xs font-bold"><textarea onchange="window.updateLocalItem(${index}, 'desc', this.value)" class="text-xs">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">換照<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
             lucide.createIcons();
         }
 
-        // 啟動邏輯
         document.getElementById('loading').style.display = 'flex';
         initNavbarScroll();
         populateDropdowns();
@@ -863,46 +749,19 @@
             const btn = document.getElementById('admin-action-btn');
             const currentUid = user?.uid?.trim();
             if (user && currentUid === ADMIN_UID) {
-                panel.classList.add('active');
-                btn.innerText = "管理模式 (已登入)";
+                panel.classList.add('active'); btn.innerText = "管理模式 (已登入)";
                 window.renderAdminList();
-            } else {
-                panel.classList.remove('active');
-                btn.innerText = "Admin Login";
-            }
+            } else { panel.classList.remove('active'); btn.innerText = "Admin Login"; }
             
-            // 載入資料
-            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'main'), (snap) => {
-                if (snap.exists()) { siteConfig = { ...siteConfig, ...snap.data() }; renderFrontEnd(); }
-            });
-            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'calculator'), (snap) => {
-                if (snap.exists()) { 
-                    calculatorConfig = snap.data(); 
-                    if (calculatorConfig.stones) {
-                        Object.keys(calculatorConfig.stones).forEach(key => {
-                            if (STONES[key] && calculatorConfig.stones[key]) STONES[key].img = calculatorConfig.stones[key];
-                        });
-                    }
-                }
-                document.getElementById('loading').style.display = 'none';
-            });
-            onSnapshot(collection(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems'), (snap) => {
-                collectionsList = []; snap.forEach(d => collectionsList.push({ id: d.id, ...d.data() }));
-                collectionsList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                renderCollections();
-                if (document.getElementById('admin-panel').classList.contains('active')) window.renderAdminList();
-            });
+            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'main'), (snap) => { if (snap.exists()) { siteConfig = { ...siteConfig, ...snap.data() }; renderFrontEnd(); } });
+            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'calculator'), (snap) => { if (snap.exists()) { calculatorConfig = snap.data(); if (calculatorConfig.stones) { Object.keys(calculatorConfig.stones).forEach(key => { if (STONES[key] && calculatorConfig.stones[key]) STONES[key].img = calculatorConfig.stones[key]; }); } } document.getElementById('loading').style.display = 'none'; });
+            onSnapshot(collection(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems'), (snap) => { collectionsList = []; snap.forEach(d => collectionsList.push({ id: d.id, ...d.data() })); collectionsList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); renderCollections(); if (document.getElementById('admin-panel').classList.contains('active')) window.renderAdminList(); });
         });
         
         await signInAnonymously(auth).catch(() => {});
         lucide.createIcons();
         
-        function escapeHtml(text) {
-            if (!text) return "";
-            return text.replace(/[&<>"']/g, function(m) {
-                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
-            });
-        }
+        function escapeHtml(text) { if (!text) return ""; return text.replace(/[&<>"']/g, function(m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]; }); }
     </script>
 </body>
 </html>
