@@ -95,7 +95,7 @@
         .stone-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
         .calc-select { appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; }
 
-        /* 紅點通知樣式 */
+        /* 紅點通知樣式 (備用) */
         .notification-badge {
             display: inline-flex;
             align-items: center;
@@ -131,7 +131,6 @@
             </div>
             <div class="hidden md:flex space-x-12 items-center">
                 <button onclick="window.scrollToSection('about')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">品牌故事</button>
-                <button onclick="window.scrollToSection('calculator')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">靈石測驗</button>
                 <button onclick="window.scrollToSection('collections')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">收藏系列</button>
                 <button onclick="window.scrollToSection('social')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">追蹤我們</button>
                 
@@ -309,15 +308,7 @@
             <h3 class="font-bold tracking-widest text-stone-800 uppercase">管理者模式已開啟</h3>
             <button onclick="window.toggleAdmin()"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
-        
-        <!-- Tab 切換 -->
-        <div class="flex space-x-4 px-1 mb-6 border-b border-stone-100">
-            <button onclick="window.switchAdminTab('settings')" id="tab-settings" class="pb-2 text-xs font-bold tracking-widest text-stone-800 border-b-2 border-stone-800 transition">網站設定</button>
-            <button onclick="window.switchAdminTab('inquiries')" id="tab-inquiries" class="pb-2 text-xs font-bold tracking-widest text-stone-400 hover:text-stone-600 transition">預約諮詢名單 <span id="unread-count" class="hidden ml-1 px-1.5 py-0.5 bg-red-500 text-white rounded-full text-[9px]">0</span></button>
-        </div>
-
-        <!-- 設定內容區 -->
-        <div id="admin-content-settings" class="space-y-10 pb-32">
+        <div class="space-y-10 pb-32">
             <section class="space-y-3">
                 <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">基本配置</h4>
                 <input type="text" id="edit-brand-name" placeholder="品牌名稱">
@@ -384,15 +375,6 @@
             <div id="edit-collections-list" class="space-y-4"></div>
             <button onclick="window.addNewCollectionItem()" class="w-full py-3 bg-stone-100 text-xs">＋ 新增靈石項目</button>
         </div>
-
-        <!-- 預約名單區 -->
-        <div id="admin-content-inquiries" class="hidden space-y-6 pb-32">
-            <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase mb-4">最新預約資料 (即時同步)</h4>
-            <div id="inquiries-list" class="space-y-4">
-                <p class="text-xs text-stone-400 text-center py-8">載入中...</p>
-            </div>
-        </div>
-
         <div class="fixed bottom-0 right-0 w-full max-w-[450px] bg-white p-6 border-t z-[2000] shadow-2xl">
             <div class="grid grid-cols-2 gap-4">
                 <button onclick="window.saveSiteData()" class="bg-stone-900 text-white py-4 text-xs font-bold uppercase rounded-sm shadow-lg">發佈更新</button>
@@ -438,7 +420,6 @@
         let siteConfig = {};
         let calculatorConfig = {};
         let collectionsList = [];
-        let inquiriesList = [];
         let currentLang = 'zh';
 
         // 載入保護
@@ -472,6 +453,7 @@
 
         // --- 靈石測驗資料與邏輯 ---
         const MONTH_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        // 修正後的訊息：只提示成功，並可開啟 Email
         const I18N = {
             zh: { title: "尋找您的命定靈石", desc: `輸入您的<span class="font-bold text-stone-700">國曆 (Solar)</span> 出生日期，<br>系統將自動換算精確的農曆五行，<br>為您連結那顆等待已久的守護石。`, labelYear: "國曆出生年", labelMonth: "國曆月份", labelDay: "國曆日期", btnCalc: "開始轉換並感應", loading: "正在換算農曆五行...", resultTitle: "農曆出生資訊", btnCollection: "查看收藏系列", btnBuy: "洽詢專員購買", btnRetry: "重新測驗", modalTitle: "專員購藏協助", modalDesc: `請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務專注於協助購買挑選，非命理諮詢)</span>`, labelCName: "您的稱呼", labelCContact: "聯絡方式 (手機 / LINE ID)", btnSubmit: "確認送出", alertSent: "資料已傳送成功！\n稍後將有專員與您聯繫。", sending: "資料傳送中...", selectYear: "請選擇年份", selectMonth: "月份", selectDay: "日期", refImg: "示意圖" },
             en: { title: "Find Your Destined Stone", desc: `Enter your <span class="font-bold text-stone-700">Solar Birth Date</span>.<br>We will calculate your Lunar Elemental Energy<br>to reveal your Guardian Stone.`, labelYear: "Birth Year (Solar)", labelMonth: "Birth Month", labelDay: "Birth Day", btnCalc: "Reveal My Stone", loading: "Calculating Cosmic Energy...", resultTitle: "Your Lunar Profile", btnCollection: "View Collection", btnBuy: "Contact for Purchase", btnRetry: "Retake Quiz", modalTitle: "Purchasing Assistance", modalDesc: `Leave your info, and a specialist will guide you through our collection.<br><span class="text-stone-400 font-light block mt-1">(Assistance for purchase, not fortune telling)</span>`, labelCName: "Your Name", labelCContact: "Contact (Phone / LINE / WhatsApp)", btnSubmit: "Submit", alertSent: "Data sent successfully!\nA specialist will contact you shortly.", sending: "Sending...", selectYear: "Select Year", selectMonth: "Month", selectDay: "Day", refImg: "Reference" }
@@ -558,7 +540,6 @@
                         <p class="text-[10px] text-stone-400 tracking-wider mb-1 uppercase">${t.resultTitle}</p>
                         <p class="text-sm font-bold text-stone-700 tracking-widest">${date}</p>
                     </div>
-                    <!-- 圖片容器：使用 bg-stone-50 與 object-contain 讓圖片不裁切並置中 -->
                     <div class="relative h-64 overflow-hidden bg-stone-50 group border-b border-stone-100">
                         <img src="${stone.img}" class="w-full h-full object-contain p-4" onerror="this.src='https://placehold.co/600x400?text=Stone'">
                         <div class="absolute top-2 right-2 bg-black/30 text-white text-[9px] px-2 py-1 rounded backdrop-blur-sm tracking-wider">${t.refImg}</div>
@@ -582,7 +563,7 @@
         window.openContactModal = () => document.getElementById('contactModal').classList.remove('hidden');
         window.closeContactModal = () => document.getElementById('contactModal').classList.add('hidden');
         
-        // [修改] 只存後台 + 顯示成功訊息 + Failover Mailto
+        // [修改] 1. 寫入後台 2. 失敗則開啟 Email (Mailto)
         window.handleContactSubmit = async (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
@@ -606,11 +587,12 @@
                 window.closeContactModal();
             } catch (err) {
                 console.error(err);
-                // Failover: 如果存檔失敗(權限/網路)，改用 mailto 讓客人手動寄信，確保不漏單
-                if(confirm("網路連線不穩導致自動傳送失敗。\n是否改開啟 Email 寄送您的需求？")) {
+                // Failover: 權限不足時改用 Email
+                if(confirm("網路連線問題，系統將改為開啟您的 Email 軟體傳送，請按確定繼續。")) {
                      const subject = `[奧兒絲朵] 預約諮詢 - ${name}`;
                      const body = `您好，我是 ${name}。\n聯絡方式：${contact}\n\n我剛做了靈石測驗，結果是：${stoneTitle}\n想請專員協助介紹與購買，謝謝！`;
                      window.location.href = `mailto:service@our-story.com.tw?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                     window.closeContactModal();
                 }
             } finally {
                 btn.disabled = false; btn.innerText = originalText;
@@ -799,86 +781,6 @@
             }
         };
 
-        // [新增] 管理後台切換 Tab 功能
-        window.switchAdminTab = (tabName) => {
-            const settingsDiv = document.getElementById('admin-content-settings');
-            const inquiriesDiv = document.getElementById('admin-content-inquiries');
-            const tabSettings = document.getElementById('tab-settings');
-            const tabInquiries = document.getElementById('tab-inquiries');
-
-            if (tabName === 'settings') {
-                settingsDiv.classList.remove('hidden');
-                inquiriesDiv.classList.add('hidden');
-                tabSettings.classList.add('text-stone-800', 'border-stone-800');
-                tabSettings.classList.remove('text-stone-400');
-                tabInquiries.classList.remove('text-stone-800', 'border-stone-800');
-                tabInquiries.classList.add('text-stone-400');
-            } else {
-                settingsDiv.classList.add('hidden');
-                inquiriesDiv.classList.remove('hidden');
-                tabInquiries.classList.add('text-stone-800', 'border-stone-800');
-                tabInquiries.classList.remove('text-stone-400');
-                tabSettings.classList.remove('text-stone-800', 'border-stone-800');
-                tabSettings.classList.add('text-stone-400');
-            }
-        };
-
-        // [新增] 渲染預約清單
-        function renderInquiriesList() {
-            const list = document.getElementById('inquiries-list');
-            if (!list) return;
-            
-            // 更新未讀紅點計數
-            const unreadCount = inquiriesList.filter(i => i.status === 'new').length;
-            const badge = document.getElementById('unread-count');
-            const adminBadge = document.getElementById('admin-badge');
-            
-            if (unreadCount > 0) {
-                badge.innerText = unreadCount;
-                badge.classList.remove('hidden');
-                if (adminBadge) adminBadge.innerText = unreadCount > 9 ? '9+' : unreadCount;
-                if (adminBadge) adminBadge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-                if (adminBadge) adminBadge.classList.add('hidden');
-            }
-
-            if (inquiriesList.length === 0) {
-                list.innerHTML = '<p class="text-xs text-stone-400 text-center py-4">目前尚無預約資料</p>';
-                return;
-            }
-            
-            list.innerHTML = inquiriesList.map(item => `
-                <div class="p-4 bg-white border ${item.status === 'new' ? 'border-red-200 bg-red-50' : 'border-stone-200'} rounded-lg shadow-sm relative">
-                    ${item.status === 'new' ? '<span class="absolute top-2 right-2 text-[9px] bg-red-500 text-white px-2 py-0.5 rounded-full">未讀</span>' : ''}
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-bold text-stone-800">${item.name}</span>
-                        <span class="text-[10px] text-stone-400">${new Date(item.timestamp).toLocaleString()}</span>
-                    </div>
-                    <p class="text-xs text-stone-600 mb-1">聯絡：<a href="tel:${item.contact}" class="underline hover:text-stone-900">${item.contact}</a></p>
-                    <p class="text-xs text-stone-600 mb-3">靈石：<span class="font-bold text-stone-700">${item.stone}</span></p>
-                    <div class="flex space-x-2 border-t border-stone-100 pt-2">
-                         ${item.status === 'new' ? `<button onclick="updateInquiryStatus('${item.id}', 'read')" class="flex-1 py-1.5 bg-stone-800 text-white text-[10px] rounded hover:bg-stone-600">標示已讀</button>` : ''}
-                         <button onclick="deleteInquiry('${item.id}')" class="flex-1 py-1.5 border border-stone-200 text-stone-500 text-[10px] rounded hover:text-red-500 hover:border-red-200">刪除</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        // [新增] 更新狀態與刪除功能
-        window.updateInquiryStatus = async (id, status) => {
-            try {
-                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'inquiries', id), { status });
-            } catch (e) { alert("更新失敗"); }
-        };
-        
-        window.deleteInquiry = async (id) => {
-            if(!confirm("確定刪除此筆資料？")) return;
-            try {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'inquiries', id));
-            } catch (e) { alert("刪除失敗"); }
-        };
-
         window.signOutAdmin = () => { 
             if(!confirm("確定要登出管理員身份嗎？")) return;
             signOut(authInstance).then(() => { alert("已安全登出。"); window.location.reload(); }); 
@@ -963,15 +865,6 @@
             if (user && currentUid === ADMIN_UID) {
                 panel.classList.add('active');
                 btn.innerText = "管理模式 (已登入)";
-                
-                // 加入紅點
-                if(!document.getElementById('admin-badge')) {
-                     const badge = document.createElement('span');
-                     badge.id = 'admin-badge';
-                     badge.className = 'notification-badge hidden';
-                     btn.appendChild(badge);
-                }
-
                 window.renderAdminList();
             } else {
                 panel.classList.remove('active');
@@ -999,17 +892,6 @@
                 renderCollections();
                 if (document.getElementById('admin-panel').classList.contains('active')) window.renderAdminList();
             });
-
-            // 監聽預約清單 (紅點邏輯)
-            // 即使未開啟面板，只要登入就會監聽
-            if (user && currentUid === ADMIN_UID) {
-                onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'inquiries'), (snap) => {
-                    inquiriesList = [];
-                    snap.forEach(d => inquiriesList.push({ id: d.id, ...d.data() }));
-                    inquiriesList.sort((a, b) => b.timestamp - a.timestamp);
-                    renderInquiriesList(); // 更新列表與紅點
-                });
-            }
         });
         
         await signInAnonymously(auth).catch(() => {});
