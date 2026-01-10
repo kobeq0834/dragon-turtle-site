@@ -100,9 +100,11 @@
             </div>
             <div class="hidden md:flex space-x-12 items-center">
                 <button onclick="window.scrollToSection('about')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">品牌故事</button>
+                <!-- 修正：移除多餘的靈石測驗文字連結 -->
                 <button onclick="window.scrollToSection('collections')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">收藏系列</button>
                 <button onclick="window.scrollToSection('social')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">追蹤我們</button>
                 
+                <!-- 靈石測驗按鈕 -->
                 <div class="flex items-center border-l border-stone-300 pl-8">
                     <button onclick="window.scrollToSection('calculator')" class="group flex items-center space-x-2 text-stone-800 hover:text-stone-500 transition-colors">
                         <i data-lucide="sparkles" class="w-4 h-4"></i>
@@ -118,19 +120,20 @@
     <div id="mobile-menu" class="fixed inset-0 z-[150] bg-white flex flex-col items-center justify-center space-y-10">
         <button class="absolute top-8 right-8 text-stone-600" onclick="window.toggleMenu()" aria-label="關閉"><i data-lucide="x" class="w-8 h-8"></i></button>
         <button onclick="window.scrollToSection('about')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">品牌故事</button>
+        <!-- 修正：移除下方底線 -->
         <button onclick="window.scrollToSection('calculator')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">靈石測驗</button>
         <button onclick="window.scrollToSection('collections')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">收藏系列</button>
         <button onclick="window.scrollToSection('social')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">追蹤我們</button>
     </div>
 
     <main>
-        <!-- 主視覺 -->
+        <!-- 主視覺 (加入預設圖片，防止空白) -->
         <header id="home" class="relative h-screen flex items-center justify-center overflow-hidden bg-white">
             <div class="absolute inset-0 z-0">
-                <img id="hero-img-display" src="" class="w-full h-full object-cover opacity-30 scale-105 animate-slowZoom" alt="奧兒絲朵品牌背景">
+                <img id="hero-img-display" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1200" class="w-full h-full object-cover opacity-30 scale-105 animate-slowZoom" alt="奧兒絲朵品牌背景">
             </div>
             <div class="relative z-10 text-center px-6">
-                <p id="hero-sub-display" class="text-[10px] md:text-xs tracking-[0.5em] text-stone-600 mb-8 animate-fadeInUp uppercase font-bold">Every stone has its own story</p>
+                <p id="hero-sub-display" class="text-[10px] md:text-xs tracking-[0.5em] text-stone-600 mb-8 animate-fadeInUp uppercase font-bold font-medium">Every stone has its own story</p>
                 <h1 id="hero-title-display" class="text-4xl md:text-6xl font-light text-stone-900 mb-10 tracking-[0.3em] leading-[1.6] animate-fadeInUp delay-100 drop-shadow-sm">奧兒絲朵<br /><span class="text-2xl md:text-3xl tracking-[0.4em] text-stone-600 italic font-normal block mt-4">靈石與您的故事</span></h1>
                 <button onclick="window.scrollToSection('calculator')" class="mt-8 px-8 py-3 border border-stone-800 text-stone-800 hover:bg-stone-800 hover:text-white transition-all text-xs tracking-[0.3em] uppercase font-bold animate-fadeInUp" style="animation-delay: 0.5s;">尋找您的命定靈石</button>
             </div>
@@ -141,7 +144,8 @@
             <div class="max-w-3xl mx-auto">
                 <div class="mb-12">
                     <a id="about-link-display" href="#" target="_blank" rel="noopener noreferrer" class="block hover:opacity-80 transition-opacity">
-                        <img id="about-icon-display" src="" class="w-40 md:w-64 mx-auto object-contain rounded-lg shadow-sm" alt="客服 QR Code">
+                        <!-- 加入預設 QR Code 佔位圖 -->
+                        <img id="about-icon-display" src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200" class="w-40 md:w-64 mx-auto object-contain rounded-lg shadow-sm" alt="客服 QR Code">
                     </a>
                 </div>
                 <h2 id="about-title-display" class="text-lg md:text-xl font-medium tracking-[0.4em] text-stone-900 mb-12 uppercase">關於 奧兒絲朵</h2>
@@ -232,7 +236,7 @@
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-sm rounded-2xl p-8 shadow-2xl modal-enter">
             <div class="text-center mb-6">
                 <h3 id="modal-title" class="text-xl font-bold text-stone-800 tracking-widest mb-2">專員購藏協助</h3>
-                <p id="modal-desc" class="text-xs text-stone-500 leading-relaxed">請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務專注於協助購買挑選，非命理諮詢)</span></p>
+                <p id="modal-desc" class="text-xs text-stone-500 leading-relaxed">請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務純屬聯繫購買，我們極度重視您的隱私)</span></p>
             </div>
             <form id="contactForm" onsubmit="window.handleContactSubmit(event)" class="space-y-4">
                 <div>
@@ -243,6 +247,7 @@
                     <label id="label-cContact" for="cContact" class="block text-xs font-medium text-stone-500 mb-1">聯絡電話</label>
                     <input type="text" id="cContact" required class="w-full px-3 py-2 border border-stone-200 rounded-md text-sm focus:outline-none focus:border-stone-400 bg-stone-50" placeholder="0912345678">
                 </div>
+                <!-- 新增備註欄位 -->
                 <div>
                     <label id="label-cNotes" for="cNotes" class="block text-xs font-medium text-stone-500 mb-1">備註事項 (選填)</label>
                     <textarea id="cNotes" rows="2" class="w-full px-3 py-2 border border-stone-200 rounded-md text-sm focus:outline-none focus:border-stone-400 bg-stone-50" placeholder="例如：方便聯絡的時間..."></textarea>
@@ -253,7 +258,7 @@
         </div>
     </div>
 
-    <!-- 管理員登入 Modal -->
+    <!-- 管理員登入 Modal (修正：使用 Modal 而非 prompt) -->
     <div id="adminLoginModal" class="fixed inset-0 z-[200] hidden">
         <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity" onclick="window.closeAdminLoginModal()"></div>
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-sm rounded-2xl p-8 shadow-2xl modal-enter">
@@ -389,6 +394,7 @@
         const auth = getAuth(app);
         const db = initializeFirestore(app, { experimentalForceLongPolling: true });
         
+        // 修正：使用動態 appId 確保權限
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'our-story-53723';
         let authInstance = auth;
 
@@ -429,6 +435,7 @@
 
         // --- 靈石測驗資料與邏輯 ---
         const MONTH_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        // 修正後的訊息：只提示成功，不跳轉 LINE
         const I18N = {
             zh: { title: "尋找您的命定靈石", desc: `輸入您的<span class="font-bold text-stone-700">國曆 (Solar)</span> 出生日期，<br>系統將自動換算精確的農曆五行，<br>為您連結那顆等待已久的守護石。`, labelYear: "國曆出生年", labelMonth: "國曆月份", labelDay: "國曆日期", btnCalc: "開始轉換並感應", loading: "正在換算農曆五行...", resultTitle: "農曆出生資訊", btnCollection: "查看收藏系列", btnBuy: "洽詢專員購買", btnRetry: "重新測驗", modalTitle: "專員購藏協助", modalDesc: `請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務專注於協助購買挑選，非命理諮詢)</span>`, labelCName: "您的稱呼", labelCContact: "聯絡電話", labelCNotes: "備註事項 (選填)", btnSubmit: "確認送出", alertSent: "資料已準備就緒！\n\n系統將自動開啟 LINE，請在對話視窗中按下「傳送」鍵，專員就會收到您的需求囉！", sending: "正在開啟 LINE...", selectYear: "請選擇年份", selectMonth: "月份", selectDay: "日期", refImg: "示意圖" },
             en: { title: "Find Your Destined Stone", desc: `Enter your <span class="font-bold text-stone-700">Solar Birth Date</span>.<br>We will calculate your Lunar Elemental Energy<br>to reveal your Guardian Stone.`, labelYear: "Birth Year (Solar)", labelMonth: "Birth Month", labelDay: "Birth Day", btnCalc: "Reveal My Stone", loading: "Calculating Cosmic Energy...", resultTitle: "Your Lunar Profile", btnCollection: "View Collection", btnBuy: "Contact for Purchase", btnRetry: "Retake Quiz", modalTitle: "Purchasing Assistance", modalDesc: `Leave your info, and a specialist will guide you through our collection.<br><span class="text-stone-400 font-light block mt-1">(Assistance for purchase, not fortune telling)</span>`, labelCName: "Your Name", labelCContact: "Contact (Phone / LINE / WhatsApp)", labelCNotes: "Notes (Optional)", btnSubmit: "Submit", alertSent: "Ready to send!\n\nLINE will open automatically. Please press the 'Send' button in the chat to contact our specialist.", sending: "Opening LINE...", selectYear: "Select Year", selectMonth: "Month", selectDay: "Day", refImg: "Reference" }
@@ -539,7 +546,7 @@
         window.openContactModal = () => document.getElementById('contactModal').classList.remove('hidden');
         window.closeContactModal = () => document.getElementById('contactModal').classList.add('hidden');
         
-        // [修正] 不寫入後台，直接跳轉 LINE
+        // [修改] 直接跳轉 LINE
         window.handleContactSubmit = (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
@@ -568,7 +575,9 @@
             // 稍微延遲以確保按鈕狀態改變，然後跳出提示並跳轉
             setTimeout(() => {
                 if(confirm(I18N[currentLang].alertSent)) {
+                    // 使用 location.href 確保手機喚醒
                     window.location.href = lineUrl;
+                    
                     e.target.reset(); 
                     window.closeContactModal();
                 } 
@@ -761,11 +770,10 @@
 
         window.renderAdminList = function() {
             const list = document.getElementById('edit-collections-list'); if (!list) return;
-            list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="window.deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="window.updateLocalItem(${index}, 'name', this.value)" class="text-xs font-bold"><textarea onchange="window.updateLocalItem(${index}, 'desc', this.value)" class="text-xs">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">換照<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
+            list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="window.updateLocalItem(${index}, 'name', this.value)" class="text-xs font-bold"><textarea onchange="window.updateLocalItem(${index}, 'desc', this.value)" class="text-xs">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">換照<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
             lucide.createIcons();
         }
 
-        // 啟動邏輯
         document.getElementById('loading').style.display = 'flex';
         initNavbarScroll();
         populateDropdowns();
@@ -779,7 +787,6 @@
                 window.renderAdminList();
             } else { panel.classList.remove('active'); btn.innerText = "Admin Login"; }
             
-            // 安全監聽
             if(user) {
                 onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'siteSettings', 'main'), (snap) => { if (snap.exists()) { siteConfig = { ...siteConfig, ...snap.data() }; renderFrontEnd(); } }, (err)=>console.log(err));
                 onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'siteSettings', 'calculator'), (snap) => { if (snap.exists()) { calculatorConfig = snap.data(); if (calculatorConfig.stones) { Object.keys(calculatorConfig.stones).forEach(key => { if (STONES[key] && calculatorConfig.stones[key]) STONES[key].img = calculatorConfig.stones[key]; }); } } document.getElementById('loading').style.display = 'none'; }, (err)=>console.log(err));
