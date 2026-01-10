@@ -113,7 +113,6 @@
             </div>
             <div class="hidden md:flex space-x-12 items-center">
                 <button onclick="window.scrollToSection('about')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">品牌故事</button>
-                <!-- [修改] 移除這裡重複的靈石測驗文字連結 -->
                 <button onclick="window.scrollToSection('collections')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">收藏系列</button>
                 <button onclick="window.scrollToSection('social')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">追蹤我們</button>
                 
@@ -133,7 +132,6 @@
     <div id="mobile-menu" class="fixed inset-0 z-[150] bg-white flex flex-col items-center justify-center space-y-10">
         <button class="absolute top-8 right-8 text-stone-600" onclick="window.toggleMenu()" aria-label="關閉"><i data-lucide="x" class="w-8 h-8"></i></button>
         <button onclick="window.scrollToSection('about')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">品牌故事</button>
-        <!-- [修改] 移除下底線樣式 border-b -->
         <button onclick="window.scrollToSection('calculator')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">靈石測驗</button>
         <button onclick="window.scrollToSection('collections')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">收藏系列</button>
         <button onclick="window.scrollToSection('social')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">追蹤我們</button>
@@ -256,33 +254,17 @@
                     <input type="text" id="cName" required class="w-full px-3 py-2 border border-stone-200 rounded-md text-sm focus:outline-none focus:border-stone-400 bg-stone-50" placeholder="Name">
                 </div>
                 <div>
-                    <label id="label-cContact" for="cContact" class="block text-xs font-medium text-stone-500 mb-1">聯絡方式 (手機 / LINE ID)</label>
-                    <input type="text" id="cContact" required class="w-full px-3 py-2 border border-stone-200 rounded-md text-sm focus:outline-none focus:border-stone-400 bg-stone-50" placeholder="Contact Info">
+                    <label id="label-cContact" for="cContact" class="block text-xs font-medium text-stone-500 mb-1">聯絡電話</label>
+                    <input type="text" id="cContact" required class="w-full px-3 py-2 border border-stone-200 rounded-md text-sm focus:outline-none focus:border-stone-400 bg-stone-50" placeholder="0912345678">
+                </div>
+                <!-- 新增備註欄位 -->
+                <div>
+                    <label id="label-cNotes" for="cNotes" class="block text-xs font-medium text-stone-500 mb-1">備註事項 (選填)</label>
+                    <textarea id="cNotes" rows="2" class="w-full px-3 py-2 border border-stone-200 rounded-md text-sm focus:outline-none focus:border-stone-400 bg-stone-50" placeholder="例如：方便聯絡的時間..."></textarea>
                 </div>
                 <button id="btn-submit" type="submit" class="w-full py-3 bg-stone-800 text-white text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-700 transition mt-2">確認送出</button>
             </form>
             <button onclick="window.closeContactModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600"><i data-lucide="x" class="w-5 h-5"></i></button>
-        </div>
-    </div>
-
-    <!-- 管理員登入 Modal -->
-    <div id="adminLoginModal" class="fixed inset-0 z-[200] hidden">
-        <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity" onclick="window.closeAdminLoginModal()"></div>
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-sm rounded-2xl p-8 shadow-2xl modal-enter">
-            <div class="text-center mb-6">
-                <h3 class="text-xl font-bold text-stone-800 tracking-widest mb-2">管理者登入</h3>
-                <p class="text-xs text-stone-500">請輸入管理員帳號密碼</p>
-            </div>
-            <form id="adminLoginForm" onsubmit="window.handleAdminLogin(event)" class="space-y-4">
-                <div>
-                    <input type="email" id="adminEmail" required class="w-full px-3 py-2 border border-stone-200 rounded-md text-sm focus:outline-none focus:border-stone-400 bg-stone-50" placeholder="Email">
-                </div>
-                <div>
-                    <input type="password" id="adminPass" required class="w-full px-3 py-2 border border-stone-200 rounded-md text-sm focus:outline-none focus:border-stone-400 bg-stone-50" placeholder="Password">
-                </div>
-                <button type="submit" class="w-full py-3 bg-stone-800 text-white text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-700 transition mt-2">登入</button>
-            </form>
-            <button onclick="window.closeAdminLoginModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
     </div>
 
@@ -354,7 +336,6 @@
                 <input type="text" id="edit-ig-url" placeholder="IG 網址">
                 <input type="text" id="edit-fb-handle" placeholder="FB 名稱">
                 <input type="text" id="edit-fb-url" placeholder="FB 網址">
-                <!-- 新增 LINE ID 設定 -->
                 <div class="pt-2 border-t border-stone-200">
                     <label class="text-[9px] text-stone-400 block mb-1">LINE 官方帳號 ID (含@)</label>
                     <input type="text" id="edit-line-id" placeholder="@291pcwxm" class="bg-green-50 border-green-200">
@@ -384,7 +365,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot, query, initializeFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot, query, orderBy, initializeFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // === 1. 定義全域變數與基本功能 ===
         const ADMIN_UID = "0MFL33qKcbQIeln2X1wsHOl4ebo2".trim();
@@ -400,7 +381,10 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = initializeFirestore(app, { experimentalForceLongPolling: true });
-        let authInstance = auth; // 賦值給全域供按鈕使用
+        
+        // 修正：使用動態 appId 確保權限
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'our-story-53723';
+        let authInstance = auth;
 
         // 全域變數
         let siteConfig = {};
@@ -439,9 +423,10 @@
 
         // --- 靈石測驗資料與邏輯 ---
         const MONTH_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        // 修正後的訊息：只提示成功，不跳轉 LINE
         const I18N = {
-            zh: { title: "尋找您的命定靈石", desc: `輸入您的<span class="font-bold text-stone-700">國曆 (Solar)</span> 出生日期，<br>系統將自動換算精確的農曆五行，<br>為您連結那顆等待已久的守護石。`, labelYear: "國曆出生年", labelMonth: "國曆月份", labelDay: "國曆日期", btnCalc: "開始轉換並感應", loading: "正在換算農曆五行...", resultTitle: "農曆出生資訊", btnCollection: "查看收藏系列", btnBuy: "洽詢專員購買", btnRetry: "重新測驗", modalTitle: "專員購藏協助", modalDesc: `請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務專注於協助購買挑選，非命理諮詢)</span>`, labelCName: "您的稱呼", labelCContact: "聯絡方式 (手機 / LINE ID)", btnSubmit: "確認送出", alertSent: "資料已準備就緒！\n\n系統將為您開啟 LINE，請在對話視窗中按下「傳送」鍵，專員就會收到您的需求囉！", sending: "正在開啟 LINE...", selectYear: "請選擇年份", selectMonth: "月份", selectDay: "日期", refImg: "示意圖" },
-            en: { title: "Find Your Destined Stone", desc: `Enter your <span class="font-bold text-stone-700">Solar Birth Date</span>.<br>We will calculate your Lunar Elemental Energy<br>to reveal your Guardian Stone.`, labelYear: "Birth Year (Solar)", labelMonth: "Birth Month", labelDay: "Birth Day", btnCalc: "Reveal My Stone", loading: "Calculating Cosmic Energy...", resultTitle: "Your Lunar Profile", btnCollection: "View Collection", btnBuy: "Contact for Purchase", btnRetry: "Retake Quiz", modalTitle: "Purchasing Assistance", modalDesc: `Leave your info, and a specialist will guide you through our collection.<br><span class="text-stone-400 font-light block mt-1">(Assistance for purchase, not fortune telling)</span>`, labelCName: "Your Name", labelCContact: "Contact (Phone / LINE / WhatsApp)", btnSubmit: "Submit", alertSent: "Ready to send!\n\nLINE will open automatically. Please press the 'Send' button in the chat to contact our specialist.", sending: "Opening LINE...", selectYear: "Select Year", selectMonth: "Month", selectDay: "Day", refImg: "Reference" }
+            zh: { title: "尋找您的命定靈石", desc: `輸入您的<span class="font-bold text-stone-700">國曆 (Solar)</span> 出生日期，<br>系統將自動換算精確的農曆五行，<br>為您連結那顆等待已久的守護石。`, labelYear: "國曆出生年", labelMonth: "國曆月份", labelDay: "國曆日期", btnCalc: "開始轉換並感應", loading: "正在換算農曆五行...", resultTitle: "農曆出生資訊", btnCollection: "查看收藏系列", btnBuy: "洽詢專員購買", btnRetry: "重新測驗", modalTitle: "專員購藏協助", modalDesc: `請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務專注於協助購買挑選，非命理諮詢)</span>`, labelCName: "您的稱呼", labelCContact: "聯絡電話", labelCNotes: "備註事項 (選填)", btnSubmit: "確認送出", alertSent: "資料已準備就緒！\n\n系統將自動開啟 LINE，請在對話視窗中按下「傳送」鍵，專員就會收到您的需求囉！", sending: "正在開啟 LINE...", selectYear: "請選擇年份", selectMonth: "月份", selectDay: "日期", refImg: "示意圖" },
+            en: { title: "Find Your Destined Stone", desc: `Enter your <span class="font-bold text-stone-700">Solar Birth Date</span>.<br>We will calculate your Lunar Elemental Energy<br>to reveal your Guardian Stone.`, labelYear: "Birth Year (Solar)", labelMonth: "Birth Month", labelDay: "Birth Day", btnCalc: "Reveal My Stone", loading: "Calculating Cosmic Energy...", resultTitle: "Your Lunar Profile", btnCollection: "View Collection", btnBuy: "Contact for Purchase", btnRetry: "Retake Quiz", modalTitle: "Purchasing Assistance", modalDesc: `Leave your info, and a specialist will guide you through our collection.<br><span class="text-stone-400 font-light block mt-1">(Assistance for purchase, not fortune telling)</span>`, labelCName: "Your Name", labelCContact: "Phone Number", labelCNotes: "Notes (Optional)", btnSubmit: "Submit", alertSent: "Ready to send!\n\nLINE will open automatically. Please press the 'Send' button in the chat to contact our specialist.", sending: "Opening LINE...", selectYear: "Select Year", selectMonth: "Month", selectDay: "Day", refImg: "Reference" }
         };
 
         const STONES = {
@@ -548,39 +533,32 @@
         window.openContactModal = () => document.getElementById('contactModal').classList.remove('hidden');
         window.closeContactModal = () => document.getElementById('contactModal').classList.add('hidden');
         
-        // [修改] 直接跳轉 LINE，移除後台寫入
+        // [修改] 直接跳轉 LINE (不寫入後台)
         window.handleContactSubmit = (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
             const originalText = btn.innerText;
-            const nameInput = document.getElementById('cName').value;
-            const contactInput = document.getElementById('cContact').value;
-            
-            // XSS 防護
-            const name = escapeHtml(nameInput);
-            const contact = escapeHtml(contactInput);
-
-            // 取得目前的靈石結果
+            const name = escapeHtml(document.getElementById('cName').value);
+            const contact = escapeHtml(document.getElementById('cContact').value);
+            const notes = escapeHtml(document.getElementById('cNotes').value);
             const stoneTitle = document.querySelector('#resultArea h3')?.innerText || "靈石";
             
             btn.disabled = true; btn.innerText = I18N[currentLang].sending;
             
-            // 讀取後台設定的 LINE ID (優先使用 siteConfig，若無則使用預設值)
+            // 讀取後台設定的 LINE ID
             let lineId = (siteConfig.lineId && siteConfig.lineId.trim() !== "") ? siteConfig.lineId : "@291pcwxm";
-            if (!lineId.startsWith('@')) lineId = '@' + lineId; // 強制補上 @
+            if (!lineId.startsWith('@')) lineId = '@' + lineId; 
             
-            // 構建預設訊息
-            const message = `您好，我是 ${name}。\n聯絡方式：${contact}\n\n我剛做了靈石測驗，結果是：${stoneTitle}\n想請專員協助介紹與購買，謝謝！`;
+            // 構建 LINE 訊息
+            let message = `您好，我是 ${name}。\n聯絡電話：${contact}\n`;
+            if (notes) message += `備註：${notes}\n`;
+            message += `\n我剛做了靈石測驗，結果是：${stoneTitle}\n想請專員協助介紹與購買，謝謝！`;
             
-            // 產生連結 (官方帳號 deep link)
             const lineUrl = `https://line.me/R/oaMessage/${lineId}/?${encodeURIComponent(message)}`;
             
-            // 稍微延遲以確保按鈕狀態改變，然後跳出提示並跳轉
             setTimeout(() => {
                 if(confirm(I18N[currentLang].alertSent)) {
-                    // 使用 location.href 確保手機喚醒
                     window.location.href = lineUrl;
-                    
                     e.target.reset(); 
                     window.closeContactModal();
                 } 
@@ -591,7 +569,7 @@
         function updateCalcUI() {
             const t = I18N[currentLang]; const safeSetText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; }; const safeSetHTML = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
             safeSetText('ui-title', t.title); safeSetHTML('ui-desc', t.desc); safeSetText('label-year', t.labelYear); safeSetText('label-month', t.labelMonth); safeSetText('label-day', t.labelDay); safeSetText('btn-calc', t.btnCalc);
-            const loadingEl = document.getElementById('loading-text'); if(loadingEl) loadingEl.innerText = t.loading; safeSetText('modal-title', t.modalTitle); safeSetHTML('modal-desc', t.modalDesc); safeSetText('label-cName', t.labelCName); safeSetText('label-cContact', t.labelCContact); safeSetText('btn-submit', t.btnSubmit);
+            const loadingEl = document.getElementById('loading-text'); if(loadingEl) loadingEl.innerText = t.loading; safeSetText('modal-title', t.modalTitle); safeSetHTML('modal-desc', t.modalDesc); safeSetText('label-cName', t.labelCName); safeSetText('label-cContact', t.labelCContact); safeSetText('label-cNotes', t.labelCNotes); safeSetText('btn-submit', t.btnSubmit);
             const resultArea = document.getElementById('resultArea'); if (resultArea && !resultArea.classList.contains('hidden')) { if(document.getElementById('year').value) window.calculateStone(); }
         }
 
@@ -654,14 +632,14 @@
         window.deleteItem = async (id) => {
             if (!confirm("確定移除嗎？")) return;
             if (id.startsWith('temp_')) { collectionsList = collectionsList.filter(i => i.id !== id); window.renderAdminList(); }
-            else { await deleteDoc(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems', id)); }
+            else { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'galleryItems', id)); }
         };
 
         window.saveSiteData = async () => {
             if (!authInstance.currentUser || authInstance.currentUser.uid.trim() !== ADMIN_UID) return alert("權限不足！");
             document.getElementById('loading').style.display = 'flex';
             try {
-                const configRef = doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'main');
+                const configRef = doc(db, 'artifacts', appId, 'public', 'data', 'siteSettings', 'main');
                 const updateData = { 
                     ...siteConfig, 
                     brandName: document.getElementById('edit-brand-name')?.value || siteConfig.brandName, 
@@ -682,13 +660,13 @@
                 await setDoc(configRef, updateData);
 
                 if (calculatorConfig && Object.keys(calculatorConfig).length > 0) {
-                    const calcRef = doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'calculator');
+                    const calcRef = doc(db, 'artifacts', appId, 'public', 'data', 'siteSettings', 'calculator');
                     await setDoc(calcRef, calculatorConfig);
                 }
 
                 for (const item of collectionsList) {
                     const id = item.isNew ? doc(collection(db, 'dummy')).id : item.id;
-                    const itemRef = doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems', id);
+                    const itemRef = doc(db, 'artifacts', appId, 'public', 'data', 'galleryItems', id);
                     const cleanItem = { ...item }; delete cleanItem.id; delete cleanItem.isNew;
                     await setDoc(itemRef, cleanItem);
                 }
@@ -697,31 +675,34 @@
             finally { document.getElementById('loading').style.display = 'none'; }
         };
 
-        // --- 管理員登入邏輯 (Modal) ---
+        // --- 管理員登入邏輯 (恢復 prompt) ---
         window.toggleAdmin = async () => {
             const panel = document.getElementById('admin-panel');
-            if (authInstance.currentUser && authInstance.currentUser.uid.trim() === ADMIN_UID) { panel.classList.toggle('active'); } 
-            else { document.getElementById('adminLoginModal').classList.remove('hidden'); }
+            const currentUid = authInstance.currentUser?.uid?.trim();
+            
+            if (authInstance.currentUser && currentUid === ADMIN_UID) {
+                panel.classList.toggle('active');
+            } else {
+                const email = prompt("Email:"); if (!email) return;
+                const pass = prompt("Password:"); if (!pass) return;
+                try {
+                    const cred = await signInWithEmailAndPassword(authInstance, email, pass);
+                    if (cred.user.uid.trim() === ADMIN_UID) {
+                        alert("身分核對成功！");
+                        panel.classList.add('active');
+                        document.getElementById('admin-action-btn').innerText = "管理模式 (已登入)";
+                        window.renderAdminList();
+                    } else {
+                        alert("不具備管理權限。"); await signOut(authInstance);
+                    }
+                } catch(e) { alert("帳號或密碼錯誤。"); }
+            }
         };
 
-        window.closeAdminLoginModal = () => document.getElementById('adminLoginModal').classList.add('hidden');
-
-        window.handleAdminLogin = async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('adminEmail').value;
-            const pass = document.getElementById('adminPass').value;
-            const btn = e.target.querySelector('button[type="submit"]');
-            const originalText = btn.innerText;
-            btn.disabled = true; btn.innerText = "驗證中...";
-            try {
-                const cred = await signInWithEmailAndPassword(authInstance, email, pass);
-                if (cred.user.uid.trim() === ADMIN_UID) { alert("登入成功！"); window.closeAdminLoginModal(); document.getElementById('admin-panel').classList.add('active'); document.getElementById('admin-action-btn').innerText = "管理模式 (已登入)"; window.renderAdminList(); } 
-                else { alert("權限不足。"); await signOut(authInstance); }
-            } catch(e) { alert("帳號密碼有誤。"); }
-            finally { btn.disabled = false; btn.innerText = originalText; }
+        window.signOutAdmin = () => { 
+            if(!confirm("確定要登出管理員身份嗎？")) return;
+            signOut(authInstance).then(() => { alert("已安全登出。"); window.location.reload(); }); 
         };
-
-        window.signOutAdmin = () => { if(!confirm("確定要登出管理員身份嗎？")) return; signOut(authInstance).then(() => { alert("已安全登出。"); window.location.reload(); }); };
         
         function renderIgSlot(slotId, embedUrl, fallbackImg) {
             const container = document.getElementById(slotId); if (!container) return;
@@ -766,12 +747,22 @@
         }
 
         function renderCollections() {
-            const container = document.getElementById('collections-container'); if (!container) return;
-            container.innerHTML = collectionsList.map(item => `<article class="group flex flex-col items-center"><div class="aspect-[4/5] w-full overflow-hidden bg-stone-200 shadow-sm"><img src="${item.img}" class="w-full h-full object-cover transition-all duration-[1500ms] group-hover:scale-110" alt="${item.name}"></div><h3 class="text-base font-medium mt-6 tracking-widest text-stone-900 uppercase">${item.name}</h3><p class="text-xs text-stone-500 mt-2 tracking-widest">${item.desc}</p></article>`).join('');
+            const container = document.getElementById('collections-container');
+            if (!container) return;
+            container.innerHTML = collectionsList.map(item => `
+                <article class="group flex flex-col items-center">
+                    <div class="aspect-[4/5] w-full overflow-hidden bg-stone-200 shadow-sm">
+                        <img src="${item.img}" class="w-full h-full object-cover transition-all duration-[1500ms] group-hover:scale-110" alt="${item.name}">
+                    </div>
+                    <h3 class="text-base font-medium mt-6 tracking-widest text-stone-900 uppercase">${item.name}</h3>
+                    <p class="text-xs text-stone-500 mt-2 tracking-widest">${item.desc}</p>
+                </article>
+            `).join('');
         }
 
         window.renderAdminList = function() {
-            const list = document.getElementById('edit-collections-list'); if (!list) return;
+            const list = document.getElementById('edit-collections-list');
+            if (!list) return;
             list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="updateLocalItem(${index}, 'name', this.value)" class="text-xs font-bold"><textarea onchange="updateLocalItem(${index}, 'desc', this.value)" class="text-xs">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">換照<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
             lucide.createIcons();
         }
@@ -786,19 +777,46 @@
             const btn = document.getElementById('admin-action-btn');
             const currentUid = user?.uid?.trim();
             if (user && currentUid === ADMIN_UID) {
-                panel.classList.add('active'); btn.innerText = "管理模式 (已登入)";
+                panel.classList.add('active');
+                btn.innerText = "管理模式 (已登入)";
                 window.renderAdminList();
-            } else { panel.classList.remove('active'); btn.innerText = "Admin Login"; }
+            } else {
+                panel.classList.remove('active');
+                btn.innerText = "Admin Login";
+            }
             
-            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'main'), (snap) => { if (snap.exists()) { siteConfig = { ...siteConfig, ...snap.data() }; renderFrontEnd(); } });
-            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'calculator'), (snap) => { if (snap.exists()) { calculatorConfig = snap.data(); if (calculatorConfig.stones) { Object.keys(calculatorConfig.stones).forEach(key => { if (STONES[key] && calculatorConfig.stones[key]) STONES[key].img = calculatorConfig.stones[key]; }); } } document.getElementById('loading').style.display = 'none'; });
-            onSnapshot(collection(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems'), (snap) => { collectionsList = []; snap.forEach(d => collectionsList.push({ id: d.id, ...d.data() })); collectionsList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); renderCollections(); if (document.getElementById('admin-panel').classList.contains('active')) window.renderAdminList(); });
+            // 載入資料
+            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'main'), (snap) => {
+                if (snap.exists()) { siteConfig = { ...siteConfig, ...snap.data() }; renderFrontEnd(); }
+            });
+            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'calculator'), (snap) => {
+                if (snap.exists()) { 
+                    calculatorConfig = snap.data(); 
+                    if (calculatorConfig.stones) {
+                        Object.keys(calculatorConfig.stones).forEach(key => {
+                            if (STONES[key] && calculatorConfig.stones[key]) STONES[key].img = calculatorConfig.stones[key];
+                        });
+                    }
+                }
+                document.getElementById('loading').style.display = 'none';
+            });
+            onSnapshot(collection(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems'), (snap) => {
+                collectionsList = []; snap.forEach(d => collectionsList.push({ id: d.id, ...d.data() }));
+                collectionsList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                renderCollections();
+                if (document.getElementById('admin-panel').classList.contains('active')) window.renderAdminList();
+            });
         });
         
         await signInAnonymously(auth).catch(() => {});
         lucide.createIcons();
         
-        function escapeHtml(text) { if (!text) return ""; return text.replace(/[&<>"']/g, function(m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]; }); }
+        function escapeHtml(text) {
+            if (!text) return "";
+            return text.replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
+        }
     </script>
 </body>
 </html>
