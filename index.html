@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     
-    <!-- === SEO 搜尋優化 (初始值) === -->
-    <title>奧兒絲朵 | 靈石與您的故事 - 專業收藏</title>
-    <meta name="description" id="meta-desc" content="奧兒絲朵（Our Story）致力於提供高品質天鐵隕石、能量水晶、精雕龍龜收藏。每一顆靈石都是連結內心深處的故事。">
-    <meta name="keywords" content="奧兒絲朵,靈石,隕石,水晶,龍龜,能量石,美學品牌,天鐵,捷克隕石,淨化磁場,能量水晶,龍龜收藏">
+    <!-- === SEO 搜尋優化 === -->
+    <title>奧兒絲朵 Our Story | 靈石、天鐵隕石與水晶能量收藏</title>
+    <meta name="description" id="meta-desc" content="奧兒絲朵（Our Story）專營高品質天鐵隕石、捷克隕石、能量水晶與精雕龍龜收藏。我們相信每一顆靈石都有其獨特的頻率與故事，為您連結內心深處的平靜與力量。">
+    <meta name="keywords" content="奧兒絲朵,Our Story,靈石,天鐵,隕石,鎳鐵隕石,捷克隕石,能量水晶,龍龜,神獸擺件,淨化磁場,身心靈,礦石收藏,水晶手鍊,能量療癒">
     <meta name="author" content="奧兒絲朵 Our Story">
+    <meta name="robots" content="index, follow">
     
     <!-- 標準連結 -->
     <link rel="canonical" href="https://our-story.com.tw/">
 
-    <!-- Open Graph 分享預覽 (LINE/FB/IG) -->
-    <meta property="og:title" id="og-title" content="奧兒絲朵 | 靈石與您的故事">
-    <meta property="og:description" id="og-desc" content="每一顆靈石都有它的頻率。探索奧兒絲朵的精選收藏。">
+    <!-- Open Graph 社群分享優化 -->
+    <meta property="og:title" id="og-title" content="奧兒絲朵 | 連結靈魂的能量收藏">
+    <meta property="og:description" id="og-desc" content="探索奧兒絲朵的精選天鐵與水晶收藏。每一顆靈石都有它的頻率，等待與您共鳴。">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://our-story.com.tw/">
     <meta property="og:image" content="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1200">
@@ -25,11 +26,12 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Brand",
+      "@type": "Store",
       "name": "奧兒絲朵 Our Story",
-      "description": "專業精選天然靈石與美學品牌",
-      "logo": "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200",
-      "url": "https://our-story.com.tw/"
+      "description": "專業精選天然靈石、天鐵隕石與美學品牌",
+      "image": "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=200",
+      "url": "https://our-story.com.tw/",
+      "priceRange": "$$"
     }
     </script>
 
@@ -40,11 +42,12 @@
     <script async src="//www.instagram.com/embed.js"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
         body { 
             font-family: 'Noto Sans TC', sans-serif; 
             background-color: #FAF9F6; 
-            color: #555555; 
+            /* 修改：加深全域文字顏色，提升對比度 */
+            color: #44403c; 
             scroll-behavior: smooth; 
             -webkit-overflow-scrolling: touch;
         }
@@ -57,7 +60,14 @@
         .animate-fadeInUp { animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .animate-slowZoom { animation: slowZoom 30s linear infinite alternate; }
         
-        .nav-scrolled { background-color: rgba(255, 255, 255, 0.98); backdrop-filter: blur(12px); padding: 0.75rem 0; box-shadow: 0 1px 10px rgba(0,0,0,0.03); }
+        /* 修改：導覽列滑動後的樣式，增強背景不透明度和陰影 */
+        .nav-scrolled { 
+            background-color: rgba(255, 255, 255, 0.98); 
+            backdrop-filter: blur(12px); 
+            padding: 1rem 0; /* 稍微增加高度讓它更穩重 */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08); /* 加深陰影 */
+            transition: all 0.3s ease;
+        }
         
         #mobile-menu { display: none; opacity: 0; transition: opacity 0.4s ease; }
         #mobile-menu.active { display: flex; opacity: 1; }
@@ -65,11 +75,11 @@
         .admin-panel { display: none; position: fixed; top: 0; right: 0; width: 100%; max-width: 450px; height: 100%; background: white; z-index: 1000; box-shadow: -10px 0 30px rgba(0,0,0,0.1); overflow-y: auto; padding: 2.5rem; }
         .admin-panel.active { display: block; }
         
-        input, textarea { width: 100%; border: 1px solid #e5e7eb; padding: 0.85rem; margin-bottom: 0.5rem; border-radius: 6px; font-size: 0.875rem; background: #fafaf9; }
+        input, textarea { width: 100%; border: 1px solid #d6d3d1; padding: 0.85rem; margin-bottom: 0.5rem; border-radius: 6px; font-size: 0.875rem; background: #fafaf9; color: #1c1917; }
         
         .upload-btn { display: inline-block; background: #f3f4f6; padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.75rem; color: #374151; cursor: pointer; border: 1px solid #d1d5db; margin-bottom: 0.5rem; text-align: center; width: 100%; }
         
-        .ai-spirit-box { max-width: 700px; margin: 0 auto; padding: 4rem 2rem; border: 1px dashed #e5e7eb; border-radius: 1.5rem; background: rgba(255, 255, 255, 0.5); }
+        .ai-spirit-box { max-width: 700px; margin: 0 auto; padding: 4rem 2rem; border: 1px dashed #a8a29e; border-radius: 1.5rem; background: rgba(255, 255, 255, 0.7); }
         .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.98); z-index: 2000; display: none; align-items: center; justify-content: center; font-size: 0.8rem; letter-spacing: 0.3em; }
         
         /* iPhone 相容性樣式 */
@@ -89,7 +99,7 @@
         .ig-embed-container iframe { width: 100% !important; max-width: 100% !important; }
     </style>
 </head>
-<body class="font-light">
+<body class="font-normal text-stone-700"> <!-- 修改：預設改為 font-normal -->
 
     <div id="loading" class="loading-overlay" aria-hidden="true">
         <div class="flex flex-col items-center">
@@ -99,30 +109,32 @@
     </div>
 
     <!-- 導航欄 -->
-    <nav id="navbar" class="fixed w-full z-[100] transition-all duration-700 bg-transparent py-8">
+    <nav id="navbar" class="fixed w-full z-[100] transition-all duration-500 bg-transparent py-6">
         <div class="max-w-7xl mx-auto px-6 md:px-8 flex justify-between items-center">
             <div class="flex items-center cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                <span id="nav-brand-display" class="text-lg md:text-xl font-medium tracking-[0.3em] text-stone-800 uppercase">奧兒絲朵</span>
+                <!-- 修改：加深 Logo 顏色與字重 -->
+                <span id="nav-brand-display" class="text-lg md:text-xl font-bold tracking-[0.3em] text-stone-900 uppercase">奧兒絲朵</span>
             </div>
             <div class="hidden md:flex space-x-12 items-center">
-                <button onclick="scrollToSection('collections')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em] uppercase">收藏系列</button>
-                <button onclick="scrollToSection('about')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em] uppercase">品牌故事</button>
-                <button onclick="scrollToSection('social')" class="text-stone-400 hover:text-stone-800 transition-colors text-xs tracking-[0.3em] uppercase">追蹤我們</button>
-                <div class="flex items-center space-x-5 border-l border-stone-200 pl-8">
-                    <a id="nav-ig-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="IG"><i data-lucide="instagram" class="w-4 h-4"></i></a>
-                    <a id="nav-fb-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="FB"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                <!-- 修改：選單文字顏色加深 -->
+                <button onclick="scrollToSection('collections')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">收藏系列</button>
+                <button onclick="scrollToSection('about')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">品牌故事</button>
+                <button onclick="scrollToSection('social')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">追蹤我們</button>
+                <div class="flex items-center space-x-5 border-l border-stone-300 pl-8">
+                    <a id="nav-ig-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="IG"><i data-lucide="instagram" class="w-4 h-4 text-stone-600 hover:text-stone-900"></i></a>
+                    <a id="nav-fb-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="FB"><i data-lucide="facebook" class="w-4 h-4 text-stone-600 hover:text-stone-900"></i></a>
                 </div>
             </div>
-            <button class="md:hidden text-stone-600 p-2" onclick="toggleMenu()" aria-label="選單"><i data-lucide="menu" class="w-6 h-6"></i></button>
+            <button class="md:hidden text-stone-800 p-2" onclick="toggleMenu()" aria-label="選單"><i data-lucide="menu" class="w-6 h-6"></i></button>
         </div>
     </nav>
 
     <!-- 行動端選單 -->
     <div id="mobile-menu" class="fixed inset-0 z-[150] bg-white flex flex-col items-center justify-center space-y-10">
         <button class="absolute top-8 right-8 text-stone-600" onclick="toggleMenu()" aria-label="關閉"><i data-lucide="x" class="w-8 h-8"></i></button>
-        <button onclick="scrollToSection('collections')" class="text-xl tracking-[0.4em] text-stone-600 uppercase">收藏系列</button>
-        <button onclick="scrollToSection('about')" class="text-xl tracking-[0.4em] text-stone-600 uppercase">品牌故事</button>
-        <button onclick="scrollToSection('social')" class="text-xl tracking-[0.4em] text-stone-600 uppercase">追蹤我們</button>
+        <button onclick="scrollToSection('collections')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">收藏系列</button>
+        <button onclick="scrollToSection('about')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">品牌故事</button>
+        <button onclick="scrollToSection('social')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">追蹤我們</button>
     </div>
 
     <main>
@@ -132,8 +144,10 @@
                 <img id="hero-img-display" src="" class="w-full h-full object-cover opacity-30 scale-105 animate-slowZoom" alt="奧兒絲朵品牌背景">
             </div>
             <div class="relative z-10 text-center px-6">
-                <p id="hero-sub-display" class="text-[9px] md:text-[10px] tracking-[0.5em] text-stone-400 mb-8 animate-fadeInUp uppercase font-medium">Every stone has its own story</p>
-                <h1 id="hero-title-display" class="text-3xl md:text-5xl font-extralight text-stone-800 mb-10 tracking-[0.3em] leading-[1.6] animate-fadeInUp delay-100">奧兒絲朵<br /><span class="text-xl md:text-3xl tracking-[0.4em] text-stone-400 italic">靈石與您的故事</span></h1>
+                <!-- 修改：加深副標題顏色，使用 font-normal -->
+                <p id="hero-sub-display" class="text-[10px] md:text-xs tracking-[0.5em] text-stone-600 mb-8 animate-fadeInUp uppercase font-bold">Every stone has its own story</p>
+                <!-- 修改：大標題字重加重，並加入 drop-shadow 增加辨識度 -->
+                <h1 id="hero-title-display" class="text-4xl md:text-6xl font-light text-stone-900 mb-10 tracking-[0.3em] leading-[1.6] animate-fadeInUp delay-100 drop-shadow-sm">奧兒絲朵<br /><span class="text-2xl md:text-3xl tracking-[0.4em] text-stone-600 italic font-normal block mt-4">靈石與您的故事</span></h1>
             </div>
         </header>
 
@@ -145,11 +159,13 @@
                         <img id="about-icon-display" src="" class="w-40 md:w-64 mx-auto object-contain rounded-lg shadow-sm" alt="客服 QR Code">
                     </a>
                 </div>
-                <h2 id="about-title-display" class="text-lg md:text-xl font-light tracking-[0.4em] text-stone-800 mb-12 uppercase">關於 奧兒絲朵</h2>
-                <p id="about-text-display" class="text-stone-500 leading-[2.5] tracking-[0.15em] text-sm md:text-base font-extralight whitespace-pre-line text-justify md:text-center"></p>
+                <!-- 修改：標題加粗 -->
+                <h2 id="about-title-display" class="text-lg md:text-xl font-medium tracking-[0.4em] text-stone-900 mb-12 uppercase">關於 奧兒絲朵</h2>
+                <!-- 修改：內文顏色加深，字重加重 (font-light -> font-normal) -->
+                <p id="about-text-display" class="text-stone-600 leading-[2.5] tracking-[0.15em] text-base font-normal whitespace-pre-line text-justify md:text-center"></p>
                 <div class="mt-20 ai-spirit-box">
-                    <p id="ai-quote" class="text-xs md:text-sm text-stone-400 italic tracking-[0.2em] mb-10 leading-relaxed">「每一塊石頭都有它的頻率，等待與您共鳴。」</p>
-                    <button id="btn-daily-quote" onclick="generateDailyQuote()" class="text-[10px] tracking-[0.3em] uppercase px-6 py-2 border border-stone-200 hover:border-stone-800 transition-all shadow-sm">獲取今日石語 ✨</button>
+                    <p id="ai-quote" class="text-sm md:text-base text-stone-500 italic tracking-[0.2em] mb-10 leading-relaxed font-medium">「每一塊石頭都有它的頻率，等待與您共鳴。」</p>
+                    <button id="btn-daily-quote" onclick="generateDailyQuote()" class="text-xs tracking-[0.3em] uppercase px-8 py-3 border border-stone-300 hover:border-stone-900 hover:bg-stone-50 transition-all shadow-sm font-bold text-stone-700">獲取今日石語 ✨</button>
                 </div>
             </div>
         </section>
@@ -163,21 +179,21 @@
         <section id="social" class="py-24 md:py-40 px-8 bg-white">
             <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16">
                 <div class="w-full md:w-2/5 space-y-12">
-                    <h2 id="social-title-display" class="text-2xl md:text-3xl font-extralight tracking-[0.3em] text-stone-800 uppercase">Follow Us</h2>
+                    <h2 id="social-title-display" class="text-2xl md:text-3xl font-light tracking-[0.3em] text-stone-900 uppercase">Follow Us</h2>
                     <div class="space-y-4">
-                        <a id="ig-link-display" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between group py-5 border-b border-stone-100"><span id="ig-text-display" class="text-xs tracking-[0.2em] text-stone-500 uppercase">Instagram</span><i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300 group-hover:translate-x-1 transition-transform"></i></a>
-                        <a id="fb-link-display" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between group py-5 border-b border-stone-100"><span id="fb-text-display" class="text-xs tracking-[0.2em] text-stone-500 uppercase">Facebook</span><i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300 group-hover:translate-x-1 transition-transform"></i></a>
+                        <a id="ig-link-display" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between group py-5 border-b border-stone-200"><span id="ig-text-display" class="text-sm tracking-[0.2em] text-stone-600 font-medium uppercase">Instagram</span><i data-lucide="arrow-right" class="w-4 h-4 text-stone-400 group-hover:translate-x-1 transition-transform group-hover:text-stone-800"></i></a>
+                        <a id="fb-link-display" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between group py-5 border-b border-stone-200"><span id="fb-text-display" class="text-sm tracking-[0.2em] text-stone-600 font-medium uppercase">Facebook</span><i data-lucide="arrow-right" class="w-4 h-4 text-stone-400 group-hover:translate-x-1 transition-transform group-hover:text-stone-800"></i></a>
                     </div>
                 </div>
                 
                 <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                     <div class="space-y-6">
-                        <div id="ig-slot-1" class="ig-embed-container shadow-sm"></div>
-                        <div id="ig-slot-2" class="ig-embed-container shadow-sm"></div>
+                        <div id="ig-slot-1" class="ig-embed-container shadow-md"></div>
+                        <div id="ig-slot-2" class="ig-embed-container shadow-md"></div>
                     </div>
                     <div class="space-y-6 md:pt-12">
-                        <div id="ig-slot-3" class="ig-embed-container shadow-sm"></div>
-                        <div id="ig-slot-4" class="ig-embed-container shadow-sm"></div>
+                        <div id="ig-slot-3" class="ig-embed-container shadow-md"></div>
+                        <div id="ig-slot-4" class="ig-embed-container shadow-md"></div>
                     </div>
                 </div>
             </div>
@@ -250,10 +266,10 @@
     </div>
 
     <!-- 頁腳 -->
-    <footer class="py-24 px-8 bg-white border-t border-stone-50 text-center">
-        <span class="text-xl font-medium tracking-[0.5em] text-stone-800 uppercase">奧兒絲朵</span>
-        <p class="text-[9px] tracking-[0.2em] text-stone-300 mt-8">© 2025 OUR STORY. CURATED FOR YOUR SOUL.</p>
-        <button onclick="toggleAdmin()" id="admin-action-btn" class="text-[9px] tracking-[0.2em] text-stone-200 mt-8 uppercase border-b border-transparent hover:border-stone-200 transition-colors">Admin Login</button>
+    <footer class="py-24 px-8 bg-white border-t border-stone-200 text-center">
+        <span class="text-xl font-bold tracking-[0.5em] text-stone-900 uppercase">奧兒絲朵</span>
+        <p class="text-[10px] tracking-[0.2em] text-stone-400 mt-8 font-medium">© 2025 OUR STORY. CURATED FOR YOUR SOUL.</p>
+        <button onclick="toggleAdmin()" id="admin-action-btn" class="text-[9px] tracking-[0.2em] text-stone-300 mt-8 uppercase border-b border-transparent hover:border-stone-400 transition-colors">Admin Login</button>
     </footer>
 
     <script type="module">
@@ -287,6 +303,18 @@
             setTimeout(() => { display.innerText = `「${sessionQuote}」`; btn.disabled = false; btn.innerText = "獲取今日石語 ✨"; }, 1200);
         };
 
+        // === 修改：新增 Navbar 滾動監聽 ===
+        function initNavbarScroll() {
+            const nav = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    nav.classList.add('nav-scrolled');
+                } else {
+                    nav.classList.remove('nav-scrolled');
+                }
+            });
+        }
+
         let siteConfig = {};
         let collectionsList = [];
 
@@ -315,6 +343,10 @@
 
         async function init() {
             document.getElementById('loading').style.display = 'flex';
+            
+            // 啟動 Navbar 滾動效果
+            initNavbarScroll();
+
             onAuthStateChanged(auth, (user) => {
                 const panel = document.getElementById('admin-panel');
                 const btn = document.getElementById('admin-action-btn');
@@ -361,12 +393,13 @@
             }
         }
 
-        // === 新增：動態 SEO 同步功能 ===
+        // === SEO 自動同步功能 ===
         function syncSEO(config) {
             const brand = config.brandName || "奧兒絲朵";
             const sub = config.heroSub || "靈石與您的故事";
             document.title = `${brand} | ${sub} - 專業收藏`;
-            const desc = config.aboutText ? config.aboutText.substring(0, 150) + "..." : "專業精選天然靈石與美學品牌。";
+            const desc = config.aboutText ? config.aboutText.substring(0, 160) : "奧兒絲朵致力於提供高品質天鐵隕石、能量水晶、精雕龍龜收藏。";
+            
             const metaDesc = document.getElementById('meta-desc');
             if (metaDesc) metaDesc.setAttribute('content', desc);
             const ogTitle = document.getElementById('og-title');
@@ -376,7 +409,6 @@
         }
 
         function renderFrontEnd() {
-            // 安全設置函式，防止 ID 不存在報錯
             const safeSetText = (id, text) => { if(document.getElementById(id)) document.getElementById(id).innerText = text || ""; };
             const safeSetSrc = (id, src) => { if(document.getElementById(id)) document.getElementById(id).src = src || ""; };
             const safeSetHref = (id, href) => { if(document.getElementById(id)) document.getElementById(id).href = href || "#"; };
@@ -406,7 +438,6 @@
                 }
             }, 600);
             
-            // 執行 SEO 同步
             syncSEO(siteConfig);
             
             safeSetVal('edit-brand-name', siteConfig.brandName);
@@ -429,8 +460,9 @@
                     <div class="aspect-[4/5] w-full overflow-hidden bg-stone-200 shadow-sm">
                         <img src="${item.img}" class="w-full h-full object-cover transition-all duration-[1500ms] group-hover:scale-110" alt="${item.name}">
                     </div>
-                    <h3 class="text-base font-light mt-6 tracking-widest text-stone-800 uppercase">${item.name}</h3>
-                    <p class="text-xs text-stone-400 mt-2 tracking-widest">${item.desc}</p>
+                    <!-- 修改：收藏項目標題加粗 -->
+                    <h3 class="text-base font-medium mt-6 tracking-widest text-stone-900 uppercase">${item.name}</h3>
+                    <p class="text-xs text-stone-500 mt-2 tracking-widest">${item.desc}</p>
                 </article>
             `).join('');
         }
