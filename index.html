@@ -238,8 +238,8 @@
 
         <!-- 社群區塊 -->
         <section id="social" class="py-24 md:py-40 px-8 bg-white">
-            <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16">
-                <div class="w-full lg:w-2/5 space-y-12">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16">
+                <div class="w-full md:w-2/5 space-y-12">
                     <h2 id="social-title-display" class="text-2xl md:text-3xl font-light tracking-[0.3em] text-stone-900 uppercase">Follow Us</h2>
                     <div class="space-y-4">
                         <a id="ig-link-display" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between group py-5 border-b border-stone-200"><span id="ig-text-display" class="text-sm tracking-[0.2em] text-stone-600 font-medium uppercase">Instagram</span><i data-lucide="arrow-right" class="w-4 h-4 text-stone-400 group-hover:translate-x-1 transition-transform group-hover:text-stone-800"></i></a>
@@ -247,12 +247,12 @@
                     </div>
                 </div>
                 
-                <div id="gallery-container" class="w-full lg:w-3/5 grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                     <div class="space-y-6">
                         <div id="ig-slot-1" class="ig-embed-container shadow-md"></div>
                         <div id="ig-slot-2" class="ig-embed-container shadow-md"></div>
                     </div>
-                    <div class="space-y-6 lg:pt-12">
+                    <div class="space-y-6 md:pt-12">
                         <div id="ig-slot-3" class="ig-embed-container shadow-md"></div>
                         <div id="ig-slot-4" class="ig-embed-container shadow-md"></div>
                     </div>
@@ -281,6 +281,27 @@
                 <button id="btn-submit" type="submit" class="w-full py-3 bg-stone-800 text-white text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-700 transition mt-2">確認送出</button>
             </form>
             <button onclick="closeContactModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+    </div>
+
+    <!-- [新增] 管理員登入 Modal -->
+    <div id="adminLoginModal" class="fixed inset-0 z-[200] hidden">
+        <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity" onclick="closeAdminLoginModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-sm rounded-2xl p-8 shadow-2xl modal-enter">
+            <div class="text-center mb-6">
+                <h3 class="text-xl font-bold text-stone-800 tracking-widest mb-2">管理者登入</h3>
+                <p class="text-xs text-stone-500">請輸入管理員帳號密碼</p>
+            </div>
+            <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <div>
+                    <input type="email" id="adminEmail" required class="w-full px-3 py-2 border border-stone-200 rounded-md text-sm focus:outline-none focus:border-stone-400 bg-stone-50" placeholder="Email">
+                </div>
+                <div>
+                    <input type="password" id="adminPass" required class="w-full px-3 py-2 border border-stone-200 rounded-md text-sm focus:outline-none focus:border-stone-400 bg-stone-50" placeholder="Password">
+                </div>
+                <button type="submit" class="w-full py-3 bg-stone-800 text-white text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-700 transition mt-2">登入</button>
+            </form>
+            <button onclick="closeAdminLoginModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
     </div>
 
@@ -562,7 +583,7 @@
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
             const originalText = btn.innerText;
-            // XSS 防護：雖然此處僅 alert，但實作資料庫存取時必須過濾
+            // XSS 防護
             const name = escapeHtml(document.getElementById('cName').value);
             const contact = escapeHtml(document.getElementById('cContact').value);
 
@@ -644,6 +665,59 @@
             reader.readAsDataURL(file);
         };
 
+        // --- 管理員登入 Modal 邏輯 ---
+        window.toggleAdmin = async () => {
+            const panel = document.getElementById('admin-panel');
+            const currentUid = auth.currentUser?.uid?.trim();
+            if (auth.currentUser && currentUid === ADMIN_UID) {
+                panel.classList.toggle('active');
+            } else {
+                // 改用 Modal 顯示登入框，避免 prompt 被瀏覽器阻擋
+                document.getElementById('adminLoginModal').classList.remove('hidden');
+            }
+        };
+
+        window.closeAdminLoginModal = () => {
+            document.getElementById('adminLoginModal').classList.add('hidden');
+        };
+
+        window.handleAdminLogin = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('adminEmail').value;
+            const pass = document.getElementById('adminPass').value;
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            
+            btn.disabled = true;
+            btn.innerText = "驗證中...";
+
+            try {
+                const cred = await signInWithEmailAndPassword(auth, email, pass);
+                if (cred.user.uid.trim() === ADMIN_UID) {
+                    alert("身分核對成功！");
+                    window.closeAdminLoginModal();
+                    document.getElementById('admin-panel').classList.add('active');
+                    document.getElementById('admin-action-btn').innerText = "管理模式 (已登入)";
+                    // 重整管理列表
+                    if (typeof renderAdminList === 'function') renderAdminList();
+                } else {
+                    alert("不具備管理權限。");
+                    await signOut(auth);
+                }
+            } catch(e) {
+                console.error(e);
+                alert("帳號或密碼錯誤: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = originalText;
+            }
+        };
+
+        window.signOutAdmin = () => { 
+            if(!confirm("確定要登出管理員身份嗎？")) return;
+            signOut(auth).then(() => { alert("已安全登出。"); window.location.reload(); }); 
+        };
+        
         async function initApp() {
             document.getElementById('loading').style.display = 'flex';
             initNavbarScroll();
@@ -707,9 +781,7 @@
             const container = document.getElementById(slotId);
             if (!container) return;
             if (embedUrl && embedUrl.trim() !== "") {
-                container.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14" style="background:#FFF; border:0; margin:0; width:100%;">
-                    <div style="padding:16px;"> <a href="${embedUrl}" target="_blank" style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;">View on Instagram</a></div>
-                </blockquote>`;
+                container.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14" style="background:#FFF; border:0; margin:0; width:100%;"><div style="padding:16px;"> <a href="${embedUrl}" target="_blank" style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;">View on Instagram</a></div></blockquote>`;
             } else if (fallbackImg) {
                 container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 hover:scale-105" alt="Showcase">`;
             } else {
@@ -773,7 +845,6 @@
             lucide.createIcons();
         }
 
-        populateDropdowns();
         initApp();
         lucide.createIcons();
     </script>
