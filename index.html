@@ -113,10 +113,11 @@
             </div>
             <div class="hidden md:flex space-x-12 items-center">
                 <button onclick="window.scrollToSection('about')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">品牌故事</button>
-                <button onclick="window.scrollToSection('calculator')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">靈石測驗</button>
+                <!-- 移除重複的靈石測驗連結 -->
                 <button onclick="window.scrollToSection('collections')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">收藏系列</button>
                 <button onclick="window.scrollToSection('social')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">追蹤我們</button>
                 <div class="flex items-center border-l border-stone-300 pl-8">
+                    <!-- 保留右側帶圖示的靈石測驗按鈕 -->
                     <button onclick="window.scrollToSection('calculator')" class="group flex items-center space-x-2 text-stone-800 hover:text-stone-500 transition-colors">
                         <i data-lucide="sparkles" class="w-4 h-4"></i>
                         <span class="text-xs font-bold tracking-[0.2em] uppercase">靈石測驗</span>
@@ -262,27 +263,6 @@
         </div>
     </div>
 
-    <!-- 管理員登入 Modal -->
-    <div id="adminLoginModal" class="fixed inset-0 z-[200] hidden">
-        <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity" onclick="window.closeAdminLoginModal()"></div>
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-sm rounded-2xl p-8 shadow-2xl modal-enter">
-            <div class="text-center mb-6">
-                <h3 class="text-xl font-bold text-stone-800 tracking-widest mb-2">管理者登入</h3>
-                <p class="text-xs text-stone-500">請輸入管理員帳號密碼</p>
-            </div>
-            <form id="adminLoginForm" onsubmit="window.handleAdminLogin(event)" class="space-y-4">
-                <div>
-                    <input type="email" id="adminEmail" required class="w-full px-3 py-2 border border-stone-200 rounded-md text-sm focus:outline-none focus:border-stone-400 bg-stone-50" placeholder="Email">
-                </div>
-                <div>
-                    <input type="password" id="adminPass" required class="w-full px-3 py-2 border border-stone-200 rounded-md text-sm focus:outline-none focus:border-stone-400 bg-stone-50" placeholder="Password">
-                </div>
-                <button type="submit" class="w-full py-3 bg-stone-800 text-white text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-700 transition mt-2">登入</button>
-            </form>
-            <button onclick="window.closeAdminLoginModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600"><i data-lucide="x" class="w-5 h-5"></i></button>
-        </div>
-    </div>
-
     <!-- 管理編輯面板 -->
     <div id="admin-panel" class="admin-panel">
         <div class="flex justify-between items-center mb-8 border-b pb-4">
@@ -390,7 +370,8 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = initializeFirestore(app, { experimentalForceLongPolling: true });
-        
+        let authInstance = auth; // 賦值給全域供按鈕使用
+
         // 全域變數
         let siteConfig = {};
         let calculatorConfig = {};
@@ -435,7 +416,7 @@
 
         const STONES = {
             moldavite: { name: { zh: "捷克隕石", en: "Moldavite" }, desc: { zh: "來自外太空的綠色奇蹟。擁有極高的振動頻率，能打通心輪，加速願望顯化，帶領您突破現狀，迎接靈魂的蛻變。", en: "The green miracle from outer space. Opens the Heart Chakra and accelerates manifestation." }, tags: { zh: ["#轉化", "#心輪", "#招財"], en: ["#Transformation", "#HeartChakra", "#Abundance"] }, img: "https://images.unsplash.com/photo-1617791160588-241658c0f566?auto=format&fit=crop&q=80&w=600", color: "text-green-700" },
-            libyan: { name: { zh: "利比亞隕石", en: "Libyan Desert Glass" }, desc: { zh: "沙漠中的黃金之光。擁有強大的太陽能量，能增強意志力與自信，像沙漠中的烈日一樣驅散陰霾，帶來豐盛與守護。", en: "Golden light of the desert. Strengthens will and confidence, bringing protection." }, tags: { zh: ["#意志力", "#太陽輪", "#顯化"], en: ["#Willpower", "#SolarPlexus", "#Manifestation"] }, img: "https://images.unsplash.com/photo-1610421272714-b15392e2764f?auto=format&fit=crop&q=80&w=600", color: "text-yellow-600" },
+            libyan: { name: { zh: "利比亞隕石", en: "Libyan Desert Glass" }, desc: { zh: "沙漠中的黃金之光。擁有強大的太陽能量，能增強意志力與自信，像沙漠中的烈日一樣驅散陰霾，帶來豐盛與守護。", en: "Golden light of the desert. Strengthens will and confidence, bringing protection." }, tags: { zh: ["#意志力", "#太陽輪", "#顯化"], en: ["#Willpower", "#SolarPlexus", "#Manifestation"] }, img: "https://images.unsplash.com/photo-1610421272714-b15392e2764f?auto=format&fit=crop&q=80&w=600", color: "text-yellow-700" },
             tektite: { name: { zh: "黑隕石", en: "Black Tektite" }, desc: { zh: "最強大的防禦之盾。具有深厚的接地能量，能排除負能量、濁氣，為您建立強大的能量場，讓身心回歸穩定的平靜。", en: "The ultimate shield. Deep grounding energy that repels negativity." }, tags: { zh: ["#避邪", "#海底輪", "#接地"], en: ["#Protection", "#RootChakra", "#Grounding"] }, img: "https://images.unsplash.com/photo-1596500954004-9a3d46cb0531?auto=format&fit=crop&q=80&w=600", color: "text-stone-800" },
             gibeon: { name: { zh: "天鐵", en: "Gibeon Meteorite" }, desc: { zh: "宇宙力量的具象化。其獨特的維德曼交角紋路是強大能量的證明，能打通七脈輪，提升整體氣場，賦予您果斷的行動力。", en: "Cosmic power embodied. Unique patterns aligning all chakras and boosting aura." }, tags: { zh: ["#能量", "#氣場", "#行動力"], en: ["#Energy", "#Aura", "#Action"] }, img: "https://images.unsplash.com/photo-1629804268393-3d0271701388?auto=format&fit=crop&q=80&w=600", color: "text-slate-500" },
             pallasite: { name: { zh: "橄欖隕石", en: "Pallasite" }, desc: { zh: "天鐵與橄欖石的完美結合。象徵宇宙的幸運與富足，金黃色的光芒能帶來意想不到的好運，是尊貴與財富的象徵。", en: "Fusion of iron and olivine. Symbolizing cosmic luck, abundance and nobility." }, tags: { zh: ["#幸運", "#財富", "#貴人"], en: ["#Luck", "#Wealth", "#Nobility"] }, img: "https://images.unsplash.com/photo-1602117565819-d91d1e449208?auto=format&fit=crop&q=80&w=600", color: "text-yellow-700" },
@@ -643,168 +624,19 @@
             reader.readAsDataURL(file);
         };
 
-        async function init() {
-            document.getElementById('loading').style.display = 'flex';
-            initNavbarScroll();
-            populateDropdowns();
-
-            onAuthStateChanged(auth, (user) => {
-                const panel = document.getElementById('admin-panel');
-                const btn = document.getElementById('admin-action-btn');
-                const currentUid = user?.uid?.trim();
-                if (user && currentUid === ADMIN_UID) {
-                    panel.classList.add('active');
-                    btn.innerText = "管理模式 (已登入)";
-                    renderAdminList();
-                } else {
-                    panel.classList.remove('active');
-                    btn.innerText = "Admin Login";
-                }
-                startListeners();
-            });
-            await signInAnonymously(auth).catch(() => {});
-        }
-
-        function startListeners() {
-            // 監聽一般設定
-            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'main'), (snap) => {
-                if (snap.exists()) { siteConfig = { ...siteConfig, ...snap.data() }; renderFrontEnd(); }
-            });
-            // 監聽測驗圖片設定
-            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'calculator'), (snap) => {
-                if (snap.exists()) { 
-                    calculatorConfig = snap.data(); 
-                    if (calculatorConfig.stones) {
-                        Object.keys(calculatorConfig.stones).forEach(key => {
-                            if (STONES[key] && calculatorConfig.stones[key]) {
-                                STONES[key].img = calculatorConfig.stones[key];
-                            }
-                        });
-                        // 重新渲染結果區塊如果它是打開的
-                        const resultArea = document.getElementById('resultArea');
-                        if (resultArea && !resultArea.classList.contains('hidden')) {
-                             // 這裡簡單處理，如果不影響用戶體驗，可以選擇不自動刷新
-                        }
-                    }
-                }
-                document.getElementById('loading').style.display = 'none';
-            });
-            // 監聽商品列表
-            onSnapshot(collection(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems'), (snap) => {
-                collectionsList = []; snap.forEach(d => collectionsList.push({ id: d.id, ...d.data() }));
-                collectionsList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                renderCollections();
-                if (document.getElementById('admin-panel').classList.contains('active')) renderAdminList();
-            });
-        }
-
-        function renderIgSlot(slotId, embedUrl, fallbackImg) {
-            const container = document.getElementById(slotId);
-            if (!container) return;
-            if (embedUrl && embedUrl.trim() !== "") {
-                container.innerHTML = `
-                    <blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14" style="background:#FFF; border:0; margin:0; width:100%;">
-                        <div style="padding:16px;"> <a href="${embedUrl}" target="_blank" style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" rel="noopener noreferrer">載入貼文中...</a></div>
-                    </blockquote>
-                `;
-            } else if (fallbackImg) {
-                container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 hover:scale-105" alt="Showcase">`;
-            } else {
-                container.innerHTML = `<div class="w-full h-full bg-stone-100 flex items-center justify-center text-stone-300 text-[10px]">影像載入中</div>`;
-            }
-        }
-
-        function syncSEO(config) {
-            const brand = config.brandName || "奧兒絲朵";
-            const sub = config.heroSub || "靈石與您的故事";
-            document.title = `${brand} | ${sub} - 專業收藏`;
-            const desc = config.aboutText ? config.aboutText.substring(0, 160) : "奧兒絲朵致力於提供高品質天鐵隕石、能量水晶、精雕龍龜收藏。";
-            const metaDesc = document.getElementById('meta-desc');
-            if (metaDesc) metaDesc.setAttribute('content', desc);
-            const ogTitle = document.getElementById('og-title');
-            if (ogTitle) ogTitle.setAttribute('content', `${brand} | ${sub}`);
-            const ogDesc = document.getElementById('og-desc');
-            if (ogDesc) ogDesc.setAttribute('content', desc);
-        }
-
-        function renderFrontEnd() {
-            const safeSetText = (id, text) => { if(document.getElementById(id)) document.getElementById(id).innerText = text || ""; };
-            const safeSetSrc = (id, src) => { if(document.getElementById(id)) document.getElementById(id).src = src || ""; };
-            const safeSetHref = (id, href) => { if(document.getElementById(id)) document.getElementById(id).href = href || "#"; };
-            const safeSetVal = (id, val) => { if(document.getElementById(id)) document.getElementById(id).value = val || ""; };
-
-            safeSetText('nav-brand-display', siteConfig.brandName);
-            safeSetText('hero-title-display', siteConfig.heroTitle);
-            safeSetText('hero-sub-display', siteConfig.heroSub);
-            if (siteConfig.heroImg) safeSetSrc('hero-img-display', siteConfig.heroImg);
-            safeSetText('about-text-display', siteConfig.aboutText);
-            if (siteConfig.aboutIcon) safeSetSrc('about-icon-display', siteConfig.aboutIcon);
-            safeSetHref('about-link-display', siteConfig.aboutLink);
-            
-            safeSetText('ig-text-display', `Instagram / ${siteConfig.igHandle}`);
-            safeSetText('fb-text-display', `Facebook / ${siteConfig.fbHandle}`);
-            safeSetHref('ig-link-display', siteConfig.igUrl);
-            safeSetHref('fb-link-display', siteConfig.fbUrl);
-
-            for(let i=1; i<=4; i++) { renderIgSlot(`ig-slot-${i}`, siteConfig[`igEmbed${i}`], siteConfig[`igImg${i}`]); }
-            
-            setTimeout(() => { 
-                if (window.instgrm) {
-                    window.instgrm.Embeds.process(); 
-                    document.querySelectorAll('.ig-embed-container iframe').forEach(f => {
-                        f.style.pointerEvents = 'auto';
-                    });
-                }
-            }, 600);
-            
-            syncSEO(siteConfig);
-            
-            safeSetVal('edit-brand-name', siteConfig.brandName);
-            safeSetVal('edit-hero-title', siteConfig.heroTitle);
-            safeSetVal('edit-hero-sub', siteConfig.heroSub);
-            safeSetVal('edit-about-text', siteConfig.aboutText);
-            safeSetVal('edit-about-link', siteConfig.aboutLink);
-            safeSetVal('edit-ig-handle', siteConfig.igHandle);
-            safeSetVal('edit-ig-url', siteConfig.igUrl);
-            safeSetVal('edit-fb-handle', siteConfig.fbHandle);
-            safeSetVal('edit-fb-url', siteConfig.fbUrl);
-            for(let i=1; i<=4; i++) { safeSetVal(`edit-ig-embed-${i}`, siteConfig[`igEmbed${i}`]); }
-        }
-
-        function renderCollections() {
-            const container = document.getElementById('collections-container');
-            if (!container) return;
-            container.innerHTML = collectionsList.map(item => `
-                <article class="group flex flex-col items-center">
-                    <div class="aspect-[4/5] w-full overflow-hidden bg-stone-200 shadow-sm">
-                        <img src="${item.img}" class="w-full h-full object-cover transition-all duration-[1500ms] group-hover:scale-110" alt="${item.name}">
-                    </div>
-                    <h3 class="text-base font-medium mt-6 tracking-widest text-stone-900 uppercase">${item.name}</h3>
-                    <p class="text-xs text-stone-500 mt-2 tracking-widest">${item.desc}</p>
-                </article>
-            `).join('');
-        }
-
-        function renderAdminList() {
-            const list = document.getElementById('edit-collections-list');
-            if (!list) return;
-            list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="updateLocalItem(${index}, 'name', this.value)" class="text-xs font-bold"><textarea onchange="updateLocalItem(${index}, 'desc', this.value)" class="text-xs">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">換照<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
-            lucide.createIcons();
-        }
-
         window.addNewCollectionItem = () => {
             collectionsList.unshift({ id: 'temp_' + Date.now(), name: "新收藏", desc: "能量描述", img: "", createdAt: Date.now(), isNew: true });
-            renderAdminList();
+            window.renderAdminList();
         };
         window.updateLocalItem = (index, field, value) => { collectionsList[index][field] = value; };
         window.deleteItem = async (id) => {
             if (!confirm("確定移除嗎？")) return;
-            if (id.startsWith('temp_')) { collectionsList = collectionsList.filter(i => i.id !== id); renderAdminList(); }
+            if (id.startsWith('temp_')) { collectionsList = collectionsList.filter(i => i.id !== id); window.renderAdminList(); }
             else { await deleteDoc(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems', id)); }
         };
 
         window.saveSiteData = async () => {
-            if (!auth.currentUser || auth.currentUser.uid.trim() !== ADMIN_UID) return alert("權限不足！");
+            if (!authInstance.currentUser || authInstance.currentUser.uid.trim() !== ADMIN_UID) return alert("權限不足！");
             document.getElementById('loading').style.display = 'flex';
             try {
                 const configRef = doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'main');
@@ -842,21 +674,25 @@
             finally { document.getElementById('loading').style.display = 'none'; }
         };
 
+        // --- 管理員登入邏輯 (恢復使用 prompt) ---
         window.toggleAdmin = async () => {
             const panel = document.getElementById('admin-panel');
-            const currentUid = auth.currentUser?.uid?.trim();
-            if (auth.currentUser && currentUid === ADMIN_UID) {
+            const currentUid = authInstance.currentUser?.uid?.trim();
+            
+            if (authInstance.currentUser && currentUid === ADMIN_UID) {
                 panel.classList.toggle('active');
             } else {
                 const email = prompt("Email:"); if (!email) return;
                 const pass = prompt("Password:"); if (!pass) return;
                 try {
-                    const cred = await signInWithEmailAndPassword(auth, email, pass);
+                    const cred = await signInWithEmailAndPassword(authInstance, email, pass);
                     if (cred.user.uid.trim() === ADMIN_UID) {
                         alert("身分核對成功！");
                         panel.classList.add('active');
+                        document.getElementById('admin-action-btn').innerText = "管理模式 (已登入)";
+                        window.renderAdminList();
                     } else {
-                        alert("不具備管理權限。"); await signOut(auth);
+                        alert("不具備管理權限。"); await signOut(authInstance);
                     }
                 } catch(e) { alert("帳號或密碼錯誤。"); }
             }
@@ -864,23 +700,121 @@
 
         window.signOutAdmin = () => { 
             if(!confirm("確定要登出管理員身份嗎？")) return;
-            signOut(auth).then(() => { alert("已安全登出。"); window.location.reload(); }); 
+            signOut(authInstance).then(() => { alert("已安全登出。"); window.location.reload(); }); 
         };
         
-        window.scrollToSection = (id) => {
-            const e = document.getElementById(id);
-            if (e) { 
-                window.scrollTo({ top: e.offsetTop - 80, behavior: 'smooth' }); 
-                document.getElementById('mobile-menu').classList.remove('active'); 
+        // 渲染函式群
+        function renderIgSlot(slotId, embedUrl, fallbackImg) {
+            const container = document.getElementById(slotId);
+            if (!container) return;
+            if (embedUrl && embedUrl.trim() !== "") {
+                container.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14" style="background:#FFF; border:0; margin:0; width:100%;"><div style="padding:16px;"> <a href="${embedUrl}" target="_blank" style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;">View on Instagram</a></div></blockquote>`;
+            } else if (fallbackImg) {
+                container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 hover:scale-105" alt="Showcase">`;
+            } else {
+                container.innerHTML = `<div class="w-full h-full bg-stone-100 flex items-center justify-center text-stone-300 text-[10px]">影像載入中</div>`;
             }
-        };
-        
-        window.toggleMenu = () => {
-            const m = document.getElementById('mobile-menu');
-            m.classList.toggle('active');
-        };
+        }
 
-        init();
+        function renderFrontEnd() {
+            // (簡化版，確保 ID 存在才更新)
+            const safeSetText = (id, text) => { if(document.getElementById(id)) document.getElementById(id).innerText = text || ""; };
+            const safeSetSrc = (id, src) => { if(document.getElementById(id)) document.getElementById(id).src = src || ""; };
+            const safeSetHref = (id, href) => { if(document.getElementById(id)) document.getElementById(id).href = href || "#"; };
+            const safeSetVal = (id, val) => { if(document.getElementById(id)) document.getElementById(id).value = val || ""; };
+
+            safeSetText('nav-brand-display', siteConfig.brandName);
+            safeSetText('hero-title-display', siteConfig.heroTitle);
+            safeSetText('hero-sub-display', siteConfig.heroSub);
+            if (siteConfig.heroImg) safeSetSrc('hero-img-display', siteConfig.heroImg);
+            safeSetText('about-text-display', siteConfig.aboutText);
+            if (siteConfig.aboutIcon) safeSetSrc('about-icon-display', siteConfig.aboutIcon);
+            safeSetHref('about-link-display', siteConfig.aboutLink);
+            
+            safeSetText('ig-text-display', `Instagram / ${siteConfig.igHandle}`);
+            safeSetText('fb-text-display', `Facebook / ${siteConfig.fbHandle}`);
+            safeSetHref('ig-link-display', siteConfig.igUrl);
+            safeSetHref('fb-link-display', siteConfig.fbUrl);
+
+            for(let i=1; i<=4; i++) { renderIgSlot(`ig-slot-${i}`, siteConfig[`igEmbed${i}`], siteConfig[`igImg${i}`]); }
+            setTimeout(() => { if (window.instgrm) window.instgrm.Embeds.process(); }, 1000);
+            
+            safeSetVal('edit-brand-name', siteConfig.brandName);
+            safeSetVal('edit-hero-title', siteConfig.heroTitle);
+            safeSetVal('edit-hero-sub', siteConfig.heroSub);
+            safeSetVal('edit-about-text', siteConfig.aboutText);
+            safeSetVal('edit-about-link', siteConfig.aboutLink);
+            safeSetVal('edit-ig-handle', siteConfig.igHandle);
+            safeSetVal('edit-ig-url', siteConfig.igUrl);
+            safeSetVal('edit-fb-handle', siteConfig.fbHandle);
+            safeSetVal('edit-fb-url', siteConfig.fbUrl);
+            for(let i=1; i<=4; i++) { safeSetVal(`edit-ig-embed-${i}`, siteConfig[`igEmbed${i}`]); }
+        }
+
+        function renderCollections() {
+            const container = document.getElementById('collections-container');
+            if (!container) return;
+            container.innerHTML = collectionsList.map(item => `
+                <article class="group flex flex-col items-center">
+                    <div class="aspect-[4/5] w-full overflow-hidden bg-stone-200 shadow-sm">
+                        <img src="${item.img}" class="w-full h-full object-cover transition-all duration-[1500ms] group-hover:scale-110" alt="${item.name}">
+                    </div>
+                    <h3 class="text-base font-medium mt-6 tracking-widest text-stone-900 uppercase">${item.name}</h3>
+                    <p class="text-xs text-stone-500 mt-2 tracking-widest">${item.desc}</p>
+                </article>
+            `).join('');
+        }
+
+        // 將函式掛載到 window 以供全域呼叫
+        window.renderAdminList = function() {
+            const list = document.getElementById('edit-collections-list');
+            if (!list) return;
+            list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="updateLocalItem(${index}, 'name', this.value)" class="text-xs font-bold"><textarea onchange="updateLocalItem(${index}, 'desc', this.value)" class="text-xs">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">換照<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
+            lucide.createIcons();
+        }
+
+        // 啟動邏輯
+        document.getElementById('loading').style.display = 'flex';
+        initNavbarScroll();
+        populateDropdowns();
+        
+        onAuthStateChanged(auth, (user) => {
+            const panel = document.getElementById('admin-panel');
+            const btn = document.getElementById('admin-action-btn');
+            const currentUid = user?.uid?.trim();
+            if (user && currentUid === ADMIN_UID) {
+                panel.classList.add('active');
+                btn.innerText = "管理模式 (已登入)";
+                window.renderAdminList();
+            } else {
+                panel.classList.remove('active');
+                btn.innerText = "Admin Login";
+            }
+            
+            // 載入資料
+            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'main'), (snap) => {
+                if (snap.exists()) { siteConfig = { ...siteConfig, ...snap.data() }; renderFrontEnd(); }
+            });
+            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'calculator'), (snap) => {
+                if (snap.exists()) { 
+                    calculatorConfig = snap.data(); 
+                    if (calculatorConfig.stones) {
+                        Object.keys(calculatorConfig.stones).forEach(key => {
+                            if (STONES[key] && calculatorConfig.stones[key]) STONES[key].img = calculatorConfig.stones[key];
+                        });
+                    }
+                }
+                document.getElementById('loading').style.display = 'none';
+            });
+            onSnapshot(collection(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems'), (snap) => {
+                collectionsList = []; snap.forEach(d => collectionsList.push({ id: d.id, ...d.data() }));
+                collectionsList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                renderCollections();
+                if (document.getElementById('admin-panel').classList.contains('active')) window.renderAdminList();
+            });
+        });
+        
+        await signInAnonymously(auth).catch(() => {});
         lucide.createIcons();
     </script>
 </body>
