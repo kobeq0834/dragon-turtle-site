@@ -179,7 +179,7 @@
                 <h2 id="about-title-display" class="text-lg md:text-xl font-medium tracking-[0.4em] text-stone-900 mb-12 uppercase" data-i18n="about-title">關於 奧兒絲朵</h2>
                 <p id="about-text-display" class="text-stone-600 leading-[2.5] tracking-[0.15em] text-base font-normal whitespace-pre-line text-justify md:text-center"></p>
                 <div class="mt-20 ai-spirit-box">
-                    <p id="ai-quote" class="text-sm md:text-base text-stone-500 italic tracking-[0.2em] mb-10 leading-relaxed font-medium">「每一塊石頭都有它的頻率，等待與您共鳴。」</p>
+                    <p id="ai-quote" class="text-sm md:text-base text-stone-500 italic tracking-[0.2em] mb-10 leading-relaxed font-medium"></p>
                     <button id="btn-daily-quote" onclick="window.generateDailyQuote()" class="text-xs tracking-[0.3em] uppercase px-8 py-3 border border-stone-300 hover:border-stone-900 hover:bg-stone-50 transition-all shadow-sm font-bold text-stone-700" data-i18n="btn-quote">獲取今日石語 ✨</button>
                 </div>
             </div>
@@ -431,6 +431,33 @@
         let calculatorConfig = {};
         let collectionsList = [];
         let currentLang = 'zh';
+        
+        // 石語狀態變數
+        let currentQuoteIndex = null; // null 表示尚未隨機抽取，顯示預設語
+
+        // 石語資料庫
+        const QUOTES = {
+            zh: [
+                "每一顆靈石，都在訴說宇宙的秘密。", 
+                "靜謐之中，感受大地的呼吸。", 
+                "光影折射，映照出靈魂的純粹。", 
+                "穿越億萬年的星塵，只為與你相遇。", 
+                "心如明鏡，塵埃自落。", 
+                "在石頭的溫潤中，找回內心的平靜。", 
+                "礦石的低語，是時間留下的情書。", 
+                "擁抱自然，與萬物共鳴。"
+            ],
+            en: [
+                "Every stone whispers the secrets of the universe.", 
+                "In silence, feel the breath of the earth.", 
+                "Light reflects the purity of the soul.", 
+                "Stardust crossing eons just to meet you.", 
+                "Heart like a mirror, dust settles naturally.", 
+                "Find inner peace in the warmth of the stone.", 
+                "Whispers of ore are love letters from time.", 
+                "Embrace nature, resonate with all things."
+            ]
+        };
 
         // 載入保護
         setTimeout(() => {
@@ -453,11 +480,6 @@
         };
 
         window.generateDailyQuote = () => {
-            const poolZh = ["每一顆靈石，都在訴說宇宙的秘密。", "靜謐之中，感受大地的呼吸。", "光影折射，映照出靈魂的純粹。", "穿越億萬年的星塵，只為與你相遇。", "心如明鏡，塵埃自落。", "在石頭的溫潤中，找回內心的平靜。", "礦石的低語，是時間留下的情書。", "擁抱自然，與萬物共鳴。"];
-            const poolEn = ["Every stone whispers the secrets of the universe.", "In silence, feel the breath of the earth.", "Light reflects the purity of the soul.", "Stardust crossing eons just to meet you.", "Heart like a mirror, dust settles naturally.", "Find inner peace in the warmth of the stone.", "Whispers of ore are love letters from time.", "Embrace nature, resonate with all things."];
-            
-            const pool = currentLang === 'zh' ? poolZh : poolEn;
-            const sessionQuote = pool[Math.floor(Math.random() * pool.length)];
             const btn = document.getElementById('btn-daily-quote');
             const display = document.getElementById('ai-quote');
             
@@ -465,7 +487,17 @@
             const btnText = currentLang === 'zh' ? "獲取今日石語 ✨" : "Daily Wisdom ✨";
             
             btn.disabled = true; btn.innerText = loadingText;
-            setTimeout(() => { display.innerText = `「${sessionQuote}」`; btn.disabled = false; btn.innerText = btnText; }, 1200);
+            
+            setTimeout(() => { 
+                // 隨機抽取新的 Index
+                const poolSize = QUOTES[currentLang].length;
+                currentQuoteIndex = Math.floor(Math.random() * poolSize);
+                
+                // 顯示該 Index 的目前語言版本
+                display.innerText = `「${QUOTES[currentLang][currentQuoteIndex]}」`; 
+                
+                btn.disabled = false; btn.innerText = btnText; 
+            }, 1200);
         };
 
         // --- 靈石測驗資料與邏輯 ---
@@ -477,15 +509,17 @@
                 'nav-about': "品牌故事", 'nav-coll': "收藏系列", 'nav-social': "追蹤我們", 'nav-quiz': "靈石測驗",
                 'hero-btn': "尋找您的命定靈石",
                 'about-title': "關於 奧兒絲朵", 'btn-quote': "獲取今日石語 ✨",
-                'social-title': "Follow Us", // Brand style kept
+                'social-title': "Follow Us", 
                 'loading-text': "讀取靈石能量中...",
                 
+                // 石語預設文字
+                'quote-default': "「每一塊石頭都有它的頻率，等待與您共鳴。」",
+
                 // Quiz
                 title: "尋找您的命定靈石", desc: `輸入您的<span class="font-bold text-stone-700">國曆 (Solar)</span> 出生日期，<br>系統將自動換算精確的農曆五行，<br>為您連結那顆等待已久的守護石。`, 
                 labelYear: "國曆出生年", labelMonth: "國曆月份", labelDay: "國曆日期", 
                 btnCalc: "開始轉換並感應", loading: "正在換算農曆五行...", 
                 resultTitle: "農曆出生資訊", 
-                // [Modified] Updated button text
                 btnBuy: "洽詢客服購買",  
                 btnRetry: "重新測驗", 
                 
@@ -502,12 +536,14 @@
                 'social-title': "Follow Us",
                 'loading-text': "Reading Energy...",
 
+                // 石語預設文字
+                'quote-default': "“Every stone has its frequency, waiting to resonate with you.”",
+
                 // Quiz
                 title: "Find Your Destined Stone", desc: `Enter your <span class="font-bold text-stone-700">Solar Birth Date</span>.<br>We will calculate your Lunar Elemental Energy<br>to reveal your Guardian Stone.`, 
                 labelYear: "Birth Year (Solar)", labelMonth: "Birth Month", labelDay: "Birth Day", 
                 btnCalc: "Reveal My Stone", loading: "Calculating Cosmic Energy...", 
                 resultTitle: "Your Lunar Profile", 
-                // [Modified] Updated button text
                 btnBuy: "Contact Customer Service", 
                 btnRetry: "Retake Quiz", 
                 
@@ -604,6 +640,9 @@
             // 4. 更新測驗 UI (包含 dropdowns)
             updateCalcUI();
             populateDropdowns(); 
+            
+            // 5. 更新石語 (新增)
+            updateQuoteText();
         };
 
         function updateStaticText() {
@@ -615,6 +654,18 @@
             
             // loading screen
             document.querySelector('.loading-text').innerText = t['loading-text'];
+        }
+        
+        // [新增] 獨立的石語更新函式
+        function updateQuoteText() {
+            const display = document.getElementById('ai-quote');
+            if (currentQuoteIndex === null) {
+                // 尚未抽籤，顯示預設語
+                display.innerText = I18N[currentLang]['quote-default'];
+            } else {
+                // 已經抽籤，更新為對應語言的同一句
+                display.innerText = `「${QUOTES[currentLang][currentQuoteIndex]}」`;
+            }
         }
 
         window.calculateStone = (e) => {
@@ -1018,6 +1069,9 @@
         document.getElementById('loading').style.display = 'flex';
         initNavbarScroll();
         populateDropdowns();
+        
+        // 初始設定預設石語
+        document.getElementById('ai-quote').innerText = I18N[currentLang]['quote-default'];
         
         onAuthStateChanged(auth, (user) => {
             const panel = document.getElementById('admin-panel');
