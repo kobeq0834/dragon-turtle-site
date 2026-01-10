@@ -57,7 +57,7 @@
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.05); } }
         @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translate(-50%, -50%); } to { opacity: 1; transform: scale(1) translate(-50%, -50%); } }
-        
+
         .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }
         .animate-fadeInUp { animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .animate-slowZoom { animation: slowZoom 30s linear infinite alternate; }
@@ -74,6 +74,7 @@
         #mobile-menu { display: none; opacity: 0; transition: opacity 0.4s ease; }
         #mobile-menu.active { display: flex; opacity: 1; }
         
+        /* 管理面板樣式 */
         .admin-panel { display: none; position: fixed; top: 0; right: 0; width: 100%; max-width: 450px; height: 100%; background: white; z-index: 1000; box-shadow: -10px 0 30px rgba(0,0,0,0.1); overflow-y: auto; padding: 2.5rem; }
         .admin-panel.active { display: block; }
         
@@ -85,7 +86,7 @@
         .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.98); z-index: 2000; display: none; align-items: center; justify-content: center; font-size: 0.8rem; letter-spacing: 0.3em; }
         
         /* iPhone 相容性樣式 */
-        .ig-embed-container { width: 100%; min-height: 450px; display: block; overflow: visible !important; background: #fff; position: relative; z-index: 10; pointer-events: auto !important; margin-bottom: 1.5rem; transform: none !important; }
+        .ig-embed-container { width: 100%; min-height: 400px; display: block; overflow: visible !important; background: #fff; position: relative; z-index: 10; pointer-events: auto !important; margin-bottom: 1.5rem; transform: none !important; }
         .ig-embed-container blockquote { margin: 0 auto !important; width: 100% !important; border: 0 !important; padding: 0 !important; min-width: 100% !important; }
         .ig-embed-container iframe { width: 100% !important; max-width: 100% !important; }
 
@@ -111,30 +112,30 @@
                 <span id="nav-brand-display" class="text-lg md:text-xl font-bold tracking-[0.3em] text-stone-900 uppercase">奧兒絲朵</span>
             </div>
             <div class="hidden md:flex space-x-12 items-center">
-                <button onclick="scrollToSection('about')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">品牌故事</button>
-                <button onclick="scrollToSection('calculator')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">靈石測驗</button>
-                <button onclick="scrollToSection('collections')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">收藏系列</button>
-                <button onclick="scrollToSection('social')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">追蹤我們</button>
+                <button onclick="window.scrollToSection('about')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">品牌故事</button>
+                <button onclick="window.scrollToSection('calculator')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">靈石測驗</button>
+                <button onclick="window.scrollToSection('collections')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">收藏系列</button>
+                <button onclick="window.scrollToSection('social')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">追蹤我們</button>
                 
-                <!-- 靈石測驗入口按鈕 -->
+                <!-- 靈石測驗按鈕 (替換原 IG/FB) -->
                 <div class="flex items-center border-l border-stone-300 pl-8">
-                    <button onclick="scrollToSection('calculator')" class="group flex items-center space-x-2 text-stone-800 hover:text-stone-500 transition-colors">
+                    <button onclick="window.scrollToSection('calculator')" class="group flex items-center space-x-2 text-stone-800 hover:text-stone-500 transition-colors">
                         <i data-lucide="sparkles" class="w-4 h-4"></i>
                         <span class="text-xs font-bold tracking-[0.2em] uppercase">靈石測驗</span>
                     </button>
                 </div>
             </div>
-            <button class="md:hidden text-stone-800 p-2" onclick="toggleMenu()" aria-label="選單"><i data-lucide="menu" class="w-6 h-6"></i></button>
+            <button class="md:hidden text-stone-800 p-2" onclick="window.toggleMenu()" aria-label="選單"><i data-lucide="menu" class="w-6 h-6"></i></button>
         </div>
     </nav>
 
     <!-- 行動端選單 -->
     <div id="mobile-menu" class="fixed inset-0 z-[150] bg-white flex flex-col items-center justify-center space-y-10">
-        <button class="absolute top-8 right-8 text-stone-600" onclick="toggleMenu()" aria-label="關閉"><i data-lucide="x" class="w-8 h-8"></i></button>
-        <button onclick="scrollToSection('about')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">品牌故事</button>
-        <button onclick="scrollToSection('calculator')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase border-b border-stone-800 pb-1">靈石測驗</button>
-        <button onclick="scrollToSection('collections')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">收藏系列</button>
-        <button onclick="scrollToSection('social')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">追蹤我們</button>
+        <button class="absolute top-8 right-8 text-stone-600" onclick="window.toggleMenu()" aria-label="關閉"><i data-lucide="x" class="w-8 h-8"></i></button>
+        <button onclick="window.scrollToSection('about')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">品牌故事</button>
+        <button onclick="window.scrollToSection('calculator')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase border-b border-stone-800 pb-1">靈石測驗</button>
+        <button onclick="window.scrollToSection('collections')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">收藏系列</button>
+        <button onclick="window.scrollToSection('social')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">追蹤我們</button>
     </div>
 
     <main>
@@ -147,7 +148,7 @@
                 <p id="hero-sub-display" class="text-[10px] md:text-xs tracking-[0.5em] text-stone-600 mb-8 animate-fadeInUp uppercase font-bold">Every stone has its own story</p>
                 <h1 id="hero-title-display" class="text-4xl md:text-6xl font-light text-stone-900 mb-10 tracking-[0.3em] leading-[1.6] animate-fadeInUp delay-100 drop-shadow-sm">奧兒絲朵<br /><span class="text-2xl md:text-3xl tracking-[0.4em] text-stone-600 italic font-normal block mt-4">靈石與您的故事</span></h1>
                 
-                <button onclick="scrollToSection('calculator')" class="mt-8 px-8 py-3 border border-stone-800 text-stone-800 hover:bg-stone-800 hover:text-white transition-all text-xs tracking-[0.3em] uppercase font-bold animate-fadeInUp" style="animation-delay: 0.5s;">
+                <button onclick="window.scrollToSection('calculator')" class="mt-8 px-8 py-3 border border-stone-800 text-stone-800 hover:bg-stone-800 hover:text-white transition-all text-xs tracking-[0.3em] uppercase font-bold animate-fadeInUp" style="animation-delay: 0.5s;">
                     尋找您的命定靈石
                 </button>
             </div>
@@ -165,7 +166,7 @@
                 <p id="about-text-display" class="text-stone-600 leading-[2.5] tracking-[0.15em] text-base font-normal whitespace-pre-line text-justify md:text-center"></p>
                 <div class="mt-20 ai-spirit-box">
                     <p id="ai-quote" class="text-sm md:text-base text-stone-500 italic tracking-[0.2em] mb-10 leading-relaxed font-medium">「每一塊石頭都有它的頻率，等待與您共鳴。」</p>
-                    <button id="btn-daily-quote" onclick="generateDailyQuote()" class="text-xs tracking-[0.3em] uppercase px-8 py-3 border border-stone-300 hover:border-stone-900 hover:bg-stone-50 transition-all shadow-sm font-bold text-stone-700">獲取今日石語 ✨</button>
+                    <button id="btn-daily-quote" onclick="window.generateDailyQuote()" class="text-xs tracking-[0.3em] uppercase px-8 py-3 border border-stone-300 hover:border-stone-900 hover:bg-stone-50 transition-all shadow-sm font-bold text-stone-700">獲取今日石語 ✨</button>
                 </div>
             </div>
         </section>
@@ -173,7 +174,7 @@
         <!-- === 🔮 命定靈石測驗區塊 === -->
         <section id="calculator" class="py-24 px-4 bg-stone-50 relative overflow-hidden">
             <div class="absolute top-0 right-0 p-6 z-10">
-                <button onclick="toggleLanguage()" class="flex items-center space-x-2 text-[10px] font-bold tracking-widest text-stone-500 hover:text-stone-800 transition uppercase border border-stone-200 px-3 py-1.5 rounded-full bg-white shadow-sm">
+                <button onclick="window.toggleLanguage()" class="flex items-center space-x-2 text-[10px] font-bold tracking-widest text-stone-500 hover:text-stone-800 transition uppercase border border-stone-200 px-3 py-1.5 rounded-full bg-white shadow-sm">
                     <i data-lucide="globe" class="w-3 h-3"></i>
                     <span id="langLabel">English</span>
                 </button>
@@ -192,7 +193,7 @@
                     </p>
                 </div>
 
-                <form id="calcForm" class="mt-8 space-y-6" onsubmit="calculateStone(event)">
+                <form id="calcForm" class="mt-8 space-y-6" onsubmit="window.calculateStone(event)">
                     <div class="space-y-5">
                         <div class="relative">
                             <label id="label-year" for="year" class="block text-xs font-medium text-stone-500 tracking-widest mb-1">國曆出生年</label>
@@ -238,8 +239,8 @@
 
         <!-- 社群區塊 -->
         <section id="social" class="py-24 md:py-40 px-8 bg-white">
-            <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16">
-                <div class="w-full md:w-2/5 space-y-12">
+            <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+                <div class="w-full lg:w-2/5 space-y-12">
                     <h2 id="social-title-display" class="text-2xl md:text-3xl font-light tracking-[0.3em] text-stone-900 uppercase">Follow Us</h2>
                     <div class="space-y-4">
                         <a id="ig-link-display" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between group py-5 border-b border-stone-200"><span id="ig-text-display" class="text-sm tracking-[0.2em] text-stone-600 font-medium uppercase">Instagram</span><i data-lucide="arrow-right" class="w-4 h-4 text-stone-400 group-hover:translate-x-1 transition-transform group-hover:text-stone-800"></i></a>
@@ -247,12 +248,12 @@
                     </div>
                 </div>
                 
-                <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                <div id="gallery-container" class="w-full lg:w-3/5 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                     <div class="space-y-6">
                         <div id="ig-slot-1" class="ig-embed-container shadow-md"></div>
                         <div id="ig-slot-2" class="ig-embed-container shadow-md"></div>
                     </div>
-                    <div class="space-y-6 md:pt-12">
+                    <div class="space-y-6 lg:pt-12">
                         <div id="ig-slot-3" class="ig-embed-container shadow-md"></div>
                         <div id="ig-slot-4" class="ig-embed-container shadow-md"></div>
                     </div>
@@ -263,13 +264,13 @@
 
     <!-- 聯絡專員 Modal -->
     <div id="contactModal" class="fixed inset-0 z-[200] hidden">
-        <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity" onclick="closeContactModal()"></div>
+        <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity" onclick="window.closeContactModal()"></div>
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-sm rounded-2xl p-8 shadow-2xl modal-enter">
             <div class="text-center mb-6">
                 <h3 id="modal-title" class="text-xl font-bold text-stone-800 tracking-widest mb-2">專員購藏協助</h3>
                 <p id="modal-desc" class="text-xs text-stone-500 leading-relaxed">請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務專注於協助購買挑選，非命理諮詢)</span></p>
             </div>
-            <form id="contactForm" onsubmit="handleContactSubmit(event)" class="space-y-4">
+            <form id="contactForm" onsubmit="window.handleContactSubmit(event)" class="space-y-4">
                 <div>
                     <label id="label-cName" for="cName" class="block text-xs font-medium text-stone-500 mb-1">您的稱呼</label>
                     <input type="text" id="cName" required class="w-full px-3 py-2 border border-stone-200 rounded-md text-sm focus:outline-none focus:border-stone-400 bg-stone-50" placeholder="Name">
@@ -280,19 +281,19 @@
                 </div>
                 <button id="btn-submit" type="submit" class="w-full py-3 bg-stone-800 text-white text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-700 transition mt-2">確認送出</button>
             </form>
-            <button onclick="closeContactModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <button onclick="window.closeContactModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
     </div>
 
-    <!-- [新增] 管理員登入 Modal -->
+    <!-- 管理員登入 Modal -->
     <div id="adminLoginModal" class="fixed inset-0 z-[200] hidden">
-        <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity" onclick="closeAdminLoginModal()"></div>
+        <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity" onclick="window.closeAdminLoginModal()"></div>
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-sm rounded-2xl p-8 shadow-2xl modal-enter">
             <div class="text-center mb-6">
                 <h3 class="text-xl font-bold text-stone-800 tracking-widest mb-2">管理者登入</h3>
                 <p class="text-xs text-stone-500">請輸入管理員帳號密碼</p>
             </div>
-            <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" class="space-y-4">
+            <form id="adminLoginForm" onsubmit="window.handleAdminLogin(event)" class="space-y-4">
                 <div>
                     <input type="email" id="adminEmail" required class="w-full px-3 py-2 border border-stone-200 rounded-md text-sm focus:outline-none focus:border-stone-400 bg-stone-50" placeholder="Email">
                 </div>
@@ -301,7 +302,7 @@
                 </div>
                 <button type="submit" class="w-full py-3 bg-stone-800 text-white text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-700 transition mt-2">登入</button>
             </form>
-            <button onclick="closeAdminLoginModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <button onclick="window.closeAdminLoginModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
     </div>
 
@@ -309,7 +310,7 @@
     <div id="admin-panel" class="admin-panel">
         <div class="flex justify-between items-center mb-8 border-b pb-4">
             <h3 class="font-bold tracking-widest text-stone-800 uppercase">管理者模式已開啟</h3>
-            <button onclick="toggleAdmin()"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <button onclick="window.toggleAdmin()"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
         <div class="space-y-10 pb-32">
             <section class="space-y-3">
@@ -317,30 +318,30 @@
                 <input type="text" id="edit-brand-name" placeholder="品牌名稱">
                 <textarea id="edit-hero-title" rows="2" placeholder="大標題"></textarea>
                 <input type="text" id="edit-hero-sub" placeholder="副標題">
-                <label class="upload-btn">更換首頁背景<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'hero')"></label>
+                <label class="upload-btn">更換首頁背景<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'hero')"></label>
             </section>
             
             <section class="space-y-3">
                 <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">故事與 QR</h4>
                 <textarea id="edit-about-text" rows="5" placeholder="故事內容"></textarea>
                 <div class="p-4 bg-stone-50 rounded-lg space-y-3">
-                    <label class="upload-btn m-0">更換 QR 圖片<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'about_icon')"></label>
+                    <label class="upload-btn m-0">更換 QR 圖片<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'about_icon')"></label>
                     <input type="text" id="edit-about-link" placeholder="QR 跳轉連結">
                 </div>
             </section>
 
-            <!-- 新增：靈石測驗圖片管理 -->
+            <!-- 靈石測驗圖片管理 -->
             <section class="space-y-3 bg-stone-50 p-4 rounded border border-stone-200">
                 <h4 class="text-[10px] font-bold tracking-widest text-stone-500 uppercase flex items-center">
                     <i data-lucide="sparkles" class="w-3 h-3 mr-1"></i> 靈石測驗圖片管理
                 </h4>
                 <div class="grid grid-cols-2 gap-2">
-                    <label class="upload-btn text-[10px] m-0">捷克隕石<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'calc_stone', 'moldavite')"></label>
-                    <label class="upload-btn text-[10px] m-0">利比亞隕石<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'calc_stone', 'libyan')"></label>
-                    <label class="upload-btn text-[10px] m-0">黑隕石<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'calc_stone', 'tektite')"></label>
-                    <label class="upload-btn text-[10px] m-0">天鐵<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'calc_stone', 'gibeon')"></label>
-                    <label class="upload-btn text-[10px] m-0">橄欖隕石<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'calc_stone', 'pallasite')"></label>
-                    <label class="upload-btn text-[10px] m-0">櫻花瑪瑙<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'calc_stone', 'cherryAgate')"></label>
+                    <label class="upload-btn text-[10px] m-0">捷克隕石<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'calc_stone', 'moldavite')"></label>
+                    <label class="upload-btn text-[10px] m-0">利比亞隕石<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'calc_stone', 'libyan')"></label>
+                    <label class="upload-btn text-[10px] m-0">黑隕石<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'calc_stone', 'tektite')"></label>
+                    <label class="upload-btn text-[10px] m-0">天鐵<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'calc_stone', 'gibeon')"></label>
+                    <label class="upload-btn text-[10px] m-0">橄欖隕石<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'calc_stone', 'pallasite')"></label>
+                    <label class="upload-btn text-[10px] m-0">櫻花瑪瑙<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'calc_stone', 'cherryAgate')"></label>
                 </div>
                 <p class="text-[9px] text-stone-400 mt-1">* 上傳後請點擊下方「發佈更新」以同步。</p>
             </section>
@@ -350,19 +351,19 @@
                 <div class="space-y-4">
                     <div class="p-3 border rounded">
                         <input type="text" id="edit-ig-embed-1" placeholder="IG 連結 1">
-                        <label class="upload-btn text-[9px] m-0">或備用圖 1<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig1')"></label>
+                        <label class="upload-btn text-[9px] m-0">或備用圖 1<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'ig1')"></label>
                     </div>
                     <div class="p-3 border rounded">
                         <input type="text" id="edit-ig-embed-2" placeholder="IG 連結 2">
-                        <label class="upload-btn text-[9px] m-0">或備用圖 2<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig2')"></label>
+                        <label class="upload-btn text-[9px] m-0">或備用圖 2<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'ig2')"></label>
                     </div>
                     <div class="p-3 border rounded">
                         <input type="text" id="edit-ig-embed-3" placeholder="IG 連結 3">
-                        <label class="upload-btn text-[9px] m-0">或備用圖 3<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig3')"></label>
+                        <label class="upload-btn text-[9px] m-0">或備用圖 3<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'ig3')"></label>
                     </div>
                     <div class="p-3 border rounded">
                         <input type="text" id="edit-ig-embed-4" placeholder="IG 連結 4">
-                        <label class="upload-btn text-[9px] m-0">或備用圖 4<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'ig4')"></label>
+                        <label class="upload-btn text-[9px] m-0">或備用圖 4<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'ig4')"></label>
                     </div>
                 </div>
             </section>
@@ -376,12 +377,12 @@
             </section>
 
             <div id="edit-collections-list" class="space-y-4"></div>
-            <button onclick="addNewCollectionItem()" class="w-full py-3 bg-stone-100 text-xs">＋ 新增靈石項目</button>
+            <button onclick="window.addNewCollectionItem()" class="w-full py-3 bg-stone-100 text-xs">＋ 新增靈石項目</button>
         </div>
         <div class="fixed bottom-0 right-0 w-full max-w-[450px] bg-white p-6 border-t z-[2000] shadow-2xl">
             <div class="grid grid-cols-2 gap-4">
-                <button onclick="saveSiteData()" class="bg-stone-900 text-white py-4 text-xs font-bold uppercase rounded-sm shadow-lg">發佈更新</button>
-                <button onclick="signOutAdmin()" class="bg-stone-50 text-stone-400 py-4 text-xs font-bold border border-stone-200 rounded-sm">登出</button>
+                <button onclick="window.saveSiteData()" class="bg-stone-900 text-white py-4 text-xs font-bold uppercase rounded-sm shadow-lg">發佈更新</button>
+                <button onclick="window.signOutAdmin()" class="bg-stone-50 text-stone-400 py-4 text-xs font-bold border border-stone-200 rounded-sm">登出</button>
             </div>
         </div>
     </div>
@@ -390,7 +391,7 @@
     <footer class="py-24 px-8 bg-white border-t border-stone-200 text-center">
         <span class="text-xl font-bold tracking-[0.5em] text-stone-900 uppercase">奧兒絲朵</span>
         <p class="text-[10px] tracking-[0.2em] text-stone-400 mt-8 font-medium">© 2025 OUR STORY. CURATED FOR YOUR SOUL.</p>
-        <button onclick="toggleAdmin()" id="admin-action-btn" class="text-[9px] tracking-[0.2em] text-stone-300 mt-8 uppercase border-b border-transparent hover:border-stone-400 transition-colors">Admin Login</button>
+        <button onclick="window.toggleAdmin()" id="admin-action-btn" class="text-[9px] tracking-[0.2em] text-stone-300 mt-8 uppercase border-b border-transparent hover:border-stone-400 transition-colors">Admin Login</button>
     </footer>
 
     <script type="module">
@@ -398,42 +399,15 @@
         import { getAuth, signInWithEmailAndPassword, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot, query, initializeFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // === ⚠️ 安全性設定 (Security Note) ===
-        // 請確保您的 Firebase Console 設定了適當的規則：
-        // 1. 限制 API Key 只能從您的網域 (https://our-story.com.tw) 呼叫。
-        // 2. 設定 Firestore Rules，限制 'siteSettings' 和 'galleryItems' 只有特定 UID (ADMIN_UID) 可寫入。
+        // === 1. 優先定義全域功能函式，確保按鈕有反應 ===
         
-        const ADMIN_UID = "0MFL33qKcbQIeln2X1wsHOl4ebo2".trim();
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDruZNMUyiJNcyoksYIBDHv5F1SiiG2Mss",
-            authDomain: "our-story-53723.firebaseapp.com",
-            projectId: "our-story-53723",
-            storageBucket: "our-story-53723.firebasestorage.app",
-            messagingSenderId: "651350028652",
-            appId: "1:651350028652:web:44db9f6bd7d1b502578349"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = initializeFirestore(app, { experimentalForceLongPolling: true });
-
-        // === 全局變數 ===
-        let siteConfig = {};
-        let calculatorConfig = {}; // 存放測驗圖片
-        let collectionsList = [];
-        let currentLang = 'zh';
-
-        const quotesPool = ["每一顆靈石，都在訴說宇宙的秘密。", "靜謐之中，感受大地的呼吸。", "光影折射，映照出靈魂的純粹。", "穿越億萬年的星塵，只為與你相遇。", "心如明鏡，塵埃自落。", "在石頭的溫潤中，找回內心的平靜。", "礦石的低語，是時間留下的情書。", "擁抱自然，與萬物共鳴。", "純粹的光，照亮未曾察覺的角落。", "靜聽石語，找尋失落的記憶。", "大地之母的饋贈，值得溫柔以待。", "靈魂的頻率，在色彩中閃耀。", "靜默，是最高級的溝通方式。", "不刻意渲染，美自會浮現。", "每一道裂痕，都是成長的印記。", "與石結緣，即是與自己重逢。", "星辰隕落，化作掌心的溫度。", "在忙碌的世界中，保有一方淨土。", "心之所向，便是能量所在。", "靈石無言，卻最懂你的心。"];
-        const sessionQuote = quotesPool[Math.floor(Math.random() * quotesPool.length)];
-
-        // 導出全局函數 (供 HTML onclick)
-        window.generateDailyQuote = () => {
-            const btn = document.getElementById('btn-daily-quote');
-            const display = document.getElementById('ai-quote');
-            btn.disabled = true; btn.innerText = "感應中...";
-            setTimeout(() => { display.innerText = `「${sessionQuote}」`; btn.disabled = false; btn.innerText = "獲取今日石語 ✨"; }, 1200);
-        };
+        // 顯示載入畫面超時保護
+        setTimeout(() => {
+            const loading = document.getElementById('loading');
+            if (loading && loading.style.display !== 'none') {
+                loading.style.display = 'none';
+            }
+        }, 3000); // 3秒後強制關閉 loading
 
         window.scrollToSection = (id) => {
             const e = document.getElementById(id);
@@ -448,7 +422,63 @@
             m.classList.toggle('active');
         };
 
-        // --- 靈石測驗相關邏輯 ---
+        // --- 管理員登入/登出邏輯 ---
+        let authInstance = null; // 暫存 auth 實例
+        const ADMIN_UID = "0MFL33qKcbQIeln2X1wsHOl4ebo2".trim();
+
+        window.toggleAdmin = () => {
+            if (!authInstance) return alert("系統載入中，請稍後再試");
+            const panel = document.getElementById('admin-panel');
+            const currentUid = authInstance.currentUser?.uid?.trim();
+            
+            if (authInstance.currentUser && currentUid === ADMIN_UID) {
+                panel.classList.toggle('active');
+            } else {
+                document.getElementById('adminLoginModal').classList.remove('hidden');
+            }
+        };
+
+        window.closeAdminLoginModal = () => {
+            document.getElementById('adminLoginModal').classList.add('hidden');
+        };
+
+        window.handleAdminLogin = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('adminEmail').value;
+            const pass = document.getElementById('adminPass').value;
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            
+            btn.disabled = true;
+            btn.innerText = "驗證中...";
+
+            try {
+                const cred = await signInWithEmailAndPassword(authInstance, email, pass);
+                if (cred.user.uid.trim() === ADMIN_UID) {
+                    alert("身分核對成功！");
+                    window.closeAdminLoginModal();
+                    document.getElementById('admin-panel').classList.add('active');
+                    document.getElementById('admin-action-btn').innerText = "管理模式 (已登入)";
+                    if (typeof window.renderAdminList === 'function') window.renderAdminList();
+                } else {
+                    alert("不具備管理權限。");
+                    await signOut(authInstance);
+                }
+            } catch(e) {
+                alert("帳號或密碼錯誤: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = originalText;
+            }
+        };
+
+        window.signOutAdmin = () => { 
+            if(!confirm("確定要登出管理員身份嗎？")) return;
+            signOut(authInstance).then(() => { alert("已安全登出。"); window.location.reload(); }); 
+        };
+
+        // --- 靈石測驗邏輯 ---
+        let currentLang = 'zh';
         const MONTH_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         
         const I18N = {
@@ -470,7 +500,6 @@
             }
         };
 
-        // 靈石資料 (預設資料，後台可覆蓋圖片)
         const STONES = {
             moldavite: { name: { zh: "捷克隕石", en: "Moldavite" }, desc: { zh: "來自外太空的綠色奇蹟。擁有極高的振動頻率，能打通心輪，加速願望顯化，帶領您突破現狀，迎接靈魂的蛻變。", en: "The green miracle from outer space. Opens the Heart Chakra and accelerates manifestation." }, tags: { zh: ["#轉化", "#心輪", "#招財"], en: ["#Transformation", "#HeartChakra", "#Abundance"] }, img: "https://images.unsplash.com/photo-1617791160588-241658c0f566?auto=format&fit=crop&q=80&w=600", color: "text-green-700" },
             libyan: { name: { zh: "利比亞隕石", en: "Libyan Desert Glass" }, desc: { zh: "沙漠中的黃金之光。擁有強大的太陽能量，能增強意志力與自信，像沙漠中的烈日一樣驅散陰霾，帶來豐盛與守護。", en: "Golden light of the desert. Strengthens will and confidence, bringing protection." }, tags: { zh: ["#意志力", "#太陽輪", "#顯化"], en: ["#Willpower", "#SolarPlexus", "#Manifestation"] }, img: "https://images.unsplash.com/photo-1610421272714-b15392e2764f?auto=format&fit=crop&q=80&w=600", color: "text-yellow-600" },
@@ -526,11 +555,9 @@
             }, delay);
         };
 
-        // 輔助函式
         function toTraditionalChinese(str) { const map = { '龙': '龍', '马': '馬', '鸡': '雞', '猪': '豬', '腊': '臘' }; return str.split('').map(char => map[char] || char).join(''); }
         function getZodiacEn(chi) { const map = { '鼠': 'Rat', '牛': 'Ox', '虎': 'Tiger', '兔': 'Rabbit', '龍': 'Dragon', '蛇': 'Snake', '馬': 'Horse', '羊': 'Goat', '猴': 'Monkey', '雞': 'Rooster', '狗': 'Dog', '豬': 'Pig' }; return map[chi] || chi; }
         
-        // 簡易運算邏輯
         function getStoneByFate(y, m) {
             const d = y % 10;
             if (d <= 1) return (m>=10||m<=12)?'gibeon':(m>=4&&m<=6)?'tektite':'gibeon';
@@ -540,7 +567,6 @@
             return (m>=1&&m<=3)?'libyan':'pallasite';
         }
 
-        // 渲染結果
         function renderResult(stone, date) {
             const t = I18N[currentLang];
             const name = stone.name[currentLang];
@@ -568,8 +594,8 @@
                             ${tags.map(tag => `<span class="px-3 py-1 bg-white border border-stone-200 rounded-full text-[10px] text-stone-500 tracking-wider">${tag}</span>`).join('')}
                         </div>
                         <div class="space-y-3">
-                            <button onclick="scrollToSection('collections')" class="block w-full py-3 bg-stone-800 text-white text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-600 transition text-center">${t.btnCollection}</button>
-                            <button onclick="openContactModal()" class="block w-full py-3 bg-white border border-stone-200 text-stone-600 text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-50 hover:border-stone-400 transition text-center">${t.btnBuy}</button>
+                            <button onclick="window.scrollToSection('collections')" class="block w-full py-3 bg-stone-800 text-white text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-600 transition text-center">${t.btnCollection}</button>
+                            <button onclick="window.openContactModal()" class="block w-full py-3 bg-white border border-stone-200 text-stone-600 text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-50 hover:border-stone-400 transition text-center">${t.btnBuy}</button>
                         </div>
                         <button onclick="document.getElementById('calcForm').reset(); document.getElementById('resultArea').classList.add('hidden');" class="mt-6 text-[10px] text-stone-400 border-b border-transparent hover:border-stone-400 hover:text-stone-600 transition">${t.btnRetry}</button>
                     </div>
@@ -579,19 +605,27 @@
 
         window.openContactModal = () => document.getElementById('contactModal').classList.remove('hidden');
         window.closeContactModal = () => document.getElementById('contactModal').classList.add('hidden');
+        
+        function escapeHtml(text) {
+            if (!text) return "";
+            return text.replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
+        }
+
         window.handleContactSubmit = (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
             const originalText = btn.innerText;
-            // XSS 防護
             const name = escapeHtml(document.getElementById('cName').value);
             const contact = escapeHtml(document.getElementById('cContact').value);
+            const t = I18N[currentLang];
 
-            btn.disabled = true; btn.innerText = I18N[currentLang].sending;
+            btn.disabled = true; btn.innerText = t.sending;
             setTimeout(() => {
-                alert(I18N[currentLang].alertSent);
+                alert(t.alertSent);
                 btn.disabled = false; btn.innerText = originalText;
-                e.target.reset(); closeContactModal();
+                e.target.reset(); window.closeContactModal();
             }, 1000);
         };
         
@@ -626,7 +660,36 @@
             if(valY) yearSelect.value = valY; if(valM) monthSelect.value = valM; if(valD) daySelect.value = valD;
         }
 
-        // === 內部邏輯函式 ===
+        const quotesPool = ["每一顆靈石，都在訴說宇宙的秘密。", "靜謐之中，感受大地的呼吸。", "光影折射，映照出靈魂的純粹。", "穿越億萬年的星塵，只為與你相遇。", "心如明鏡，塵埃自落。", "在石頭的溫潤中，找回內心的平靜。", "礦石的低語，是時間留下的情書。", "擁抱自然，與萬物共鳴。", "純粹的光，照亮未曾察覺的角落。", "靜聽石語，找尋失落的記憶。", "大地之母的饋贈，值得溫柔以待。", "靈魂的頻率，在色彩中閃耀。", "靜默，是最高級的溝通方式。", "不刻意渲染，美自會浮現。", "每一道裂痕，都是成長的印記。", "與石結緣，即是與自己重逢。", "星辰隕落，化作掌心的溫度。", "在忙碌的世界中，保有一方淨土。", "心之所向，便是能量所在。", "靈石無言，卻最懂你的心。"];
+        const sessionQuote = quotesPool[Math.floor(Math.random() * quotesPool.length)];
+
+        window.generateDailyQuote = () => {
+            const btn = document.getElementById('btn-daily-quote');
+            const display = document.getElementById('ai-quote');
+            btn.disabled = true; btn.innerText = "感應中...";
+            setTimeout(() => { display.innerText = `「${sessionQuote}」`; btn.disabled = false; btn.innerText = "獲取今日石語 ✨"; }, 1200);
+        };
+
+        // === 2. 初始化流程 (Firebase) ===
+        const firebaseConfig = {
+            apiKey: "AIzaSyDruZNMUyiJNcyoksYIBDHv5F1SiiG2Mss",
+            authDomain: "our-story-53723.firebaseapp.com",
+            projectId: "our-story-53723",
+            storageBucket: "our-story-53723.firebasestorage.app",
+            messagingSenderId: "651350028652",
+            appId: "1:651350028652:web:44db9f6bd7d1b502578349"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = initializeFirestore(app, { experimentalForceLongPolling: true });
+        authInstance = auth; // 賦值給全域供按鈕使用
+
+        // 全域變數
+        let siteConfig = {};
+        let calculatorConfig = {};
+        let collectionsList = [];
+
         function initNavbarScroll() {
             const nav = document.getElementById('navbar');
             window.addEventListener('scroll', () => {
@@ -665,118 +728,57 @@
             reader.readAsDataURL(file);
         };
 
-        // --- 管理員登入 Modal 邏輯 ---
-        window.toggleAdmin = async () => {
-            const panel = document.getElementById('admin-panel');
-            const currentUid = auth.currentUser?.uid?.trim();
-            if (auth.currentUser && currentUid === ADMIN_UID) {
-                panel.classList.toggle('active');
-            } else {
-                // 改用 Modal 顯示登入框，避免 prompt 被瀏覽器阻擋
-                document.getElementById('adminLoginModal').classList.remove('hidden');
-            }
+        window.addNewCollectionItem = () => {
+            collectionsList.unshift({ id: 'temp_' + Date.now(), name: "新收藏", desc: "能量描述", img: "", createdAt: Date.now(), isNew: true });
+            window.renderAdminList();
+        };
+        window.updateLocalItem = (index, field, value) => { collectionsList[index][field] = value; };
+        window.deleteItem = async (id) => {
+            if (!confirm("確定移除嗎？")) return;
+            if (id.startsWith('temp_')) { collectionsList = collectionsList.filter(i => i.id !== id); window.renderAdminList(); }
+            else { await deleteDoc(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems', id)); }
         };
 
-        window.closeAdminLoginModal = () => {
-            document.getElementById('adminLoginModal').classList.add('hidden');
-        };
-
-        window.handleAdminLogin = async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('adminEmail').value;
-            const pass = document.getElementById('adminPass').value;
-            const btn = e.target.querySelector('button[type="submit"]');
-            const originalText = btn.innerText;
-            
-            btn.disabled = true;
-            btn.innerText = "驗證中...";
-
-            try {
-                const cred = await signInWithEmailAndPassword(auth, email, pass);
-                if (cred.user.uid.trim() === ADMIN_UID) {
-                    alert("身分核對成功！");
-                    window.closeAdminLoginModal();
-                    document.getElementById('admin-panel').classList.add('active');
-                    document.getElementById('admin-action-btn').innerText = "管理模式 (已登入)";
-                    // 重整管理列表
-                    if (typeof renderAdminList === 'function') renderAdminList();
-                } else {
-                    alert("不具備管理權限。");
-                    await signOut(auth);
-                }
-            } catch(e) {
-                console.error(e);
-                alert("帳號或密碼錯誤: " + e.message);
-            } finally {
-                btn.disabled = false;
-                btn.innerText = originalText;
-            }
-        };
-
-        window.signOutAdmin = () => { 
-            if(!confirm("確定要登出管理員身份嗎？")) return;
-            signOut(auth).then(() => { alert("已安全登出。"); window.location.reload(); }); 
-        };
-        
-        async function initApp() {
+        window.saveSiteData = async () => {
+            if (!auth.currentUser || auth.currentUser.uid.trim() !== ADMIN_UID) return alert("權限不足！");
             document.getElementById('loading').style.display = 'flex';
-            initNavbarScroll();
-            populateDropdowns();
-
-            onAuthStateChanged(auth, (user) => {
-                const panel = document.getElementById('admin-panel');
-                const btn = document.getElementById('admin-action-btn');
-                const currentUid = user?.uid?.trim();
-                if (user && currentUid === ADMIN_UID) {
-                    panel.classList.add('active');
-                    btn.innerText = "管理模式 (已登入)";
-                    renderAdminList();
-                } else {
-                    panel.classList.remove('active');
-                    btn.innerText = "Admin Login";
+            try {
+                const configRef = doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'main');
+                const updateData = { 
+                    ...siteConfig, 
+                    brandName: document.getElementById('edit-brand-name')?.value || siteConfig.brandName, 
+                    heroTitle: document.getElementById('edit-hero-title')?.value || siteConfig.heroTitle, 
+                    heroSub: document.getElementById('edit-hero-sub')?.value || siteConfig.heroSub, 
+                    aboutText: document.getElementById('edit-about-text')?.value || siteConfig.aboutText, 
+                    aboutLink: document.getElementById('edit-about-link')?.value || siteConfig.aboutLink,
+                    igHandle: document.getElementById('edit-ig-handle')?.value || siteConfig.igHandle,
+                    igUrl: document.getElementById('edit-ig-url')?.value || siteConfig.igUrl,
+                    fbHandle: document.getElementById('edit-fb-handle')?.value || siteConfig.fbHandle,
+                    fbUrl: document.getElementById('edit-fb-url')?.value || siteConfig.fbUrl
+                };
+                for(let i=1; i<=4; i++) { 
+                    const val = document.getElementById(`edit-ig-embed-${i}`)?.value;
+                    if(val !== undefined) updateData[`igEmbed${i}`] = val; 
                 }
-                startListeners();
-            });
-            await signInAnonymously(auth).catch(() => {});
-        }
+                await setDoc(configRef, updateData);
 
-        function startListeners() {
-            // 監聽一般設定
-            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'main'), (snap) => {
-                if (snap.exists()) { siteConfig = { ...siteConfig, ...snap.data() }; renderFrontEnd(); }
-            });
-            // 監聽測驗圖片設定
-            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'calculator'), (snap) => {
-                if (snap.exists()) { 
-                    calculatorConfig = snap.data(); 
-                    if (calculatorConfig.stones) {
-                        Object.keys(calculatorConfig.stones).forEach(key => {
-                            if (STONES[key] && calculatorConfig.stones[key]) {
-                                STONES[key].img = calculatorConfig.stones[key];
-                            }
-                        });
-                        // 重新渲染結果區塊如果它是打開的
-                        const resultArea = document.getElementById('resultArea');
-                        if (resultArea && !resultArea.classList.contains('hidden')) {
-                             // 這裡簡單處理，如果不影響用戶體驗，可以選擇不自動刷新
-                        }
-                    }
+                if (calculatorConfig && Object.keys(calculatorConfig).length > 0) {
+                    const calcRef = doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'calculator');
+                    await setDoc(calcRef, calculatorConfig);
                 }
-                document.getElementById('loading').style.display = 'none';
-            });
-            // 監聽商品列表
-            onSnapshot(collection(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems'), (snap) => {
-                collectionsList = []; snap.forEach(d => collectionsList.push({ id: d.id, ...d.data() }));
-                collectionsList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                renderCollections();
-                if (document.getElementById('admin-panel').classList.contains('active')) renderAdminList();
-            });
-        }
 
-        // --- 沿用之前的渲染邏輯與上傳存檔邏輯 (為節省篇幅省略重複函式，但已包含在執行邏輯中) ---
-        // (此處省略部分重複的 renderFrontEnd, renderCollections 等函式以避免超長，但功能已透過上方定義與呼叫完整串接)
-        // 注意：為了完整性，以下補齊 renderFrontEnd 等關鍵函式
+                for (const item of collectionsList) {
+                    const id = item.isNew ? doc(collection(db, 'dummy')).id : item.id;
+                    const itemRef = doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems', id);
+                    const cleanItem = { ...item }; delete cleanItem.id; delete cleanItem.isNew;
+                    await setDoc(itemRef, cleanItem);
+                }
+                alert("同步成功！");
+            } catch (e) { alert("失敗: " + e.message); }
+            finally { document.getElementById('loading').style.display = 'none'; }
+        };
 
+        // 渲染函式群
         function renderIgSlot(slotId, embedUrl, fallbackImg) {
             const container = document.getElementById(slotId);
             if (!container) return;
@@ -790,7 +792,6 @@
         }
 
         function renderFrontEnd() {
-            // (簡化版，確保 ID 存在才更新)
             const safeSetText = (id, text) => { if(document.getElementById(id)) document.getElementById(id).innerText = text || ""; };
             const safeSetSrc = (id, src) => { if(document.getElementById(id)) document.getElementById(id).src = src || ""; };
             const safeSetHref = (id, href) => { if(document.getElementById(id)) document.getElementById(id).href = href || "#"; };
@@ -838,14 +839,56 @@
             `).join('');
         }
 
-        function renderAdminList() {
+        // 將函式掛載到 window 以供全域呼叫
+        window.renderAdminList = function() {
             const list = document.getElementById('edit-collections-list');
             if (!list) return;
             list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="updateLocalItem(${index}, 'name', this.value)" class="text-xs font-bold"><textarea onchange="updateLocalItem(${index}, 'desc', this.value)" class="text-xs">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">換照<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
             lucide.createIcons();
         }
 
-        initApp();
+        // 啟動邏輯
+        document.getElementById('loading').style.display = 'flex';
+        initNavbarScroll();
+        populateDropdowns();
+        
+        onAuthStateChanged(auth, (user) => {
+            const panel = document.getElementById('admin-panel');
+            const btn = document.getElementById('admin-action-btn');
+            const currentUid = user?.uid?.trim();
+            if (user && currentUid === ADMIN_UID) {
+                panel.classList.add('active');
+                btn.innerText = "管理模式 (已登入)";
+                window.renderAdminList();
+            } else {
+                panel.classList.remove('active');
+                btn.innerText = "Admin Login";
+            }
+            
+            // 載入資料
+            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'main'), (snap) => {
+                if (snap.exists()) { siteConfig = { ...siteConfig, ...snap.data() }; renderFrontEnd(); }
+            });
+            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'calculator'), (snap) => {
+                if (snap.exists()) { 
+                    calculatorConfig = snap.data(); 
+                    if (calculatorConfig.stones) {
+                        Object.keys(calculatorConfig.stones).forEach(key => {
+                            if (STONES[key] && calculatorConfig.stones[key]) STONES[key].img = calculatorConfig.stones[key];
+                        });
+                    }
+                }
+                document.getElementById('loading').style.display = 'none';
+            });
+            onSnapshot(collection(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems'), (snap) => {
+                collectionsList = []; snap.forEach(d => collectionsList.push({ id: d.id, ...d.data() }));
+                collectionsList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                renderCollections();
+                if (document.getElementById('admin-panel').classList.contains('active')) window.renderAdminList();
+            });
+        });
+        
+        await signInAnonymously(auth).catch(() => {});
         lucide.createIcons();
     </script>
 </body>
