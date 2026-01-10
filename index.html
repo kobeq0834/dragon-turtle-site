@@ -545,6 +545,7 @@
 
         window.openContactModal = () => document.getElementById('contactModal').classList.remove('hidden');
         window.closeContactModal = () => document.getElementById('contactModal').classList.add('hidden');
+        
         window.handleContactSubmit = (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
@@ -552,24 +553,30 @@
             const nameInput = document.getElementById('cName').value;
             const contactInput = document.getElementById('cContact').value;
             
+            // XSS 防護
+            const name = escapeHtml(nameInput);
+            const contact = escapeHtml(contactInput);
+
             // 取得目前的靈石結果
             const stoneTitle = document.querySelector('#resultArea h3')?.innerText || "靈石";
             
             btn.disabled = true; btn.innerText = I18N[currentLang].sending;
             
             // 讀取後台設定的 LINE ID (優先使用 siteConfig，若無則使用預設值)
-            const lineId = (siteConfig.lineId && siteConfig.lineId.trim() !== "") ? siteConfig.lineId : "@291pcwxm";
+            let lineId = (siteConfig.lineId && siteConfig.lineId.trim() !== "") ? siteConfig.lineId : "@291pcwxm";
+            if (!lineId.startsWith('@')) lineId = '@' + lineId; // 強制補上 @
             
             // 構建預設訊息
-            const message = `您好，我是 ${nameInput}。\n聯絡方式：${contactInput}\n\n我剛做了靈石測驗，結果是：${stoneTitle}\n想請專員協助介紹與購買，謝謝！`;
+            const message = `您好，我是 ${name}。\n聯絡方式：${contact}\n\n我剛做了靈石測驗，結果是：${stoneTitle}\n想請專員協助介紹與購買，謝謝！`;
             
-            // 產生連結 (官方帳號 deep link)
+            // 使用 location.href 進行跳轉 (解決移動端攔截問題)
+            // 使用 /R/oaMessage/ 格式 (適用於官方帳號)
             const lineUrl = `https://line.me/R/oaMessage/${lineId}/?${encodeURIComponent(message)}`;
             
-            // 立即開啟視窗 (繞過 popup blocker)
-            window.open(lineUrl, '_blank');
+            // 使用 location.href 替代 window.open，避免被瀏覽器擋下
+            window.location.href = lineUrl;
 
-            // 隨後更新 UI
+            // 稍微延遲後重置介面 (因為頁面可能跳轉走了)
             setTimeout(() => {
                 alert(I18N[currentLang].alertSent);
                 btn.disabled = false; btn.innerText = originalText;
@@ -717,7 +724,7 @@
             finally { document.getElementById('loading').style.display = 'none'; }
         };
 
-        // --- 管理員登入 Modal 邏輯 ---
+        // --- 管理員登入邏輯 (恢復 prompt) ---
         window.toggleAdmin = async () => {
             const panel = document.getElementById('admin-panel');
             const currentUid = authInstance.currentUser?.uid?.trim();
@@ -725,10 +732,12 @@
             if (authInstance.currentUser && currentUid === ADMIN_UID) {
                 panel.classList.toggle('active');
             } else {
+                // 使用 Modal 登入視窗
                 document.getElementById('adminLoginModal').classList.remove('hidden');
             }
         };
 
+        // Modal 相關控制
         window.closeAdminLoginModal = () => {
             document.getElementById('adminLoginModal').classList.add('hidden');
         };
@@ -877,6 +886,13 @@
         
         await signInAnonymously(auth).catch(() => {});
         lucide.createIcons();
+        
+        function escapeHtml(text) {
+            if (!text) return "";
+            return text.replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
+        }
     </script>
 </body>
 </html>
