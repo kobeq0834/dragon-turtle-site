@@ -829,27 +829,36 @@
             if (!authInstance.currentUser || authInstance.currentUser.uid.trim() !== ADMIN_UID) return alert("權限不足！");
             document.getElementById('loading').style.display = 'flex';
             try {
+                // 使用輔助函式確保所有欄位都不是 undefined
+                const getVal = (id, fallback) => {
+                    const el = document.getElementById(id);
+                    // 如果元素存在，就使用元素的值（即使是空字串也沒關係，這樣才能清空欄位）
+                    // 只有當元素不存在時，才使用舊的資料（fallback），並確保 fallback 至少是 ""
+                    if (el) return el.value;
+                    return fallback || "";
+                };
+
                 const configRef = doc(db, 'artifacts', appId, 'public', 'data', 'siteSettings', 'main');
                 const updateData = { 
                     ...siteConfig, 
-                    brandName: document.getElementById('edit-brand-name')?.value || siteConfig.brandName, 
-                    brandNameEn: document.getElementById('edit-brand-name-en')?.value || siteConfig.brandNameEn,
+                    brandName: getVal('edit-brand-name', siteConfig.brandName), 
+                    brandNameEn: getVal('edit-brand-name-en', siteConfig.brandNameEn),
                     
-                    heroTitle: document.getElementById('edit-hero-title')?.value || siteConfig.heroTitle, 
-                    heroTitleEn: document.getElementById('edit-hero-title-en')?.value || siteConfig.heroTitleEn,
+                    heroTitle: getVal('edit-hero-title', siteConfig.heroTitle), 
+                    heroTitleEn: getVal('edit-hero-title-en', siteConfig.heroTitleEn),
                     
-                    heroSub: document.getElementById('edit-hero-sub')?.value || siteConfig.heroSub, 
-                    heroSubEn: document.getElementById('edit-hero-sub-en')?.value || siteConfig.heroSubEn,
+                    heroSub: getVal('edit-hero-sub', siteConfig.heroSub), 
+                    heroSubEn: getVal('edit-hero-sub-en', siteConfig.heroSubEn),
                     
-                    aboutText: document.getElementById('edit-about-text')?.value || siteConfig.aboutText, 
-                    aboutTextEn: document.getElementById('edit-about-text-en')?.value || siteConfig.aboutTextEn,
+                    aboutText: getVal('edit-about-text', siteConfig.aboutText), 
+                    aboutTextEn: getVal('edit-about-text-en', siteConfig.aboutTextEn),
                     
-                    aboutLink: document.getElementById('edit-about-link')?.value || siteConfig.aboutLink,
-                    igHandle: document.getElementById('edit-ig-handle')?.value || siteConfig.igHandle,
-                    igUrl: document.getElementById('edit-ig-url')?.value || siteConfig.igUrl,
-                    fbHandle: document.getElementById('edit-fb-handle')?.value || siteConfig.fbHandle,
-                    fbUrl: document.getElementById('edit-fb-url')?.value || siteConfig.fbUrl,
-                    lineId: document.getElementById('edit-line-id')?.value || siteConfig.lineId
+                    aboutLink: getVal('edit-about-link', siteConfig.aboutLink),
+                    igHandle: getVal('edit-ig-handle', siteConfig.igHandle),
+                    igUrl: getVal('edit-ig-url', siteConfig.igUrl),
+                    fbHandle: getVal('edit-fb-handle', siteConfig.fbHandle),
+                    fbUrl: getVal('edit-fb-url', siteConfig.fbUrl),
+                    lineId: getVal('edit-line-id', siteConfig.lineId)
                 };
                 for(let i=1; i<=4; i++) { 
                     const val = document.getElementById(`edit-ig-embed-${i}`)?.value;
