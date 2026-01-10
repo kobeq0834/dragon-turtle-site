@@ -116,8 +116,6 @@
                 <button onclick="window.scrollToSection('calculator')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">靈石測驗</button>
                 <button onclick="window.scrollToSection('collections')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">收藏系列</button>
                 <button onclick="window.scrollToSection('social')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">追蹤我們</button>
-                
-                <!-- 靈石測驗按鈕 (替換原 IG/FB) -->
                 <div class="flex items-center border-l border-stone-300 pl-8">
                     <button onclick="window.scrollToSection('calculator')" class="group flex items-center space-x-2 text-stone-800 hover:text-stone-500 transition-colors">
                         <i data-lucide="sparkles" class="w-4 h-4"></i>
@@ -147,10 +145,7 @@
             <div class="relative z-10 text-center px-6">
                 <p id="hero-sub-display" class="text-[10px] md:text-xs tracking-[0.5em] text-stone-600 mb-8 animate-fadeInUp uppercase font-bold">Every stone has its own story</p>
                 <h1 id="hero-title-display" class="text-4xl md:text-6xl font-light text-stone-900 mb-10 tracking-[0.3em] leading-[1.6] animate-fadeInUp delay-100 drop-shadow-sm">奧兒絲朵<br /><span class="text-2xl md:text-3xl tracking-[0.4em] text-stone-600 italic font-normal block mt-4">靈石與您的故事</span></h1>
-                
-                <button onclick="window.scrollToSection('calculator')" class="mt-8 px-8 py-3 border border-stone-800 text-stone-800 hover:bg-stone-800 hover:text-white transition-all text-xs tracking-[0.3em] uppercase font-bold animate-fadeInUp" style="animation-delay: 0.5s;">
-                    尋找您的命定靈石
-                </button>
+                <button onclick="window.scrollToSection('calculator')" class="mt-8 px-8 py-3 border border-stone-800 text-stone-800 hover:bg-stone-800 hover:text-white transition-all text-xs tracking-[0.3em] uppercase font-bold animate-fadeInUp" style="animation-delay: 0.5s;">尋找您的命定靈石</button>
             </div>
         </header>
 
@@ -179,53 +174,36 @@
                     <span id="langLabel">English</span>
                 </button>
             </div>
-
             <div class="max-w-lg mx-auto bg-white p-8 md:p-12 rounded-2xl shadow-xl border border-stone-100 relative z-0">
                 <div class="text-center">
-                    <div class="mx-auto h-16 w-16 bg-stone-50 rounded-full flex items-center justify-center mb-4">
-                        <i data-lucide="sun" class="h-8 w-8 text-stone-400"></i>
-                    </div>
+                    <div class="mx-auto h-16 w-16 bg-stone-50 rounded-full flex items-center justify-center mb-4"><i data-lucide="sun" class="h-8 w-8 text-stone-400"></i></div>
                     <h2 id="ui-title" class="text-2xl font-medium text-stone-800 tracking-widest mb-2">尋找您的命定靈石</h2>
-                    <p id="ui-desc" class="text-xs text-stone-500 tracking-wider leading-relaxed">
-                        輸入您的<span class="font-bold text-stone-700">國曆 (Solar)</span> 出生日期，<br>
-                        系統將自動換算精確的農曆五行，<br>
-                        為您連結那顆等待已久的守護石。
-                    </p>
+                    <p id="ui-desc" class="text-xs text-stone-500 tracking-wider leading-relaxed">輸入您的<span class="font-bold text-stone-700">國曆 (Solar)</span> 出生日期，<br>系統將自動換算精確的農曆五行，<br>為您連結那顆等待已久的守護石。</p>
                 </div>
-
                 <form id="calcForm" class="mt-8 space-y-6" onsubmit="window.calculateStone(event)">
                     <div class="space-y-5">
                         <div class="relative">
                             <label id="label-year" for="year" class="block text-xs font-medium text-stone-500 tracking-widest mb-1">國曆出生年</label>
-                            <select id="year" required class="calc-select block w-full pl-3 pr-10 py-3 text-sm border border-stone-200 focus:outline-none focus:ring-1 focus:ring-stone-400 focus:border-stone-400 rounded-md bg-stone-50 text-stone-700">
-                                <option value="" disabled selected data-i18n="select-year">請選擇年份</option>
-                            </select>
+                            <select id="year" required class="calc-select block w-full pl-3 pr-10 py-3 text-sm border border-stone-200 focus:outline-none focus:ring-1 focus:ring-stone-400 focus:border-stone-400 rounded-md bg-stone-50 text-stone-700"><option value="" disabled selected data-i18n="select-year">請選擇年份</option></select>
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div class="relative">
                                 <label id="label-month" for="month" class="block text-xs font-medium text-stone-500 tracking-widest mb-1">國曆月份</label>
-                                <select id="month" required class="calc-select block w-full pl-3 pr-10 py-3 text-sm border border-stone-200 focus:outline-none focus:ring-1 focus:ring-stone-400 focus:border-stone-400 rounded-md bg-stone-50 text-stone-700">
-                                    <option value="" disabled selected data-i18n="select-month">月份</option>
-                                </select>
+                                <select id="month" required class="calc-select block w-full pl-3 pr-10 py-3 text-sm border border-stone-200 focus:outline-none focus:ring-1 focus:ring-stone-400 focus:border-stone-400 rounded-md bg-stone-50 text-stone-700"><option value="" disabled selected data-i18n="select-month">月份</option></select>
                             </div>
                             <div class="relative">
                                 <label id="label-day" for="day" class="block text-xs font-medium text-stone-500 tracking-widest mb-1">國曆日期</label>
-                                <select id="day" required class="calc-select block w-full pl-3 pr-10 py-3 text-sm border border-stone-200 focus:outline-none focus:ring-1 focus:ring-stone-400 focus:border-stone-400 rounded-md bg-stone-50 text-stone-700">
-                                    <option value="" disabled selected data-i18n="select-day">日期</option>
-                                </select>
+                                <select id="day" required class="calc-select block w-full pl-3 pr-10 py-3 text-sm border border-stone-200 focus:outline-none focus:ring-1 focus:ring-stone-400 focus:border-stone-400 rounded-md bg-stone-50 text-stone-700"><option value="" disabled selected data-i18n="select-day">日期</option></select>
                             </div>
                         </div>
                     </div>
                     <div class="pt-4">
                         <button type="submit" class="group relative w-full flex justify-center py-4 px-4 border border-transparent text-sm font-bold rounded-md text-white bg-stone-800 hover:bg-stone-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stone-500 transition-all tracking-[0.2em] uppercase shadow-lg">
                             <span id="btn-calc">開始轉換並感應</span>
-                            <span class="absolute right-0 inset-y-0 flex items-center pr-3">
-                                <i data-lucide="arrow-right" class="h-4 w-4 text-stone-400 group-hover:text-white transition"></i>
-                            </span>
+                            <span class="absolute right-0 inset-y-0 flex items-center pr-3"><i data-lucide="arrow-right" class="h-4 w-4 text-stone-400 group-hover:text-white transition"></i></span>
                         </button>
                     </div>
                 </form>
-
                 <div id="resultArea" class="hidden text-center space-y-6 pt-6 border-t border-stone-100">
                     <div id="loading-text" class="animate-pulse text-stone-400 text-xs tracking-widest mb-4">正在換算農曆五行...</div>
                 </div>
@@ -239,21 +217,20 @@
 
         <!-- 社群區塊 -->
         <section id="social" class="py-24 md:py-40 px-8 bg-white">
-            <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16">
-                <div class="w-full lg:w-2/5 space-y-12">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16">
+                <div class="w-full md:w-2/5 space-y-12">
                     <h2 id="social-title-display" class="text-2xl md:text-3xl font-light tracking-[0.3em] text-stone-900 uppercase">Follow Us</h2>
                     <div class="space-y-4">
                         <a id="ig-link-display" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between group py-5 border-b border-stone-200"><span id="ig-text-display" class="text-sm tracking-[0.2em] text-stone-600 font-medium uppercase">Instagram</span><i data-lucide="arrow-right" class="w-4 h-4 text-stone-400 group-hover:translate-x-1 transition-transform group-hover:text-stone-800"></i></a>
                         <a id="fb-link-display" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between group py-5 border-b border-stone-200"><span id="fb-text-display" class="text-sm tracking-[0.2em] text-stone-600 font-medium uppercase">Facebook</span><i data-lucide="arrow-right" class="w-4 h-4 text-stone-400 group-hover:translate-x-1 transition-transform group-hover:text-stone-800"></i></a>
                     </div>
                 </div>
-                
-                <div id="gallery-container" class="w-full lg:w-3/5 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                     <div class="space-y-6">
                         <div id="ig-slot-1" class="ig-embed-container shadow-md"></div>
                         <div id="ig-slot-2" class="ig-embed-container shadow-md"></div>
                     </div>
-                    <div class="space-y-6 lg:pt-12">
+                    <div class="space-y-6 md:pt-12">
                         <div id="ig-slot-3" class="ig-embed-container shadow-md"></div>
                         <div id="ig-slot-4" class="ig-embed-container shadow-md"></div>
                     </div>
@@ -399,16 +376,34 @@
         import { getAuth, signInWithEmailAndPassword, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot, query, initializeFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // === 1. 優先定義全域功能函式，確保按鈕有反應 ===
+        // === 1. 定義全域變數與基本功能 ===
+        const ADMIN_UID = "0MFL33qKcbQIeln2X1wsHOl4ebo2".trim();
+        const firebaseConfig = {
+            apiKey: "AIzaSyDruZNMUyiJNcyoksYIBDHv5F1SiiG2Mss",
+            authDomain: "our-story-53723.firebaseapp.com",
+            projectId: "our-story-53723",
+            storageBucket: "our-story-53723.firebasestorage.app",
+            messagingSenderId: "651350028652",
+            appId: "1:651350028652:web:44db9f6bd7d1b502578349"
+        };
         
-        // 顯示載入畫面超時保護
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = initializeFirestore(app, { experimentalForceLongPolling: true });
+        
+        // 全域變數
+        let siteConfig = {};
+        let calculatorConfig = {};
+        let collectionsList = [];
+        let currentLang = 'zh';
+
+        // 載入保護
         setTimeout(() => {
             const loading = document.getElementById('loading');
-            if (loading && loading.style.display !== 'none') {
-                loading.style.display = 'none';
-            }
-        }, 3000); // 3秒後強制關閉 loading
+            if (loading && loading.style.display !== 'none') loading.style.display = 'none';
+        }, 3000);
 
+        // 基本 UI 函式
         window.scrollToSection = (id) => {
             const e = document.getElementById(id);
             if (e) { 
@@ -422,82 +417,20 @@
             m.classList.toggle('active');
         };
 
-        // --- 管理員登入/登出邏輯 ---
-        let authInstance = null; // 暫存 auth 實例
-        const ADMIN_UID = "0MFL33qKcbQIeln2X1wsHOl4ebo2".trim();
-
-        window.toggleAdmin = () => {
-            if (!authInstance) return alert("系統載入中，請稍後再試");
-            const panel = document.getElementById('admin-panel');
-            const currentUid = authInstance.currentUser?.uid?.trim();
-            
-            if (authInstance.currentUser && currentUid === ADMIN_UID) {
-                panel.classList.toggle('active');
-            } else {
-                document.getElementById('adminLoginModal').classList.remove('hidden');
-            }
+        window.generateDailyQuote = () => {
+            const quotesPool = ["每一顆靈石，都在訴說宇宙的秘密。", "靜謐之中，感受大地的呼吸。", "光影折射，映照出靈魂的純粹。", "穿越億萬年的星塵，只為與你相遇。", "心如明鏡，塵埃自落。", "在石頭的溫潤中，找回內心的平靜。", "礦石的低語，是時間留下的情書。", "擁抱自然，與萬物共鳴。", "純粹的光，照亮未曾察覺的角落。", "靜聽石語，找尋失落的記憶。", "大地之母的饋贈，值得溫柔以待。", "靈魂的頻率，在色彩中閃耀。", "靜默，是最高級的溝通方式。", "不刻意渲染，美自會浮現。", "每一道裂痕，都是成長的印記。", "與石結緣，即是與自己重逢。", "星辰隕落，化作掌心的溫度。", "在忙碌的世界中，保有一方淨土。", "心之所向，便是能量所在。", "靈石無言，卻最懂你的心。"];
+            const sessionQuote = quotesPool[Math.floor(Math.random() * quotesPool.length)];
+            const btn = document.getElementById('btn-daily-quote');
+            const display = document.getElementById('ai-quote');
+            btn.disabled = true; btn.innerText = "感應中...";
+            setTimeout(() => { display.innerText = `「${sessionQuote}」`; btn.disabled = false; btn.innerText = "獲取今日石語 ✨"; }, 1200);
         };
 
-        window.closeAdminLoginModal = () => {
-            document.getElementById('adminLoginModal').classList.add('hidden');
-        };
-
-        window.handleAdminLogin = async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('adminEmail').value;
-            const pass = document.getElementById('adminPass').value;
-            const btn = e.target.querySelector('button[type="submit"]');
-            const originalText = btn.innerText;
-            
-            btn.disabled = true;
-            btn.innerText = "驗證中...";
-
-            try {
-                const cred = await signInWithEmailAndPassword(authInstance, email, pass);
-                if (cred.user.uid.trim() === ADMIN_UID) {
-                    alert("身分核對成功！");
-                    window.closeAdminLoginModal();
-                    document.getElementById('admin-panel').classList.add('active');
-                    document.getElementById('admin-action-btn').innerText = "管理模式 (已登入)";
-                    if (typeof window.renderAdminList === 'function') window.renderAdminList();
-                } else {
-                    alert("不具備管理權限。");
-                    await signOut(authInstance);
-                }
-            } catch(e) {
-                alert("帳號或密碼錯誤: " + e.message);
-            } finally {
-                btn.disabled = false;
-                btn.innerText = originalText;
-            }
-        };
-
-        window.signOutAdmin = () => { 
-            if(!confirm("確定要登出管理員身份嗎？")) return;
-            signOut(authInstance).then(() => { alert("已安全登出。"); window.location.reload(); }); 
-        };
-
-        // --- 靈石測驗邏輯 ---
-        let currentLang = 'zh';
+        // --- 靈石測驗資料與邏輯 ---
         const MONTH_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        
         const I18N = {
-            zh: {
-                title: "尋找您的命定靈石", desc: `輸入您的<span class="font-bold text-stone-700">國曆 (Solar)</span> 出生日期，<br>系統將自動換算精確的農曆五行，<br>為您連結那顆等待已久的守護石。`,
-                labelYear: "國曆出生年", labelMonth: "國曆月份", labelDay: "國曆日期", btnCalc: "開始轉換並感應", loading: "正在換算農曆五行...",
-                resultTitle: "農曆出生資訊", btnCollection: "查看收藏系列", btnBuy: "洽詢專員購買", btnRetry: "重新測驗",
-                modalTitle: "專員購藏協助", modalDesc: `請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務專注於協助購買挑選，非命理諮詢)</span>`,
-                labelCName: "您的稱呼", labelCContact: "聯絡方式 (手機 / LINE ID)", btnSubmit: "確認送出", alertSent: "資料已送出！稍後將有專員與您聯繫。", sending: "資料傳送中...",
-                selectYear: "請選擇年份", selectMonth: "月份", selectDay: "日期", refImg: "示意圖"
-            },
-            en: {
-                title: "Find Your Destined Stone", desc: `Enter your <span class="font-bold text-stone-700">Solar Birth Date</span>.<br>We will calculate your Lunar Elemental Energy<br>to reveal your Guardian Stone.`,
-                labelYear: "Birth Year (Solar)", labelMonth: "Birth Month", labelDay: "Birth Day", btnCalc: "Reveal My Stone", loading: "Calculating Cosmic Energy...",
-                resultTitle: "Your Lunar Profile", btnCollection: "View Collection", btnBuy: "Contact for Purchase", btnRetry: "Retake Quiz",
-                modalTitle: "Purchasing Assistance", modalDesc: `Leave your info, and a specialist will guide you through our collection.<br><span class="text-stone-400 font-light block mt-1">(Assistance for purchase, not fortune telling)</span>`,
-                labelCName: "Your Name", labelCContact: "Contact (Phone / LINE / WhatsApp)", btnSubmit: "Submit", alertSent: "Sent! A specialist will contact you shortly.", sending: "Sending...",
-                selectYear: "Select Year", selectMonth: "Month", selectDay: "Day", refImg: "Reference"
-            }
+            zh: { title: "尋找您的命定靈石", desc: `輸入您的<span class="font-bold text-stone-700">國曆 (Solar)</span> 出生日期，<br>系統將自動換算精確的農曆五行，<br>為您連結那顆等待已久的守護石。`, labelYear: "國曆出生年", labelMonth: "國曆月份", labelDay: "國曆日期", btnCalc: "開始轉換並感應", loading: "正在換算農曆五行...", resultTitle: "農曆出生資訊", btnCollection: "查看收藏系列", btnBuy: "洽詢專員購買", btnRetry: "重新測驗", modalTitle: "專員購藏協助", modalDesc: `請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務專注於協助購買挑選，非命理諮詢)</span>`, labelCName: "您的稱呼", labelCContact: "聯絡方式 (手機 / LINE ID)", btnSubmit: "確認送出", alertSent: "資料已送出！稍後將有專員與您聯繫。", sending: "資料傳送中...", selectYear: "請選擇年份", selectMonth: "月份", selectDay: "日期", refImg: "示意圖" },
+            en: { title: "Find Your Destined Stone", desc: `Enter your <span class="font-bold text-stone-700">Solar Birth Date</span>.<br>We will calculate your Lunar Elemental Energy<br>to reveal your Guardian Stone.`, labelYear: "Birth Year (Solar)", labelMonth: "Birth Month", labelDay: "Birth Day", btnCalc: "Reveal My Stone", loading: "Calculating Cosmic Energy...", resultTitle: "Your Lunar Profile", btnCollection: "View Collection", btnBuy: "Contact for Purchase", btnRetry: "Retake Quiz", modalTitle: "Purchasing Assistance", modalDesc: `Leave your info, and a specialist will guide you through our collection.<br><span class="text-stone-400 font-light block mt-1">(Assistance for purchase, not fortune telling)</span>`, labelCName: "Your Name", labelCContact: "Contact (Phone / LINE / WhatsApp)", btnSubmit: "Submit", alertSent: "Sent! A specialist will contact you shortly.", sending: "Sending...", selectYear: "Select Year", selectMonth: "Month", selectDay: "Day", refImg: "Reference" }
         };
 
         const STONES = {
@@ -557,150 +490,38 @@
 
         function toTraditionalChinese(str) { const map = { '龙': '龍', '马': '馬', '鸡': '雞', '猪': '豬', '腊': '臘' }; return str.split('').map(char => map[char] || char).join(''); }
         function getZodiacEn(chi) { const map = { '鼠': 'Rat', '牛': 'Ox', '虎': 'Tiger', '兔': 'Rabbit', '龍': 'Dragon', '蛇': 'Snake', '馬': 'Horse', '羊': 'Goat', '猴': 'Monkey', '雞': 'Rooster', '狗': 'Dog', '豬': 'Pig' }; return map[chi] || chi; }
+        function getStoneByFate(y, m) { const d = y % 10; if (d <= 1) return (m>=10||m<=12)?'gibeon':(m>=4&&m<=6)?'tektite':'gibeon'; if (d <= 3) return (m>=1&&m<=3)?'gibeon':'moldavite'; if (d <= 5) return (m>=7&&m<=9)?'tektite':'moldavite'; if (d <= 7) return (m>=10||m<=12)?'cherryAgate':(m>=4&&m<=6)?'libyan':'cherryAgate'; return (m>=1&&m<=3)?'libyan':'pallasite'; }
         
-        function getStoneByFate(y, m) {
-            const d = y % 10;
-            if (d <= 1) return (m>=10||m<=12)?'gibeon':(m>=4&&m<=6)?'tektite':'gibeon';
-            if (d <= 3) return (m>=1&&m<=3)?'gibeon':'moldavite';
-            if (d <= 5) return (m>=7&&m<=9)?'tektite':'moldavite';
-            if (d <= 7) return (m>=10||m<=12)?'cherryAgate':(m>=4&&m<=6)?'libyan':'cherryAgate';
-            return (m>=1&&m<=3)?'libyan':'pallasite';
-        }
-
         function renderResult(stone, date) {
             const t = I18N[currentLang];
-            const name = stone.name[currentLang];
-            const desc = stone.desc[currentLang];
-            const tags = stone.tags[currentLang];
-            const subTitle = currentLang === 'zh' ? stone.name.en : "";
-
-            const html = `
-                <div class="stone-card bg-stone-50 rounded-xl overflow-hidden shadow-sm border border-stone-100 fade-in">
-                    <div class="bg-stone-100 p-4 border-b border-stone-200 text-center">
-                        <p class="text-[10px] text-stone-400 tracking-wider mb-1 uppercase">${t.resultTitle}</p>
-                        <p class="text-sm font-bold text-stone-700 tracking-widest">${date}</p>
-                    </div>
-                    <div class="relative h-64 overflow-hidden bg-stone-200 group">
-                        <img src="${stone.img}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400?text=Stone'">
-                        <div class="absolute top-2 right-2 bg-black/30 text-white text-[9px] px-2 py-1 rounded backdrop-blur-sm tracking-wider">${t.refImg}</div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 to-transparent flex items-end justify-center pb-6">
-                            <h3 class="text-white text-2xl font-bold tracking-[0.2em]">${name}</h3>
-                        </div>
-                    </div>
-                    <div class="p-8">
-                        ${subTitle ? `<p class="text-xs text-stone-400 uppercase tracking-widest mb-4 font-bold">${subTitle}</p>` : ''}
-                        <p class="text-sm text-stone-600 leading-loose tracking-wide mb-6 text-justify">${desc}</p>
-                        <div class="flex justify-center space-x-2 mb-8 flex-wrap gap-y-2">
-                            ${tags.map(tag => `<span class="px-3 py-1 bg-white border border-stone-200 rounded-full text-[10px] text-stone-500 tracking-wider">${tag}</span>`).join('')}
-                        </div>
-                        <div class="space-y-3">
-                            <button onclick="window.scrollToSection('collections')" class="block w-full py-3 bg-stone-800 text-white text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-600 transition text-center">${t.btnCollection}</button>
-                            <button onclick="window.openContactModal()" class="block w-full py-3 bg-white border border-stone-200 text-stone-600 text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-50 hover:border-stone-400 transition text-center">${t.btnBuy}</button>
-                        </div>
-                        <button onclick="document.getElementById('calcForm').reset(); document.getElementById('resultArea').classList.add('hidden');" class="mt-6 text-[10px] text-stone-400 border-b border-transparent hover:border-stone-400 hover:text-stone-600 transition">${t.btnRetry}</button>
-                    </div>
-                </div>`;
+            const name = stone.name[currentLang]; const desc = stone.desc[currentLang]; const tags = stone.tags[currentLang]; const subTitle = currentLang === 'zh' ? stone.name.en : "";
+            const html = `<div class="stone-card bg-stone-50 rounded-xl overflow-hidden shadow-sm border border-stone-100 fade-in"><div class="bg-stone-100 p-4 border-b border-stone-200 text-center"><p class="text-[10px] text-stone-400 tracking-wider mb-1 uppercase">${t.resultTitle}</p><p class="text-sm font-bold text-stone-700 tracking-widest">${date}</p></div><div class="relative h-64 overflow-hidden bg-stone-200 group"><img src="${stone.img}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400?text=Stone'"><div class="absolute top-2 right-2 bg-black/30 text-white text-[9px] px-2 py-1 rounded backdrop-blur-sm tracking-wider">${t.refImg}</div><div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 to-transparent flex items-end justify-center pb-6"><h3 class="text-white text-2xl font-bold tracking-[0.2em]">${name}</h3></div></div><div class="p-8">${subTitle ? `<p class="text-xs text-stone-400 uppercase tracking-widest mb-4 font-bold">${subTitle}</p>` : ''}<p class="text-sm text-stone-600 leading-loose tracking-wide mb-6 text-justify">${desc}</p><div class="flex justify-center space-x-2 mb-8 flex-wrap gap-y-2">${tags.map(tag => `<span class="px-3 py-1 bg-white border border-stone-200 rounded-full text-[10px] text-stone-500 tracking-wider">${tag}</span>`).join('')}</div><div class="space-y-3"><button onclick="window.scrollToSection('collections')" class="block w-full py-3 bg-stone-800 text-white text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-600 transition text-center">${t.btnCollection}</button><button onclick="window.openContactModal()" class="block w-full py-3 bg-white border border-stone-200 text-stone-600 text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-50 hover:border-stone-400 transition text-center">${t.btnBuy}</button></div><button onclick="document.getElementById('calcForm').reset(); document.getElementById('resultArea').classList.add('hidden');" class="mt-6 text-[10px] text-stone-400 border-b border-transparent hover:border-stone-400 hover:text-stone-600 transition">${t.btnRetry}</button></div></div>`;
             document.getElementById('resultArea').innerHTML = html;
         }
 
         window.openContactModal = () => document.getElementById('contactModal').classList.remove('hidden');
         window.closeContactModal = () => document.getElementById('contactModal').classList.add('hidden');
-        
-        function escapeHtml(text) {
-            if (!text) return "";
-            return text.replace(/[&<>"']/g, function(m) {
-                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
-            });
-        }
-
-        window.handleContactSubmit = (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button[type="submit"]');
-            const originalText = btn.innerText;
-            const name = escapeHtml(document.getElementById('cName').value);
-            const contact = escapeHtml(document.getElementById('cContact').value);
-            const t = I18N[currentLang];
-
-            btn.disabled = true; btn.innerText = t.sending;
-            setTimeout(() => {
-                alert(t.alertSent);
-                btn.disabled = false; btn.innerText = originalText;
-                e.target.reset(); window.closeContactModal();
-            }, 1000);
-        };
+        window.handleContactSubmit = (e) => { e.preventDefault(); const btn = e.target.querySelector('button[type="submit"]'); const originalText = btn.innerText; const name = escapeHtml(document.getElementById('cName').value); const contact = escapeHtml(document.getElementById('cContact').value); btn.disabled = true; btn.innerText = I18N[currentLang].sending; setTimeout(() => { alert(I18N[currentLang].alertSent); btn.disabled = false; btn.innerText = originalText; e.target.reset(); window.closeContactModal(); }, 1000); };
+        function escapeHtml(text) { if (!text) return ""; return text.replace(/[&<>"']/g, function(m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]; }); }
         
         function updateCalcUI() {
-            const t = I18N[currentLang];
-            const safeSetText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
-            const safeSetHTML = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
-            safeSetText('ui-title', t.title); safeSetHTML('ui-desc', t.desc);
-            safeSetText('label-year', t.labelYear); safeSetText('label-month', t.labelMonth); safeSetText('label-day', t.labelDay);
-            safeSetText('btn-calc', t.btnCalc);
-            const loadingEl = document.getElementById('loading-text'); if(loadingEl) loadingEl.innerText = t.loading;
-            safeSetText('modal-title', t.modalTitle); safeSetHTML('modal-desc', t.modalDesc);
-            safeSetText('label-cName', t.labelCName); safeSetText('label-cContact', t.labelCContact);
-            safeSetText('btn-submit', t.btnSubmit);
-            const resultArea = document.getElementById('resultArea');
-            if (resultArea && !resultArea.classList.contains('hidden')) { if(document.getElementById('year').value) window.calculateStone(); }
+            const t = I18N[currentLang]; const safeSetText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; }; const safeSetHTML = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
+            safeSetText('ui-title', t.title); safeSetHTML('ui-desc', t.desc); safeSetText('label-year', t.labelYear); safeSetText('label-month', t.labelMonth); safeSetText('label-day', t.labelDay); safeSetText('btn-calc', t.btnCalc);
+            const loadingEl = document.getElementById('loading-text'); if(loadingEl) loadingEl.innerText = t.loading; safeSetText('modal-title', t.modalTitle); safeSetHTML('modal-desc', t.modalDesc); safeSetText('label-cName', t.labelCName); safeSetText('label-cContact', t.labelCContact); safeSetText('btn-submit', t.btnSubmit);
+            const resultArea = document.getElementById('resultArea'); if (resultArea && !resultArea.classList.contains('hidden')) { if(document.getElementById('year').value) window.calculateStone(); }
         }
 
         function populateDropdowns() {
-            const yearSelect = document.getElementById('year');
-            const monthSelect = document.getElementById('month');
-            const daySelect = document.getElementById('day');
+            const yearSelect = document.getElementById('year'); const monthSelect = document.getElementById('month'); const daySelect = document.getElementById('day');
             const valY = yearSelect.value; const valM = monthSelect.value; const valD = daySelect.value;
-            
-            yearSelect.innerHTML = `<option value="" disabled selected>${I18N[currentLang].selectYear}</option>`;
-            monthSelect.innerHTML = `<option value="" disabled selected>${I18N[currentLang].selectMonth}</option>`;
-            daySelect.innerHTML = `<option value="" disabled selected>${I18N[currentLang].selectDay}</option>`;
-
+            yearSelect.innerHTML = `<option value="" disabled selected>${I18N[currentLang].selectYear}</option>`; monthSelect.innerHTML = `<option value="" disabled selected>${I18N[currentLang].selectMonth}</option>`; daySelect.innerHTML = `<option value="" disabled selected>${I18N[currentLang].selectDay}</option>`;
             for (let i = 2025; i >= 1950; i--) { let o = document.createElement('option'); o.value = i; o.text = currentLang === 'zh' ? `西元 ${i} 年` : `${i}`; yearSelect.appendChild(o); }
             for (let i = 1; i <= 12; i++) { let o = document.createElement('option'); o.value = i; o.text = currentLang === 'zh' ? `${i}月` : MONTH_EN[i-1]; monthSelect.appendChild(o); }
             for (let i = 1; i <= 31; i++) { let o = document.createElement('option'); o.value = i; o.text = currentLang === 'zh' ? `${i}日` : `${i}`; daySelect.appendChild(o); }
             if(valY) yearSelect.value = valY; if(valM) monthSelect.value = valM; if(valD) daySelect.value = valD;
         }
 
-        const quotesPool = ["每一顆靈石，都在訴說宇宙的秘密。", "靜謐之中，感受大地的呼吸。", "光影折射，映照出靈魂的純粹。", "穿越億萬年的星塵，只為與你相遇。", "心如明鏡，塵埃自落。", "在石頭的溫潤中，找回內心的平靜。", "礦石的低語，是時間留下的情書。", "擁抱自然，與萬物共鳴。", "純粹的光，照亮未曾察覺的角落。", "靜聽石語，找尋失落的記憶。", "大地之母的饋贈，值得溫柔以待。", "靈魂的頻率，在色彩中閃耀。", "靜默，是最高級的溝通方式。", "不刻意渲染，美自會浮現。", "每一道裂痕，都是成長的印記。", "與石結緣，即是與自己重逢。", "星辰隕落，化作掌心的溫度。", "在忙碌的世界中，保有一方淨土。", "心之所向，便是能量所在。", "靈石無言，卻最懂你的心。"];
-        const sessionQuote = quotesPool[Math.floor(Math.random() * quotesPool.length)];
-
-        window.generateDailyQuote = () => {
-            const btn = document.getElementById('btn-daily-quote');
-            const display = document.getElementById('ai-quote');
-            btn.disabled = true; btn.innerText = "感應中...";
-            setTimeout(() => { display.innerText = `「${sessionQuote}」`; btn.disabled = false; btn.innerText = "獲取今日石語 ✨"; }, 1200);
-        };
-
-        // === 2. 初始化流程 (Firebase) ===
-        const firebaseConfig = {
-            apiKey: "AIzaSyDruZNMUyiJNcyoksYIBDHv5F1SiiG2Mss",
-            authDomain: "our-story-53723.firebaseapp.com",
-            projectId: "our-story-53723",
-            storageBucket: "our-story-53723.firebasestorage.app",
-            messagingSenderId: "651350028652",
-            appId: "1:651350028652:web:44db9f6bd7d1b502578349"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = initializeFirestore(app, { experimentalForceLongPolling: true });
-        authInstance = auth; // 賦值給全域供按鈕使用
-
-        // 全域變數
-        let siteConfig = {};
-        let calculatorConfig = {};
-        let collectionsList = [];
-
-        function initNavbarScroll() {
-            const nav = document.getElementById('navbar');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    nav.classList.add('nav-scrolled');
-                } else {
-                    nav.classList.remove('nav-scrolled');
-                }
-            });
-        }
-
+        // --- 管理後台邏輯 ---
         window.handleImageUpload = (input, target, extra = null) => {
             const file = input.files[0]; if (!file) return;
             const reader = new FileReader();
@@ -778,94 +599,99 @@
             finally { document.getElementById('loading').style.display = 'none'; }
         };
 
-        // 渲染函式群
-        function renderIgSlot(slotId, embedUrl, fallbackImg) {
-            const container = document.getElementById(slotId);
-            if (!container) return;
-            if (embedUrl && embedUrl.trim() !== "") {
-                container.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14" style="background:#FFF; border:0; margin:0; width:100%;"><div style="padding:16px;"> <a href="${embedUrl}" target="_blank" style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;">View on Instagram</a></div></blockquote>`;
-            } else if (fallbackImg) {
-                container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 hover:scale-105" alt="Showcase">`;
-            } else {
-                container.innerHTML = `<div class="w-full h-full bg-stone-100 flex items-center justify-center text-stone-300 text-[10px]">影像載入中</div>`;
-            }
-        }
+        // Modal Login Logic
+        window.toggleAdmin = () => {
+            const panel = document.getElementById('admin-panel');
+            const currentUid = auth.currentUser?.uid?.trim();
+            if (auth.currentUser && currentUid === ADMIN_UID) { panel.classList.toggle('active'); } 
+            else { document.getElementById('adminLoginModal').classList.remove('hidden'); }
+        };
+        window.closeAdminLoginModal = () => document.getElementById('adminLoginModal').classList.add('hidden');
+        window.handleAdminLogin = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('adminEmail').value;
+            const pass = document.getElementById('adminPass').value;
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            btn.disabled = true; btn.innerText = "驗證中...";
+            try {
+                const cred = await signInWithEmailAndPassword(auth, email, pass);
+                if (cred.user.uid.trim() === ADMIN_UID) {
+                    alert("身分核對成功！"); window.closeAdminLoginModal();
+                    document.getElementById('admin-panel').classList.add('active');
+                    document.getElementById('admin-action-btn').innerText = "管理模式 (已登入)";
+                    if (typeof window.renderAdminList === 'function') window.renderAdminList();
+                } else { alert("不具備管理權限。"); await signOut(auth); }
+            } catch(e) { alert("帳號或密碼錯誤: " + e.message); } 
+            finally { btn.disabled = false; btn.innerText = originalText; }
+        };
+        window.signOutAdmin = () => { if(!confirm("確定要登出管理員身份嗎？")) return; signOut(auth).then(() => { alert("已安全登出。"); window.location.reload(); }); };
 
         function renderFrontEnd() {
             const safeSetText = (id, text) => { if(document.getElementById(id)) document.getElementById(id).innerText = text || ""; };
             const safeSetSrc = (id, src) => { if(document.getElementById(id)) document.getElementById(id).src = src || ""; };
             const safeSetHref = (id, href) => { if(document.getElementById(id)) document.getElementById(id).href = href || "#"; };
             const safeSetVal = (id, val) => { if(document.getElementById(id)) document.getElementById(id).value = val || ""; };
-
-            safeSetText('nav-brand-display', siteConfig.brandName);
-            safeSetText('hero-title-display', siteConfig.heroTitle);
-            safeSetText('hero-sub-display', siteConfig.heroSub);
+            safeSetText('nav-brand-display', siteConfig.brandName); safeSetText('hero-title-display', siteConfig.heroTitle); safeSetText('hero-sub-display', siteConfig.heroSub);
             if (siteConfig.heroImg) safeSetSrc('hero-img-display', siteConfig.heroImg);
             safeSetText('about-text-display', siteConfig.aboutText);
             if (siteConfig.aboutIcon) safeSetSrc('about-icon-display', siteConfig.aboutIcon);
             safeSetHref('about-link-display', siteConfig.aboutLink);
-            
-            safeSetText('ig-text-display', `Instagram / ${siteConfig.igHandle}`);
-            safeSetText('fb-text-display', `Facebook / ${siteConfig.fbHandle}`);
-            safeSetHref('ig-link-display', siteConfig.igUrl);
-            safeSetHref('fb-link-display', siteConfig.fbUrl);
-
+            safeSetText('ig-text-display', `Instagram / ${siteConfig.igHandle}`); safeSetText('fb-text-display', `Facebook / ${siteConfig.fbHandle}`);
+            safeSetHref('ig-link-display', siteConfig.igUrl); safeSetHref('fb-link-display', siteConfig.fbUrl);
             for(let i=1; i<=4; i++) { renderIgSlot(`ig-slot-${i}`, siteConfig[`igEmbed${i}`], siteConfig[`igImg${i}`]); }
-            setTimeout(() => { if (window.instgrm) window.instgrm.Embeds.process(); }, 1000);
-            
-            safeSetVal('edit-brand-name', siteConfig.brandName);
-            safeSetVal('edit-hero-title', siteConfig.heroTitle);
-            safeSetVal('edit-hero-sub', siteConfig.heroSub);
-            safeSetVal('edit-about-text', siteConfig.aboutText);
-            safeSetVal('edit-about-link', siteConfig.aboutLink);
-            safeSetVal('edit-ig-handle', siteConfig.igHandle);
-            safeSetVal('edit-ig-url', siteConfig.igUrl);
-            safeSetVal('edit-fb-handle', siteConfig.fbHandle);
-            safeSetVal('edit-fb-url', siteConfig.fbUrl);
+            setTimeout(() => { if (window.instgrm) window.instgrm.Embeds.process(); }, 600);
+            syncSEO(siteConfig);
+            safeSetVal('edit-brand-name', siteConfig.brandName); safeSetVal('edit-hero-title', siteConfig.heroTitle); safeSetVal('edit-hero-sub', siteConfig.heroSub);
+            safeSetVal('edit-about-text', siteConfig.aboutText); safeSetVal('edit-about-link', siteConfig.aboutLink);
+            safeSetVal('edit-ig-handle', siteConfig.igHandle); safeSetVal('edit-ig-url', siteConfig.igUrl); safeSetVal('edit-fb-handle', siteConfig.fbHandle); safeSetVal('edit-fb-url', siteConfig.fbUrl);
             for(let i=1; i<=4; i++) { safeSetVal(`edit-ig-embed-${i}`, siteConfig[`igEmbed${i}`]); }
         }
 
-        function renderCollections() {
-            const container = document.getElementById('collections-container');
-            if (!container) return;
-            container.innerHTML = collectionsList.map(item => `
-                <article class="group flex flex-col items-center">
-                    <div class="aspect-[4/5] w-full overflow-hidden bg-stone-200 shadow-sm">
-                        <img src="${item.img}" class="w-full h-full object-cover transition-all duration-[1500ms] group-hover:scale-110" alt="${item.name}">
-                    </div>
-                    <h3 class="text-base font-medium mt-6 tracking-widest text-stone-900 uppercase">${item.name}</h3>
-                    <p class="text-xs text-stone-500 mt-2 tracking-widest">${item.desc}</p>
-                </article>
-            `).join('');
+        function renderIgSlot(slotId, embedUrl, fallbackImg) {
+            const container = document.getElementById(slotId); if (!container) return;
+            if (embedUrl && embedUrl.trim() !== "") { container.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14" style="background:#FFF; border:0; margin:0; width:100%;"><div style="padding:16px;"> <a href="${embedUrl}" target="_blank" style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;">View on Instagram</a></div></blockquote>`; } 
+            else if (fallbackImg) { container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 hover:scale-105" alt="Showcase">`; } 
+            else { container.innerHTML = `<div class="w-full h-full bg-stone-100 flex items-center justify-center text-stone-300 text-[10px]">影像載入中</div>`; }
         }
 
-        // 將函式掛載到 window 以供全域呼叫
+        function syncSEO(config) {
+            const brand = config.brandName || "奧兒絲朵"; const sub = config.heroSub || "靈石與您的故事"; document.title = `${brand} | ${sub} - 專業收藏`;
+            const desc = config.aboutText ? config.aboutText.substring(0, 160) : "奧兒絲朵致力於提供高品質天鐵隕石、能量水晶、精雕龍龜收藏。";
+            const metaDesc = document.getElementById('meta-desc'); if (metaDesc) metaDesc.setAttribute('content', desc);
+            const ogTitle = document.getElementById('og-title'); if (ogTitle) ogTitle.setAttribute('content', `${brand} | ${sub}`);
+            const ogDesc = document.getElementById('og-desc'); if (ogDesc) ogDesc.setAttribute('content', desc);
+        }
+
+        function renderCollections() {
+            const container = document.getElementById('collections-container'); if (!container) return;
+            container.innerHTML = collectionsList.map(item => `<article class="group flex flex-col items-center"><div class="aspect-[4/5] w-full overflow-hidden bg-stone-200 shadow-sm"><img src="${item.img}" class="w-full h-full object-cover transition-all duration-[1500ms] group-hover:scale-110" alt="${item.name}"></div><h3 class="text-base font-medium mt-6 tracking-widest text-stone-900 uppercase">${item.name}</h3><p class="text-xs text-stone-500 mt-2 tracking-widest">${item.desc}</p></article>`).join('');
+        }
+
         window.renderAdminList = function() {
-            const list = document.getElementById('edit-collections-list');
-            if (!list) return;
+            const list = document.getElementById('edit-collections-list'); if (!list) return;
             list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="updateLocalItem(${index}, 'name', this.value)" class="text-xs font-bold"><textarea onchange="updateLocalItem(${index}, 'desc', this.value)" class="text-xs">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">換照<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
             lucide.createIcons();
         }
 
-        // 啟動邏輯
+        function initNavbarScroll() {
+            const nav = document.getElementById('navbar');
+            window.addEventListener('scroll', () => { if (window.scrollY > 50) { nav.classList.add('nav-scrolled'); } else { nav.classList.remove('nav-scrolled'); } });
+        }
+
+        // Init Flow
         document.getElementById('loading').style.display = 'flex';
         initNavbarScroll();
         populateDropdowns();
-        
+
         onAuthStateChanged(auth, (user) => {
             const panel = document.getElementById('admin-panel');
             const btn = document.getElementById('admin-action-btn');
             const currentUid = user?.uid?.trim();
             if (user && currentUid === ADMIN_UID) {
-                panel.classList.add('active');
-                btn.innerText = "管理模式 (已登入)";
-                window.renderAdminList();
-            } else {
-                panel.classList.remove('active');
-                btn.innerText = "Admin Login";
-            }
-            
-            // 載入資料
+                panel.classList.add('active'); btn.innerText = "管理模式 (已登入)"; window.renderAdminList();
+            } else { panel.classList.remove('active'); btn.innerText = "Admin Login"; }
+
             onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'main'), (snap) => {
                 if (snap.exists()) { siteConfig = { ...siteConfig, ...snap.data() }; renderFrontEnd(); }
             });
@@ -874,7 +700,7 @@
                     calculatorConfig = snap.data(); 
                     if (calculatorConfig.stones) {
                         Object.keys(calculatorConfig.stones).forEach(key => {
-                            if (STONES[key] && calculatorConfig.stones[key]) STONES[key].img = calculatorConfig.stones[key];
+                            if (STONES[key] && calculatorConfig.stones[key]) { STONES[key].img = calculatorConfig.stones[key]; }
                         });
                     }
                 }
@@ -887,7 +713,7 @@
                 if (document.getElementById('admin-panel').classList.contains('active')) window.renderAdminList();
             });
         });
-        
+
         await signInAnonymously(auth).catch(() => {});
         lucide.createIcons();
     </script>
