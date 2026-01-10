@@ -113,7 +113,7 @@
             </div>
             <div class="hidden md:flex space-x-12 items-center">
                 <button onclick="window.scrollToSection('about')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">品牌故事</button>
-                <button onclick="window.scrollToSection('calculator')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">靈石測驗</button>
+                <!-- [修改] 移除這裡重複的靈石測驗文字連結 -->
                 <button onclick="window.scrollToSection('collections')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">收藏系列</button>
                 <button onclick="window.scrollToSection('social')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">追蹤我們</button>
                 
@@ -133,7 +133,8 @@
     <div id="mobile-menu" class="fixed inset-0 z-[150] bg-white flex flex-col items-center justify-center space-y-10">
         <button class="absolute top-8 right-8 text-stone-600" onclick="window.toggleMenu()" aria-label="關閉"><i data-lucide="x" class="w-8 h-8"></i></button>
         <button onclick="window.scrollToSection('about')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">品牌故事</button>
-        <button onclick="window.scrollToSection('calculator')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase border-b border-stone-800 pb-1">靈石測驗</button>
+        <!-- [修改] 移除下底線樣式 border-b -->
+        <button onclick="window.scrollToSection('calculator')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">靈石測驗</button>
         <button onclick="window.scrollToSection('collections')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">收藏系列</button>
         <button onclick="window.scrollToSection('social')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">追蹤我們</button>
     </div>
@@ -353,6 +354,7 @@
                 <input type="text" id="edit-ig-url" placeholder="IG 網址">
                 <input type="text" id="edit-fb-handle" placeholder="FB 名稱">
                 <input type="text" id="edit-fb-url" placeholder="FB 網址">
+                <!-- 新增 LINE ID 設定 -->
                 <div class="pt-2 border-t border-stone-200">
                     <label class="text-[9px] text-stone-400 block mb-1">LINE 官方帳號 ID (含@)</label>
                     <input type="text" id="edit-line-id" placeholder="@291pcwxm" class="bg-green-50 border-green-200">
@@ -437,9 +439,8 @@
 
         // --- 靈石測驗資料與邏輯 ---
         const MONTH_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        // 修正後的訊息：提示將開啟 LINE
         const I18N = {
-            zh: { title: "尋找您的命定靈石", desc: `輸入您的<span class="font-bold text-stone-700">國曆 (Solar)</span> 出生日期，<br>系統將自動換算精確的農曆五行，<br>為您連結那顆等待已久的守護石。`, labelYear: "國曆出生年", labelMonth: "國曆月份", labelDay: "國曆日期", btnCalc: "開始轉換並感應", loading: "正在換算農曆五行...", resultTitle: "農曆出生資訊", btnCollection: "查看收藏系列", btnBuy: "洽詢專員購買", btnRetry: "重新測驗", modalTitle: "專員購藏協助", modalDesc: `請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務專注於協助購買挑選，非命理諮詢)</span>`, labelCName: "您的稱呼", labelCContact: "聯絡方式 (手機 / LINE ID)", btnSubmit: "確認送出", alertSent: "資料已準備就緒！\n\n系統將自動開啟 LINE，請在對話視窗中按下「傳送」鍵，專員就會收到您的需求囉！", sending: "正在開啟 LINE...", selectYear: "請選擇年份", selectMonth: "月份", selectDay: "日期", refImg: "示意圖" },
+            zh: { title: "尋找您的命定靈石", desc: `輸入您的<span class="font-bold text-stone-700">國曆 (Solar)</span> 出生日期，<br>系統將自動換算精確的農曆五行，<br>為您連結那顆等待已久的守護石。`, labelYear: "國曆出生年", labelMonth: "國曆月份", labelDay: "國曆日期", btnCalc: "開始轉換並感應", loading: "正在換算農曆五行...", resultTitle: "農曆出生資訊", btnCollection: "查看收藏系列", btnBuy: "洽詢專員購買", btnRetry: "重新測驗", modalTitle: "專員購藏協助", modalDesc: `請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務專注於協助購買挑選，非命理諮詢)</span>`, labelCName: "您的稱呼", labelCContact: "聯絡方式 (手機 / LINE ID)", btnSubmit: "確認送出", alertSent: "資料已準備就緒！\n\n系統將為您開啟 LINE，請在對話視窗中按下「傳送」鍵，專員就會收到您的需求囉！", sending: "正在開啟 LINE...", selectYear: "請選擇年份", selectMonth: "月份", selectDay: "日期", refImg: "示意圖" },
             en: { title: "Find Your Destined Stone", desc: `Enter your <span class="font-bold text-stone-700">Solar Birth Date</span>.<br>We will calculate your Lunar Elemental Energy<br>to reveal your Guardian Stone.`, labelYear: "Birth Year (Solar)", labelMonth: "Birth Month", labelDay: "Birth Day", btnCalc: "Reveal My Stone", loading: "Calculating Cosmic Energy...", resultTitle: "Your Lunar Profile", btnCollection: "View Collection", btnBuy: "Contact for Purchase", btnRetry: "Retake Quiz", modalTitle: "Purchasing Assistance", modalDesc: `Leave your info, and a specialist will guide you through our collection.<br><span class="text-stone-400 font-light block mt-1">(Assistance for purchase, not fortune telling)</span>`, labelCName: "Your Name", labelCContact: "Contact (Phone / LINE / WhatsApp)", btnSubmit: "Submit", alertSent: "Ready to send!\n\nLINE will open automatically. Please press the 'Send' button in the chat to contact our specialist.", sending: "Opening LINE...", selectYear: "Select Year", selectMonth: "Month", selectDay: "Day", refImg: "Reference" }
         };
 
@@ -547,13 +548,19 @@
         window.openContactModal = () => document.getElementById('contactModal').classList.remove('hidden');
         window.closeContactModal = () => document.getElementById('contactModal').classList.add('hidden');
         
-        // [修改] 直接跳轉 LINE
+        // [修改] 直接跳轉 LINE，移除後台寫入
         window.handleContactSubmit = (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
             const originalText = btn.innerText;
-            const name = escapeHtml(document.getElementById('cName').value);
-            const contact = escapeHtml(document.getElementById('cContact').value);
+            const nameInput = document.getElementById('cName').value;
+            const contactInput = document.getElementById('cContact').value;
+            
+            // XSS 防護
+            const name = escapeHtml(nameInput);
+            const contact = escapeHtml(contactInput);
+
+            // 取得目前的靈石結果
             const stoneTitle = document.querySelector('#resultArea h3')?.innerText || "靈石";
             
             btn.disabled = true; btn.innerText = I18N[currentLang].sending;
@@ -623,12 +630,16 @@
                     const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height;
                     const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height);
                     let base64 = canvas.toDataURL('image/jpeg', 0.8);
+                    
                     if (target === 'hero') siteConfig.heroImg = base64;
                     else if (target === 'about_icon') siteConfig.aboutIcon = base64;
                     else if (target.startsWith('ig')) siteConfig[`igImg${target.slice(2)}`] = base64;
                     else if (target === 'col') collectionsList[extra].img = base64;
-                    else if (target === 'calc_stone') { if (!calculatorConfig.stones) calculatorConfig.stones = {}; calculatorConfig.stones[extra] = base64; }
-                    alert("照片準備就緒，請點擊「發佈更新」。");
+                    else if (target === 'calc_stone') {
+                        if (!calculatorConfig.stones) calculatorConfig.stones = {};
+                        calculatorConfig.stones[extra] = base64;
+                    }
+                    alert("照片準備就緒，請記得按發佈更新。");
                 };
                 img.src = e.target.result;
             };
@@ -651,13 +662,38 @@
             document.getElementById('loading').style.display = 'flex';
             try {
                 const configRef = doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'main');
-                const updateData = { ...siteConfig, brandName: document.getElementById('edit-brand-name')?.value || siteConfig.brandName, heroTitle: document.getElementById('edit-hero-title')?.value || siteConfig.heroTitle, heroSub: document.getElementById('edit-hero-sub')?.value || siteConfig.heroSub, aboutText: document.getElementById('edit-about-text')?.value || siteConfig.aboutText, aboutLink: document.getElementById('edit-about-link')?.value || siteConfig.aboutLink, igHandle: document.getElementById('edit-ig-handle')?.value || siteConfig.igHandle, igUrl: document.getElementById('edit-ig-url')?.value || siteConfig.igUrl, fbHandle: document.getElementById('edit-fb-handle')?.value || siteConfig.fbHandle, fbUrl: document.getElementById('edit-fb-url')?.value || siteConfig.fbUrl, lineId: document.getElementById('edit-line-id')?.value || siteConfig.lineId };
-                for(let i=1; i<=4; i++) { const val = document.getElementById(`edit-ig-embed-${i}`)?.value; if(val !== undefined) updateData[`igEmbed${i}`] = val; }
+                const updateData = { 
+                    ...siteConfig, 
+                    brandName: document.getElementById('edit-brand-name')?.value || siteConfig.brandName, 
+                    heroTitle: document.getElementById('edit-hero-title')?.value || siteConfig.heroTitle, 
+                    heroSub: document.getElementById('edit-hero-sub')?.value || siteConfig.heroSub, 
+                    aboutText: document.getElementById('edit-about-text')?.value || siteConfig.aboutText, 
+                    aboutLink: document.getElementById('edit-about-link')?.value || siteConfig.aboutLink,
+                    igHandle: document.getElementById('edit-ig-handle')?.value || siteConfig.igHandle,
+                    igUrl: document.getElementById('edit-ig-url')?.value || siteConfig.igUrl,
+                    fbHandle: document.getElementById('edit-fb-handle')?.value || siteConfig.fbHandle,
+                    fbUrl: document.getElementById('edit-fb-url')?.value || siteConfig.fbUrl,
+                    lineId: document.getElementById('edit-line-id')?.value || siteConfig.lineId // 儲存 LINE ID
+                };
+                for(let i=1; i<=4; i++) { 
+                    const val = document.getElementById(`edit-ig-embed-${i}`)?.value;
+                    if(val !== undefined) updateData[`igEmbed${i}`] = val; 
+                }
                 await setDoc(configRef, updateData);
-                if (calculatorConfig && Object.keys(calculatorConfig).length > 0) { const calcRef = doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'calculator'); await setDoc(calcRef, calculatorConfig); }
-                for (const item of collectionsList) { const id = item.id.startsWith('temp_') ? doc(collection(db, 'dummy')).id : item.id; const itemRef = doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems', id); const cleanItem = { ...item }; delete cleanItem.id; await setDoc(itemRef, cleanItem); }
-                alert("網站設定同步成功！");
-            } catch (e) { alert("同步失敗，請檢查權限。"); }
+
+                if (calculatorConfig && Object.keys(calculatorConfig).length > 0) {
+                    const calcRef = doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'calculator');
+                    await setDoc(calcRef, calculatorConfig);
+                }
+
+                for (const item of collectionsList) {
+                    const id = item.isNew ? doc(collection(db, 'dummy')).id : item.id;
+                    const itemRef = doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems', id);
+                    const cleanItem = { ...item }; delete cleanItem.id; delete cleanItem.isNew;
+                    await setDoc(itemRef, cleanItem);
+                }
+                alert("同步成功！");
+            } catch (e) { alert("失敗: " + e.message); }
             finally { document.getElementById('loading').style.display = 'none'; }
         };
 
@@ -736,10 +772,11 @@
 
         window.renderAdminList = function() {
             const list = document.getElementById('edit-collections-list'); if (!list) return;
-            list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="window.deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="window.updateLocalItem(${index}, 'name', this.value)" class="text-xs font-bold"><textarea onchange="window.updateLocalItem(${index}, 'desc', this.value)" class="text-xs">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">換照<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
+            list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="updateLocalItem(${index}, 'name', this.value)" class="text-xs font-bold"><textarea onchange="updateLocalItem(${index}, 'desc', this.value)" class="text-xs">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">換照<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
             lucide.createIcons();
         }
 
+        // 啟動邏輯
         document.getElementById('loading').style.display = 'flex';
         initNavbarScroll();
         populateDropdowns();
