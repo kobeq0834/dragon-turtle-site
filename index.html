@@ -643,6 +643,9 @@
             
             // 5. 更新石語 (新增)
             updateQuoteText();
+            
+            // 6. 重新渲染 Collections (因為標題和描述現在取決於語言)
+            renderCollections();
         };
 
         function updateStaticText() {
@@ -866,7 +869,16 @@
         };
 
         window.addNewCollectionItem = () => {
-            collectionsList.unshift({ id: 'temp_' + Date.now(), name: "新收藏", desc: "能量描述", img: "", createdAt: Date.now(), isNew: true });
+            collectionsList.unshift({ 
+                id: 'temp_' + Date.now(), 
+                name: "新收藏", 
+                nameEn: "New Collection", 
+                desc: "能量描述", 
+                descEn: "Energy Description", 
+                img: "", 
+                createdAt: Date.now(), 
+                isNew: true 
+            });
             window.renderAdminList();
         };
         window.updateLocalItem = (index, field, value) => { collectionsList[index][field] = value; };
@@ -1047,21 +1059,38 @@
         function renderCollections() {
             const container = document.getElementById('collections-container');
             if (!container) return;
-            container.innerHTML = collectionsList.map(item => `
+            container.innerHTML = collectionsList.map(item => {
+                const title = currentLang === 'en' ? (item.nameEn || item.name) : item.name;
+                const desc = currentLang === 'en' ? (item.descEn || item.desc) : item.desc;
+                return `
                 <article class="group flex flex-col items-center">
                     <div class="aspect-[4/5] w-full overflow-hidden bg-stone-200 shadow-sm">
-                        <img src="${item.img}" class="w-full h-full object-cover transition-all duration-[1500ms] group-hover:scale-110" alt="${item.name}">
+                        <img src="${item.img}" class="w-full h-full object-cover transition-all duration-[1500ms] group-hover:scale-110" alt="${title}">
                     </div>
-                    <h3 class="text-base font-medium mt-6 tracking-widest text-stone-900 uppercase">${item.name}</h3>
-                    <p class="text-xs text-stone-500 mt-2 tracking-widest">${item.desc}</p>
+                    <h3 class="text-base font-medium mt-6 tracking-widest text-stone-900 uppercase">${title}</h3>
+                    <p class="text-xs text-stone-500 mt-2 tracking-widest">${desc}</p>
                 </article>
-            `).join('');
+            `}).join('');
         }
 
         window.renderAdminList = function() {
             const list = document.getElementById('edit-collections-list');
             if (!list) return;
-            list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="updateLocalItem(${index}, 'name', this.value)" class="text-xs font-bold"><textarea onchange="updateLocalItem(${index}, 'desc', this.value)" class="text-xs">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">換照<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
+            list.innerHTML = collectionsList.map((item, index) => `
+                <div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm">
+                    <button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    
+                    <label class="block text-[9px] text-stone-400">中文內容</label>
+                    <input type="text" value="${item.name || ''}" placeholder="標題 (中)" onchange="updateLocalItem(${index}, 'name', this.value)" class="text-xs font-bold w-full mb-1">
+                    <textarea placeholder="描述 (中)" onchange="updateLocalItem(${index}, 'desc', this.value)" class="text-xs w-full mb-2">${item.desc || ''}</textarea>
+                    
+                    <label class="block text-[9px] text-stone-400">English Content</label>
+                    <input type="text" value="${item.nameEn || ''}" placeholder="Title (EN)" onchange="updateLocalItem(${index}, 'nameEn', this.value)" class="text-xs font-bold w-full mb-1">
+                    <textarea placeholder="Description (EN)" onchange="updateLocalItem(${index}, 'descEn', this.value)" class="text-xs w-full mb-2">${item.descEn || ''}</textarea>
+                    
+                    <label class="upload-btn m-0 py-2 px-3 text-[10px]">換照<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label>
+                </div>
+            `).join('');
             lucide.createIcons();
         }
 
