@@ -94,6 +94,24 @@
         .stone-card { transition: all 0.5s ease; }
         .stone-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
         .calc-select { appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; }
+
+        /* 紅點通知樣式 */
+        .notification-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ef4444;
+            color: white;
+            font-size: 0.6rem;
+            font-weight: bold;
+            min-width: 1.2rem;
+            height: 1.2rem;
+            border-radius: 9999px;
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body class="font-normal text-stone-700">
@@ -113,6 +131,7 @@
             </div>
             <div class="hidden md:flex space-x-12 items-center">
                 <button onclick="window.scrollToSection('about')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">品牌故事</button>
+                <button onclick="window.scrollToSection('calculator')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">靈石測驗</button>
                 <button onclick="window.scrollToSection('collections')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">收藏系列</button>
                 <button onclick="window.scrollToSection('social')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">追蹤我們</button>
                 
@@ -132,7 +151,7 @@
     <div id="mobile-menu" class="fixed inset-0 z-[150] bg-white flex flex-col items-center justify-center space-y-10">
         <button class="absolute top-8 right-8 text-stone-600" onclick="window.toggleMenu()" aria-label="關閉"><i data-lucide="x" class="w-8 h-8"></i></button>
         <button onclick="window.scrollToSection('about')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">品牌故事</button>
-        <button onclick="window.scrollToSection('calculator')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">靈石測驗</button>
+        <button onclick="window.scrollToSection('calculator')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase border-b border-stone-800 pb-1">靈石測驗</button>
         <button onclick="window.scrollToSection('collections')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">收藏系列</button>
         <button onclick="window.scrollToSection('social')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">追蹤我們</button>
     </div>
@@ -246,7 +265,7 @@
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-sm rounded-2xl p-8 shadow-2xl modal-enter">
             <div class="text-center mb-6">
                 <h3 id="modal-title" class="text-xl font-bold text-stone-800 tracking-widest mb-2">專員購藏協助</h3>
-                <p id="modal-desc" class="text-xs text-stone-500 leading-relaxed">請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務專注於協助購買挑選，非命理諮詢)</span></p>
+                <p id="modal-desc" class="text-xs text-stone-500 leading-relaxed">請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務純屬聯繫購買，我們極度重視您的隱私)</span></p>
             </div>
             <form id="contactForm" onsubmit="window.handleContactSubmit(event)" class="space-y-4">
                 <div>
@@ -268,13 +287,42 @@
         </div>
     </div>
 
+    <!-- 管理員登入 Modal (恢復) -->
+    <div id="adminLoginModal" class="fixed inset-0 z-[200] hidden">
+        <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity" onclick="window.closeAdminLoginModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-full max-w-sm rounded-2xl p-8 shadow-2xl modal-enter">
+            <div class="text-center mb-6">
+                <h3 class="text-xl font-bold text-stone-800 tracking-widest mb-2">管理者登入</h3>
+                <p class="text-xs text-stone-500">請輸入管理員帳號密碼</p>
+            </div>
+            <form id="adminLoginForm" onsubmit="window.handleAdminLogin(event)" class="space-y-4">
+                <div>
+                    <input type="email" id="adminEmail" required class="w-full px-3 py-2 border border-stone-200 rounded-md text-sm focus:outline-none focus:border-stone-400 bg-stone-50" placeholder="Email">
+                </div>
+                <div>
+                    <input type="password" id="adminPass" required class="w-full px-3 py-2 border border-stone-200 rounded-md text-sm focus:outline-none focus:border-stone-400 bg-stone-50" placeholder="Password">
+                </div>
+                <button type="submit" class="w-full py-3 bg-stone-800 text-white text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-700 transition mt-2">登入</button>
+            </form>
+            <button onclick="window.closeAdminLoginModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+    </div>
+
     <!-- 管理編輯面板 -->
     <div id="admin-panel" class="admin-panel">
         <div class="flex justify-between items-center mb-8 border-b pb-4">
             <h3 class="font-bold tracking-widest text-stone-800 uppercase">管理者模式已開啟</h3>
             <button onclick="window.toggleAdmin()"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
-        <div class="space-y-10 pb-32">
+        
+        <!-- Tab 切換 -->
+        <div class="flex space-x-4 px-1 mb-6 border-b border-stone-100">
+            <button onclick="window.switchAdminTab('settings')" id="tab-settings" class="pb-2 text-xs font-bold tracking-widest text-stone-800 border-b-2 border-stone-800 transition">網站設定</button>
+            <!-- 預約名單按鈕只在有資料時顯示，或完全移除 -->
+        </div>
+
+        <!-- 設定內容區 -->
+        <div id="admin-content-settings" class="space-y-10 pb-32">
             <section class="space-y-3">
                 <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">基本配置</h4>
                 <input type="text" id="edit-brand-name" placeholder="品牌名稱">
@@ -345,6 +393,7 @@
             <div id="edit-collections-list" class="space-y-4"></div>
             <button onclick="window.addNewCollectionItem()" class="w-full py-3 bg-stone-100 text-xs">＋ 新增靈石項目</button>
         </div>
+
         <div class="fixed bottom-0 right-0 w-full max-w-[450px] bg-white p-6 border-t z-[2000] shadow-2xl">
             <div class="grid grid-cols-2 gap-4">
                 <button onclick="window.saveSiteData()" class="bg-stone-900 text-white py-4 text-xs font-bold uppercase rounded-sm shadow-lg">發佈更新</button>
@@ -423,10 +472,9 @@
 
         // --- 靈石測驗資料與邏輯 ---
         const MONTH_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        // 修正後的訊息：只提示成功，不跳轉 LINE
         const I18N = {
-            zh: { title: "尋找您的命定靈石", desc: `輸入您的<span class="font-bold text-stone-700">國曆 (Solar)</span> 出生日期，<br>系統將自動換算精確的農曆五行，<br>為您連結那顆等待已久的守護石。`, labelYear: "國曆出生年", labelMonth: "國曆月份", labelDay: "國曆日期", btnCalc: "開始轉換並感應", loading: "正在換算農曆五行...", resultTitle: "農曆出生資訊", btnCollection: "查看收藏系列", btnBuy: "洽詢專員購買", btnRetry: "重新測驗", modalTitle: "專員購藏協助", modalDesc: `請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務專注於協助購買挑選，非命理諮詢)</span>`, labelCName: "您的稱呼", labelCContact: "聯絡電話", labelCNotes: "備註事項 (選填)", btnSubmit: "確認送出", alertSent: "資料已準備就緒！\n\n系統將自動開啟 LINE，請在對話視窗中按下「傳送」鍵，專員就會收到您的需求囉！", sending: "正在開啟 LINE...", selectYear: "請選擇年份", selectMonth: "月份", selectDay: "日期", refImg: "示意圖" },
-            en: { title: "Find Your Destined Stone", desc: `Enter your <span class="font-bold text-stone-700">Solar Birth Date</span>.<br>We will calculate your Lunar Elemental Energy<br>to reveal your Guardian Stone.`, labelYear: "Birth Year (Solar)", labelMonth: "Birth Month", labelDay: "Birth Day", btnCalc: "Reveal My Stone", loading: "Calculating Cosmic Energy...", resultTitle: "Your Lunar Profile", btnCollection: "View Collection", btnBuy: "Contact for Purchase", btnRetry: "Retake Quiz", modalTitle: "Purchasing Assistance", modalDesc: `Leave your info, and a specialist will guide you through our collection.<br><span class="text-stone-400 font-light block mt-1">(Assistance for purchase, not fortune telling)</span>`, labelCName: "Your Name", labelCContact: "Phone Number", labelCNotes: "Notes (Optional)", btnSubmit: "Submit", alertSent: "Ready to send!\n\nLINE will open automatically. Please press the 'Send' button in the chat to contact our specialist.", sending: "Opening LINE...", selectYear: "Select Year", selectMonth: "Month", selectDay: "Day", refImg: "Reference" }
+            zh: { title: "尋找您的命定靈石", desc: `輸入您的<span class="font-bold text-stone-700">國曆 (Solar)</span> 出生日期，<br>系統將自動換算精確的農曆五行，<br>為您連結那顆等待已久的守護石。`, labelYear: "國曆出生年", labelMonth: "國曆月份", labelDay: "國曆日期", btnCalc: "開始轉換並感應", loading: "正在換算農曆五行...", resultTitle: "農曆出生資訊", btnCollection: "查看收藏系列", btnBuy: "洽詢專員購買", btnRetry: "重新測驗", modalTitle: "專員購藏協助", modalDesc: `請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務純屬聯繫購買，我們極度重視您的隱私)</span>`, labelCName: "您的稱呼", labelCContact: "聯絡電話", labelCNotes: "備註事項 (選填)", btnSubmit: "確認送出", alertSent: "隱私安全加密傳送中！\n\n系統將為您開啟 Email，請按下「發送」郵件，專員就會收到您的需求囉！", sending: "準備傳送中...", selectYear: "請選擇年份", selectMonth: "月份", selectDay: "日期", refImg: "示意圖" },
+            en: { title: "Find Your Destined Stone", desc: `Enter your <span class="font-bold text-stone-700">Solar Birth Date</span>.<br>We will calculate your Lunar Elemental Energy<br>to reveal your Guardian Stone.`, labelYear: "Birth Year (Solar)", labelMonth: "Birth Month", labelDay: "Birth Day", btnCalc: "Reveal My Stone", loading: "Calculating Cosmic Energy...", resultTitle: "Your Lunar Profile", btnCollection: "View Collection", btnBuy: "Contact for Purchase", btnRetry: "Retake Quiz", modalTitle: "Purchasing Assistance", modalDesc: `Leave your info, and a specialist will guide you through our collection.<br><span class="text-stone-400 font-light block mt-1">(Assistance for purchase, not fortune telling)</span>`, labelCName: "Your Name", labelCContact: "Contact (Phone / LINE / WhatsApp)", labelCNotes: "Notes (Optional)", btnSubmit: "Submit", alertSent: "Privacy secured!\n\nEmail app will open. Please press 'Send' to contact our specialist.", sending: "Preparing...", selectYear: "Select Year", selectMonth: "Month", selectDay: "Day", refImg: "Reference" }
         };
 
         const STONES = {
@@ -509,6 +557,7 @@
                         <p class="text-[10px] text-stone-400 tracking-wider mb-1 uppercase">${t.resultTitle}</p>
                         <p class="text-sm font-bold text-stone-700 tracking-widest">${date}</p>
                     </div>
+                    <!-- 圖片容器：使用 bg-stone-50 與 object-contain 讓圖片不裁切並置中 -->
                     <div class="relative h-64 overflow-hidden bg-stone-50 group border-b border-stone-100">
                         <img src="${stone.img}" class="w-full h-full object-contain p-4" onerror="this.src='https://placehold.co/600x400?text=Stone'">
                         <div class="absolute top-2 right-2 bg-black/30 text-white text-[9px] px-2 py-1 rounded backdrop-blur-sm tracking-wider">${t.refImg}</div>
@@ -533,37 +582,24 @@
         window.openContactModal = () => document.getElementById('contactModal').classList.remove('hidden');
         window.closeContactModal = () => document.getElementById('contactModal').classList.add('hidden');
         
-        // [修改] 直接跳轉 LINE (不寫入後台)
+        // === 核心安全：Email 直接傳送，資料不落地 ===
         window.handleContactSubmit = (e) => {
             e.preventDefault();
-            const btn = e.target.querySelector('button[type="submit"]');
-            const originalText = btn.innerText;
-            const name = escapeHtml(document.getElementById('cName').value);
-            const contact = escapeHtml(document.getElementById('cContact').value);
-            const notes = escapeHtml(document.getElementById('cNotes').value);
+            const name = document.getElementById('cName').value;
+            const contact = document.getElementById('cContact').value;
+            const notes = document.getElementById('cNotes').value;
             const stoneTitle = document.querySelector('#resultArea h3')?.innerText || "靈石";
             
-            btn.disabled = true; btn.innerText = I18N[currentLang].sending;
+            alert(I18N[currentLang].alertSent);
             
-            // 讀取後台設定的 LINE ID
-            let lineId = (siteConfig.lineId && siteConfig.lineId.trim() !== "") ? siteConfig.lineId : "@291pcwxm";
-            if (!lineId.startsWith('@')) lineId = '@' + lineId; 
+            const subject = `[奧兒絲朵] 命定靈石諮詢預約 - ${name}`;
+            const body = `您好，奧兒絲朵專員：\n\n我剛完成了網站的靈石測驗，想請您協助購藏指導。\n\n我的稱呼：${name}\n聯絡電話：${contact}\n備註事項：${notes}\n我的測驗結果：${stoneTitle}\n\n期待您的聯繫，謝謝！`;
             
-            // 構建 LINE 訊息
-            let message = `您好，我是 ${name}。\n聯絡電話：${contact}\n`;
-            if (notes) message += `備註：${notes}\n`;
-            message += `\n我剛做了靈石測驗，結果是：${stoneTitle}\n想請專員協助介紹與購買，謝謝！`;
+            // 安全跳轉 Mailto
+            window.location.href = `mailto:service@our-story.com.tw?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
             
-            const lineUrl = `https://line.me/R/oaMessage/${lineId}/?${encodeURIComponent(message)}`;
-            
-            setTimeout(() => {
-                if(confirm(I18N[currentLang].alertSent)) {
-                    window.location.href = lineUrl;
-                    e.target.reset(); 
-                    window.closeContactModal();
-                } 
-                btn.disabled = false; btn.innerText = originalText;
-            }, 500);
+            e.target.reset(); 
+            window.closeContactModal();
         };
         
         function updateCalcUI() {
@@ -603,10 +639,28 @@
             reader.onload = (e) => {
                 const img = new Image();
                 img.onload = () => {
-                    let width = img.width; let height = img.height; const maxDim = 800;
-                    if (width > height) { if (width > maxDim) { height *= maxDim / width; width = maxDim; } } else { if (height > maxDim) { width *= maxDim / height; height = maxDim; } }
-                    const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height;
-                    const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height);
+                    // 雙重限制：寬度或高度都不能超過 800px
+                    let width = img.width;
+                    let height = img.height;
+                    const maxDim = 800;
+
+                    if (width > height) {
+                        if (width > maxDim) {
+                            height *= maxDim / width;
+                            width = maxDim;
+                        }
+                    } else {
+                        if (height > maxDim) {
+                            width *= maxDim / height;
+                            height = maxDim;
+                        }
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
                     let base64 = canvas.toDataURL('image/jpeg', 0.8);
                     
                     if (target === 'hero') siteConfig.heroImg = base64;
@@ -617,7 +671,7 @@
                         if (!calculatorConfig.stones) calculatorConfig.stones = {};
                         calculatorConfig.stones[extra] = base64;
                     }
-                    alert("照片準備就緒，請記得按發佈更新。");
+                    alert("照片準備就緒，請點擊「發佈更新」。");
                 };
                 img.src = e.target.result;
             };
@@ -650,8 +704,7 @@
                     igHandle: document.getElementById('edit-ig-handle')?.value || siteConfig.igHandle,
                     igUrl: document.getElementById('edit-ig-url')?.value || siteConfig.igUrl,
                     fbHandle: document.getElementById('edit-fb-handle')?.value || siteConfig.fbHandle,
-                    fbUrl: document.getElementById('edit-fb-url')?.value || siteConfig.fbUrl,
-                    lineId: document.getElementById('edit-line-id')?.value || siteConfig.lineId // 儲存 LINE ID
+                    fbUrl: document.getElementById('edit-fb-url')?.value || siteConfig.fbUrl
                 };
                 for(let i=1; i<=4; i++) { 
                     const val = document.getElementById(`edit-ig-embed-${i}`)?.value;
@@ -675,7 +728,7 @@
             finally { document.getElementById('loading').style.display = 'none'; }
         };
 
-        // --- 管理員登入邏輯 (恢復 prompt) ---
+        // --- 管理員登入邏輯 (Modal) ---
         window.toggleAdmin = async () => {
             const panel = document.getElementById('admin-panel');
             const currentUid = authInstance.currentUser?.uid?.trim();
@@ -683,19 +736,39 @@
             if (authInstance.currentUser && currentUid === ADMIN_UID) {
                 panel.classList.toggle('active');
             } else {
-                const email = prompt("Email:"); if (!email) return;
-                const pass = prompt("Password:"); if (!pass) return;
-                try {
-                    const cred = await signInWithEmailAndPassword(authInstance, email, pass);
-                    if (cred.user.uid.trim() === ADMIN_UID) {
-                        alert("身分核對成功！");
-                        panel.classList.add('active');
-                        document.getElementById('admin-action-btn').innerText = "管理模式 (已登入)";
-                        window.renderAdminList();
-                    } else {
-                        alert("不具備管理權限。"); await signOut(authInstance);
-                    }
-                } catch(e) { alert("帳號或密碼錯誤。"); }
+                document.getElementById('adminLoginModal').classList.remove('hidden');
+            }
+        };
+
+        window.closeAdminLoginModal = () => {
+            document.getElementById('adminLoginModal').classList.add('hidden');
+        };
+
+        window.handleAdminLogin = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('adminEmail').value;
+            const pass = document.getElementById('adminPass').value;
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            
+            btn.disabled = true;
+            btn.innerText = "驗證中...";
+
+            try {
+                const cred = await signInWithEmailAndPassword(authInstance, email, pass);
+                if (cred.user.uid.trim() === ADMIN_UID) {
+                    alert("身分核對成功！");
+                    window.closeAdminLoginModal();
+                    document.getElementById('admin-panel').classList.add('active');
+                    document.getElementById('admin-action-btn').innerText = "管理模式 (已登入)";
+                    window.renderAdminList();
+                } else {
+                    alert("不具備管理權限。"); await signOut(authInstance);
+                }
+            } catch(e) { alert("帳號或密碼錯誤。"); }
+            finally {
+                btn.disabled = false;
+                btn.innerText = originalText;
             }
         };
 
@@ -742,7 +815,6 @@
             safeSetVal('edit-ig-url', siteConfig.igUrl);
             safeSetVal('edit-fb-handle', siteConfig.fbHandle);
             safeSetVal('edit-fb-url', siteConfig.fbUrl);
-            safeSetVal('edit-line-id', siteConfig.lineId); // LINE ID
             for(let i=1; i<=4; i++) { safeSetVal(`edit-ig-embed-${i}`, siteConfig[`igEmbed${i}`]); }
         }
 
