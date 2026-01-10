@@ -452,12 +452,66 @@
         };
 
         const STONES = {
-            moldavite: { name: { zh: "捷克隕石", en: "Moldavite" }, desc: { zh: "來自外太空的綠色奇蹟。擁有極高的振動頻率，能打通心輪，加速願望顯化，帶領您突破現狀，迎接靈魂的蛻變。", en: "The green miracle from outer space. Opens the Heart Chakra and accelerates manifestation." }, tags: { zh: ["#轉化", "#心輪", "#招財"], en: ["#Transformation", "#HeartChakra", "#Abundance"] }, img: "https://images.unsplash.com/photo-1617791160588-241658c0f566?auto=format&fit=crop&q=80&w=600", color: "text-green-700" },
-            libyan: { name: { zh: "利比亞隕石", en: "Libyan Desert Glass" }, desc: { zh: "沙漠中的黃金之光。擁有強大的太陽能量，能增強意志力與自信，像沙漠中的烈日一樣驅散陰霾，帶來豐盛與守護。", en: "Golden light of the desert. Strengthens will and confidence, bringing protection." }, tags: { zh: ["#意志力", "#太陽輪", "#顯化"], en: ["#Willpower", "#SolarPlexus", "#Manifestation"] }, img: "https://images.unsplash.com/photo-1610421272714-b15392e2764f?auto=format&fit=crop&q=80&w=600", color: "text-yellow-700" },
-            tektite: { name: { zh: "黑隕石", en: "Black Tektite" }, desc: { zh: "最強大的防禦之盾。具有深厚的接地能量，能排除負能量、濁氣，為您建立強大的能量場，讓身心回歸穩定的平靜。", en: "The ultimate shield. Deep grounding energy that repels negativity." }, tags: { zh: ["#避邪", "#海底輪", "#接地"], en: ["#Protection", "#RootChakra", "#Grounding"] }, img: "https://images.unsplash.com/photo-1596500954004-9a3d46cb0531?auto=format&fit=crop&q=80&w=600", color: "text-stone-800" },
-            gibeon: { name: { zh: "天鐵", en: "Gibeon Meteorite" }, desc: { zh: "宇宙力量的具象化。其獨特的維德曼交角紋路是強大能量的證明，能打通七脈輪，提升整體氣場，賦予您果斷的行動力。", en: "Cosmic power embodied. Unique patterns aligning all chakras and boosting aura." }, tags: { zh: ["#能量", "#氣場", "#行動力"], en: ["#Energy", "#Aura", "#Action"] }, img: "https://images.unsplash.com/photo-1629804268393-3d0271701388?auto=format&fit=crop&q=80&w=600", color: "text-slate-500" },
-            pallasite: { name: { zh: "橄欖隕石", en: "Pallasite" }, desc: { zh: "天鐵與橄欖石的完美結合。象徵宇宙的幸運與富足，金黃色的光芒能帶來意想不到的好運，是尊貴與財富的象徵。", en: "Fusion of iron and olivine. Symbolizing cosmic luck, abundance and nobility." }, tags: { zh: ["#幸運", "#財富", "#貴人"], en: ["#Luck", "#Wealth", "#Nobility"] }, img: "https://images.unsplash.com/photo-1602117565819-d91d1e449208?auto=format&fit=crop&q=80&w=600", color: "text-yellow-700" },
-            cherryAgate: { name: { zh: "櫻花瑪瑙", en: "Cherry Blossom Agate" }, desc: { zh: "溫柔綻放的生命之花。每一朵櫻花都是時間的凝結，能滋養心靈，提升人緣與魅力，讓您在忙碌中也能保有一份優雅與從容。", en: "Flowers of life gently blooming. Nurtures the soul and enhances charm." }, tags: { zh: ["#人緣", "#溫柔", "#療癒"], en: ["#Relationships", "#Gentleness", "#Healing"] }, img: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=600", color: "text-pink-400" }
+            moldavite: { 
+                name: { zh: "捷克隕石 (Moldavite)", en: "Moldavite" }, 
+                desc: { 
+                    zh: "<b>【能量頻率：高頻轉化與靈性覺醒】</b><br><br>這是一顆來自外太空的綠色奇蹟，擁有極高的振動頻率，被譽為『靈魂的加速器』。<br><br><b>【脈輪共振：心輪 (Heart Chakra)】</b><br>您目前的能量狀態正處於『突破』的前夕。捷克隕石能強烈地共振心輪，協助您打通長期滯礙的能量節點，將內在深層的情緒釋放，轉化為前進的動力。<br><br><b>【靈魂訊息】</b><br>宇宙正在推動您跨越舒適圈。這顆寶石將是您最強大的盟友，加速願望顯化，引領您迎接生命中即將到來的巨大蛻變。", 
+                    en: "<b>[Energy Frequency: High Vibration Transformation]</b><br><br>The green miracle from outer space, known as the 'Soul Accelerator'.<br><br><b>[Chakra Resonance: Heart Chakra]</b><br>You are on the verge of a breakthrough. Moldavite resonates strongly with the Heart Chakra, clearing energetic blockages and transforming deep emotions into momentum.<br><br><b>[Soul Message]</b><br>The universe is pushing you out of your comfort zone. This stone will accelerate manifestation and guide you through your coming metamorphosis." 
+                }, 
+                tags: { zh: ["#轉化", "#心輪", "#顯化"], en: ["#Transformation", "#HeartChakra", "#Abundance"] }, 
+                img: "https://images.unsplash.com/photo-1617791160588-241658c0f566?auto=format&fit=crop&q=80&w=600", 
+                color: "text-green-700" 
+            },
+            libyan: { 
+                name: { zh: "利比亞隕石 (Libyan Desert Glass)", en: "Libyan Desert Glass" }, 
+                desc: { 
+                    zh: "<b>【能量頻率：黃金烈日與王者意志】</b><br><br>源自撒哈拉沙漠的純淨玻璃隕石，封存了億萬年前的太陽能量，象徵著絕對的自信與顯化力。<br><br><b>【脈輪共振：太陽神經叢 (Solar Plexus)】</b><br>您擁有強大的潛在創造力，但有時會被外在雜音干擾。利比亞隕石如沙漠烈日般的光芒，能驅散您氣場中的陰霾與自我懷疑，強化個人意志，帶來如同法老王般的守護力量。<br><br><b>【靈魂訊息】</b><br>相信自己的直覺與力量。您是發光體，無需依附他人。這顆靈石將協助您找回內在的主導權，在事業與人生道路上展現耀眼的領導風範。", 
+                    en: "<b>[Energy Frequency: Golden Sun & Royal Will]</b><br><br>Pure glass meteorite from the Sahara, holding ancient solar energy.<br><br><b>[Chakra Resonance: Solar Plexus]</b><br>You possess great creative potential. Libyan Gold dispels self-doubt like the desert sun, strengthening your will and providing royal protection.<br><br><b>[Soul Message]</b><br>Trust your power. You are a source of light. This stone helps you reclaim your inner authority and shine as a leader." 
+                }, 
+                tags: { zh: ["#意志力", "#太陽輪", "#自信"], en: ["#Willpower", "#SolarPlexus", "#Manifestation"] }, 
+                img: "https://images.unsplash.com/photo-1610421272714-b15392e2764f?auto=format&fit=crop&q=80&w=600", 
+                color: "text-yellow-700" 
+            },
+            tektite: { 
+                name: { zh: "黑隕石 (Black Tektite)", en: "Black Tektite" }, 
+                desc: { 
+                    zh: "<b>【能量頻率：絕對防禦與深層落地】</b><br><br>這是宇宙贈予最強大的『防禦之盾』。它擁有深沉且穩定的接地能量，能快速排除氣場中的負面干擾。<br><br><b>【脈輪共振：海底輪 (Root Chakra)】</b><br>您近期可能感到思緒紛飛或缺乏安全感。黑隕石能協助您的能量向下扎根，連結大地之母的頻率，建立一道堅不可摧的能量屏障，讓您在混亂的環境中依然能保持泰然自若。<br><br><b>【靈魂訊息】</b><br>穩定是您當下最重要的課題。在向外擴張之前，先安頓好內在的根基。這顆靈石將帶給您最深層的平靜與保護，讓所有的恐懼煙消雲散。", 
+                    en: "<b>[Energy Frequency: Absolute Defense & Grounding]</b><br><br>The ultimate 'Shield of Defense' from the cosmos. Deep, stable grounding energy.<br><br><b>[Chakra Resonance: Root Chakra]</b><br>If you feel ungrounded, Black Tektite anchors your energy to the Earth, creating an impenetrable barrier against negativity.<br><br><b>[Soul Message]</b><br>Stability is key. Anchor your roots before expanding. This stone brings deep peace and protection, dissolving all fear." 
+                }, 
+                tags: { zh: ["#避邪", "#海底輪", "#接地"], en: ["#Protection", "#RootChakra", "#Grounding"] }, 
+                img: "https://images.unsplash.com/photo-1596500954004-9a3d46cb0531?auto=format&fit=crop&q=80&w=600", 
+                color: "text-stone-800" 
+            },
+            gibeon: { 
+                name: { zh: "天鐵 (Gibeon Meteorite)", en: "Gibeon Meteorite" }, 
+                desc: { 
+                    zh: "<b>【能量頻率：宇宙秩序與果斷行動】</b><br><br>鎳鐵隕石獨有的『維德曼交角』紋路，是宇宙能量秩序的具象化。它代表著剛毅、果斷與絕對的執行力。<br><br><b>【脈輪共振：全脈輪 (All Chakras)】</b><br>您需要一股強勁的力量來推動滯留的事務。天鐵如同宇宙之劍，能瞬間打通您全身的氣脈，清理阻塞的能量通道，強化整體的氣場厚度，讓您的思緒如雷電般清晰。<br><br><b>【靈魂訊息】</b><br>不要猶豫，現在就是行動的最佳時刻。天鐵賦予您戰士般的勇氣與鋼鐵般的意志，協助您在複雜的局勢中，做出最正確的決斷。", 
+                    en: "<b>[Energy Frequency: Cosmic Order & Decisive Action]</b><br><br>The Widmanstätten pattern symbolizes cosmic order. It represents strength and execution.<br><br><b>[Chakra Resonance: All Chakras]</b><br>Gibeon acts like a cosmic sword, clearing energy blockages and strengthening your aura, bringing lightning-fast clarity.<br><br><b>[Soul Message]</b><br>Do not hesitate. Gibeon grants you warrior-like courage and iron will to make the right decisions in complex situations." 
+                }, 
+                tags: { zh: ["#能量", "#氣場", "#行動力"], en: ["#Energy", "#Aura", "#Action"] }, 
+                img: "https://images.unsplash.com/photo-1629804268393-3d0271701388?auto=format&fit=crop&q=80&w=600", 
+                color: "text-slate-500" 
+            },
+            pallasite: { 
+                name: { zh: "橄欖隕石 (Pallasite)", en: "Pallasite" }, 
+                desc: { 
+                    zh: "<b>【能量頻率：宇宙幸運與豐盛之光】</b><br><br>天鐵與橄欖石的完美融合，象徵著『金』與『火』的鍊金術。這是極為稀有且尊貴的頻率，代表著宇宙的恩典。<br><br><b>【脈輪共振：太陽輪與心輪】</b><br>您的生命正準備迎接豐盛的流動。橄欖隕石金黃色的光芒能招引貴人與機運，同時療癒您對財富的匱乏感，讓您明白自己值得擁有世間的美好。<br><br><b>【靈魂訊息】</b><br>敞開胸懷，接受宇宙的禮物。您是富足的，無論是物質還是心靈。這顆靈石將協助您連結宇宙的幸運頻率，讓繁榮與喜悅自然流向您。", 
+                    en: "<b>[Energy Frequency: Cosmic Luck & Light of Abundance]</b><br><br>A fusion of iron and olivine, representing rare alchemy and cosmic grace.<br><br><b>[Chakra Resonance: Solar Plexus & Heart]</b><br>Prepare for abundance. Pallasite attracts luck and heals scarcity mindsets, reminding you of your worth.<br><br><b>[Soul Message]</b><br>Open your heart to the universe's gifts. You are abundant. This stone connects you to the frequency of luck, letting prosperity flow to you." 
+                }, 
+                tags: { zh: ["#幸運", "#財富", "#貴人"], en: ["#Luck", "#Wealth", "#Nobility"] }, 
+                img: "https://images.unsplash.com/photo-1602117565819-d91d1e449208?auto=format&fit=crop&q=80&w=600", 
+                color: "text-yellow-700" 
+            },
+            cherryAgate: { 
+                name: { zh: "櫻花瑪瑙 (Cherry Blossom Agate)", en: "Cherry Blossom Agate" }, 
+                desc: { 
+                    zh: "<b>【能量頻率：溫柔綻放與永恆之春】</b><br><br>每一朵在礦石中綻放的櫻花，都是時間凝結的溫柔詩篇。它散發著極致的陰性滋養能量，能撫平所有的焦躁。<br><br><b>【脈輪共振：心輪與臍輪】</b><br>您可能在忙碌中遺忘了照顧內在的小孩。櫻花瑪瑙能溫柔地包覆您受傷或疲憊的心，提升個人魅力與人緣，讓您在與人互動時，散發出如沐春風的親和力。<br><br><b>【靈魂訊息】</b><br>溫柔不是軟弱，而是最強大的力量。學會愛自己，生命就會像花朵一樣自然綻放。這顆靈石提醒您，在追求目標的路上，也要記得欣賞沿途的風景。", 
+                    en: "<b>[Energy Frequency: Gentle Bloom & Eternal Spring]</b><br><br>Patterns of blooming flowers frozen in time. Radiates ultimate feminine, nurturing energy.<br><br><b>[Chakra Resonance: Heart & Sacral Chakra]</b><br>You may have neglected your inner child. Cherry Blossom Agate wraps your heart in love, enhancing charm and approachability.<br><br><b>[Soul Message]</b><br>Gentleness is power. Love yourself, and life will bloom. This stone reminds you to enjoy the journey while pursuing your goals." 
+                }, 
+                tags: { zh: ["#人緣", "#溫柔", "#療癒"], en: ["#Relationships", "#Gentleness", "#Healing"] }, 
+                img: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=600", 
+                color: "text-pink-400" 
+            }
         };
 
         window.toggleLanguage = () => {
