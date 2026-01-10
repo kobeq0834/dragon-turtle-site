@@ -94,6 +94,8 @@
         .stone-card { transition: all 0.5s ease; }
         .stone-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
         .calc-select { appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; }
+        
+        .fade-text { transition: opacity 0.3s ease; }
     </style>
 </head>
 <body class="font-normal text-stone-700">
@@ -101,7 +103,7 @@
     <div id="loading" class="loading-overlay" aria-hidden="true">
         <div class="flex flex-col items-center">
             <i data-lucide="loader" class="w-8 h-8 animate-spin mb-4 text-stone-400"></i>
-            <span>讀取靈石能量中...</span>
+            <span class="loading-text">讀取靈石能量中...</span>
         </div>
     </div>
 
@@ -112,29 +114,45 @@
                 <span id="nav-brand-display" class="text-lg md:text-xl font-bold tracking-[0.3em] text-stone-900 uppercase">奧兒絲朵</span>
             </div>
             <div class="hidden md:flex space-x-12 items-center">
-                <button onclick="window.scrollToSection('about')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">品牌故事</button>
-                <button onclick="window.scrollToSection('collections')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">收藏系列</button>
-                <button onclick="window.scrollToSection('social')" class="text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase">追蹤我們</button>
+                <button onclick="window.scrollToSection('about')" class="nav-item text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase" data-i18n="nav-about">品牌故事</button>
+                <button onclick="window.scrollToSection('collections')" class="nav-item text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase" data-i18n="nav-coll">收藏系列</button>
+                <button onclick="window.scrollToSection('social')" class="nav-item text-stone-500 hover:text-stone-900 transition-colors text-xs font-medium tracking-[0.3em] uppercase" data-i18n="nav-social">追蹤我們</button>
                 
                 <!-- 靈石測驗按鈕 -->
-                <div class="flex items-center border-l border-stone-300 pl-8">
+                <div class="flex items-center border-l border-stone-300 pl-8 space-x-6">
                     <button onclick="window.scrollToSection('calculator')" class="group flex items-center space-x-2 text-stone-800 hover:text-stone-500 transition-colors">
                         <i data-lucide="sparkles" class="w-4 h-4"></i>
-                        <span class="text-xs font-bold tracking-[0.2em] uppercase">靈石測驗</span>
+                        <span class="nav-item text-xs font-bold tracking-[0.2em] uppercase" data-i18n="nav-quiz">靈石測驗</span>
+                    </button>
+                    <!-- 全站語言切換 -->
+                    <button onclick="window.toggleLanguage()" class="flex items-center space-x-1 text-[10px] font-bold tracking-widest text-stone-400 hover:text-stone-800 transition uppercase border border-stone-200 px-3 py-1.5 rounded-full bg-white/50 backdrop-blur-sm shadow-sm">
+                        <i data-lucide="globe" class="w-3 h-3"></i>
+                        <span class="lang-label">English</span>
                     </button>
                 </div>
             </div>
-            <button class="md:hidden text-stone-800 p-2" onclick="window.toggleMenu()" aria-label="選單"><i data-lucide="menu" class="w-6 h-6"></i></button>
+            <div class="md:hidden flex items-center space-x-4">
+                <button onclick="window.toggleLanguage()" class="flex items-center space-x-1 text-[10px] font-bold tracking-widest text-stone-800 uppercase border border-stone-200 px-2 py-1 rounded-full bg-white shadow-sm">
+                    <span class="lang-label">EN</span>
+                </button>
+                <button class="text-stone-800 p-2" onclick="window.toggleMenu()" aria-label="選單"><i data-lucide="menu" class="w-6 h-6"></i></button>
+            </div>
         </div>
     </nav>
 
     <!-- 行動端選單 -->
     <div id="mobile-menu" class="fixed inset-0 z-[150] bg-white flex flex-col items-center justify-center space-y-10">
         <button class="absolute top-8 right-8 text-stone-600" onclick="window.toggleMenu()" aria-label="關閉"><i data-lucide="x" class="w-8 h-8"></i></button>
-        <button onclick="window.scrollToSection('about')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">品牌故事</button>
-        <button onclick="window.scrollToSection('calculator')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">靈石測驗</button>
-        <button onclick="window.scrollToSection('collections')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">收藏系列</button>
-        <button onclick="window.scrollToSection('social')" class="text-xl font-bold tracking-[0.4em] text-stone-800 uppercase">追蹤我們</button>
+        <button onclick="window.scrollToSection('about')" class="nav-item text-xl font-bold tracking-[0.4em] text-stone-800 uppercase" data-i18n="nav-about">品牌故事</button>
+        <button onclick="window.scrollToSection('calculator')" class="nav-item text-xl font-bold tracking-[0.4em] text-stone-800 uppercase" data-i18n="nav-quiz">靈石測驗</button>
+        <button onclick="window.scrollToSection('collections')" class="nav-item text-xl font-bold tracking-[0.4em] text-stone-800 uppercase" data-i18n="nav-coll">收藏系列</button>
+        <button onclick="window.scrollToSection('social')" class="nav-item text-xl font-bold tracking-[0.4em] text-stone-800 uppercase" data-i18n="nav-social">追蹤我們</button>
+        <div class="pt-8">
+             <button onclick="window.toggleLanguage()" class="flex items-center space-x-2 text-xs font-bold tracking-widest text-stone-500 uppercase border border-stone-200 px-6 py-3 rounded-full">
+                <i data-lucide="globe" class="w-4 h-4"></i>
+                <span class="lang-label">Switch to English</span>
+            </button>
+        </div>
     </div>
 
     <main>
@@ -146,7 +164,7 @@
             <div class="relative z-10 text-center px-6">
                 <p id="hero-sub-display" class="text-[10px] md:text-xs tracking-[0.5em] text-stone-600 mb-8 animate-fadeInUp uppercase font-bold">Every stone has its own story</p>
                 <h1 id="hero-title-display" class="text-4xl md:text-6xl font-light text-stone-900 mb-10 tracking-[0.3em] leading-[1.6] animate-fadeInUp delay-100 drop-shadow-sm">奧兒絲朵<br /><span class="text-2xl md:text-3xl tracking-[0.4em] text-stone-600 italic font-normal block mt-4">靈石與您的故事</span></h1>
-                <button onclick="window.scrollToSection('calculator')" class="mt-8 px-8 py-3 border border-stone-800 text-stone-800 hover:bg-stone-800 hover:text-white transition-all text-xs tracking-[0.3em] uppercase font-bold animate-fadeInUp" style="animation-delay: 0.5s;">尋找您的命定靈石</button>
+                <button onclick="window.scrollToSection('calculator')" class="mt-8 px-8 py-3 border border-stone-800 text-stone-800 hover:bg-stone-800 hover:text-white transition-all text-xs tracking-[0.3em] uppercase font-bold animate-fadeInUp" style="animation-delay: 0.5s;" data-i18n="hero-btn">尋找您的命定靈石</button>
             </div>
         </header>
 
@@ -158,23 +176,17 @@
                         <img id="about-icon-display" src="" class="w-40 md:w-64 mx-auto object-contain rounded-lg shadow-sm" alt="客服 QR Code">
                     </a>
                 </div>
-                <h2 id="about-title-display" class="text-lg md:text-xl font-medium tracking-[0.4em] text-stone-900 mb-12 uppercase">關於 奧兒絲朵</h2>
+                <h2 id="about-title-display" class="text-lg md:text-xl font-medium tracking-[0.4em] text-stone-900 mb-12 uppercase" data-i18n="about-title">關於 奧兒絲朵</h2>
                 <p id="about-text-display" class="text-stone-600 leading-[2.5] tracking-[0.15em] text-base font-normal whitespace-pre-line text-justify md:text-center"></p>
                 <div class="mt-20 ai-spirit-box">
                     <p id="ai-quote" class="text-sm md:text-base text-stone-500 italic tracking-[0.2em] mb-10 leading-relaxed font-medium">「每一塊石頭都有它的頻率，等待與您共鳴。」</p>
-                    <button id="btn-daily-quote" onclick="window.generateDailyQuote()" class="text-xs tracking-[0.3em] uppercase px-8 py-3 border border-stone-300 hover:border-stone-900 hover:bg-stone-50 transition-all shadow-sm font-bold text-stone-700">獲取今日石語 ✨</button>
+                    <button id="btn-daily-quote" onclick="window.generateDailyQuote()" class="text-xs tracking-[0.3em] uppercase px-8 py-3 border border-stone-300 hover:border-stone-900 hover:bg-stone-50 transition-all shadow-sm font-bold text-stone-700" data-i18n="btn-quote">獲取今日石語 ✨</button>
                 </div>
             </div>
         </section>
 
         <!-- === 🔮 命定靈石測驗區塊 === -->
         <section id="calculator" class="py-24 px-4 bg-stone-50 relative overflow-hidden">
-            <div class="absolute top-0 right-0 p-6 z-10">
-                <button onclick="window.toggleLanguage()" class="flex items-center space-x-2 text-[10px] font-bold tracking-widest text-stone-500 hover:text-stone-800 transition uppercase border border-stone-200 px-3 py-1.5 rounded-full bg-white shadow-sm">
-                    <i data-lucide="globe" class="w-3 h-3"></i>
-                    <span id="langLabel">English</span>
-                </button>
-            </div>
             <div class="max-w-lg mx-auto bg-white p-8 md:p-12 rounded-2xl shadow-xl border border-stone-100 relative z-0">
                 <div class="text-center">
                     <div class="mx-auto h-16 w-16 bg-stone-50 rounded-full flex items-center justify-center mb-4"><i data-lucide="sun" class="h-8 w-8 text-stone-400"></i></div>
@@ -220,7 +232,7 @@
         <section id="social" class="py-24 md:py-40 px-8 bg-white">
             <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16">
                 <div class="w-full md:w-2/5 space-y-12">
-                    <h2 id="social-title-display" class="text-2xl md:text-3xl font-light tracking-[0.3em] text-stone-900 uppercase">Follow Us</h2>
+                    <h2 id="social-title-display" class="text-2xl md:text-3xl font-light tracking-[0.3em] text-stone-900 uppercase" data-i18n="social-title">Follow Us</h2>
                     <div class="space-y-4">
                         <a id="ig-link-display" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between group py-5 border-b border-stone-200"><span id="ig-text-display" class="text-sm tracking-[0.2em] text-stone-600 font-medium uppercase">Instagram</span><i data-lucide="arrow-right" class="w-4 h-4 text-stone-400 group-hover:translate-x-1 transition-transform group-hover:text-stone-800"></i></a>
                         <a id="fb-link-display" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between group py-5 border-b border-stone-200"><span id="fb-text-display" class="text-sm tracking-[0.2em] text-stone-600 font-medium uppercase">Facebook</span><i data-lucide="arrow-right" class="w-4 h-4 text-stone-400 group-hover:translate-x-1 transition-transform group-hover:text-stone-800"></i></a>
@@ -298,16 +310,23 @@
         </div>
         <div class="space-y-10 pb-32">
             <section class="space-y-3">
-                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">基本配置</h4>
-                <input type="text" id="edit-brand-name" placeholder="品牌名稱">
-                <textarea id="edit-hero-title" rows="2" placeholder="大標題"></textarea>
-                <input type="text" id="edit-hero-sub" placeholder="副標題">
-                <label class="upload-btn">更換首頁背景<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'hero')"></label>
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">基本配置 (中文)</h4>
+                <input type="text" id="edit-brand-name" placeholder="品牌名稱 (中)">
+                <textarea id="edit-hero-title" rows="2" placeholder="大標題 (中)"></textarea>
+                <input type="text" id="edit-hero-sub" placeholder="副標題 (中)">
+                
+                <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase mt-4">基本配置 (英文)</h4>
+                <input type="text" id="edit-brand-name-en" placeholder="Brand Name (EN)">
+                <textarea id="edit-hero-title-en" rows="2" placeholder="Hero Title (EN)"></textarea>
+                <input type="text" id="edit-hero-sub-en" placeholder="Hero Subtitle (EN)">
+                
+                <label class="upload-btn mt-2">更換首頁背景<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'hero')"></label>
             </section>
             
             <section class="space-y-3">
                 <h4 class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">故事與 QR</h4>
-                <textarea id="edit-about-text" rows="5" placeholder="故事內容"></textarea>
+                <textarea id="edit-about-text" rows="5" placeholder="故事內容 (中)"></textarea>
+                <textarea id="edit-about-text-en" rows="5" placeholder="About Content (EN)"></textarea>
                 <div class="p-4 bg-stone-50 rounded-lg space-y-3">
                     <label class="upload-btn m-0">更換 QR 圖片<input type="file" accept="image/*" class="hidden" onchange="window.handleImageUpload(this, 'about_icon')"></label>
                     <input type="text" id="edit-about-link" placeholder="QR 跳轉連結">
@@ -378,7 +397,7 @@
     <!-- 頁腳 -->
     <footer class="py-24 px-8 bg-white border-t border-stone-200 text-center">
         <span class="text-xl font-bold tracking-[0.5em] text-stone-900 uppercase">奧兒絲朵</span>
-        <p class="text-[10px] tracking-[0.2em] text-stone-400 mt-8 font-medium">© 2025 OUR STORY. CURATED FOR YOUR SOUL.</p>
+        <p id="footer-text" class="text-[10px] tracking-[0.2em] text-stone-400 mt-8 font-medium">© 2025 OUR STORY. CURATED FOR YOUR SOUL.</p>
         <button onclick="window.toggleAdmin()" id="admin-action-btn" class="text-[9px] tracking-[0.2em] text-stone-300 mt-8 uppercase border-b border-transparent hover:border-stone-400 transition-colors flex items-center justify-center mx-auto relative">
             Admin Login
         </button>
@@ -404,7 +423,6 @@
         const auth = getAuth(app);
         const db = initializeFirestore(app, { experimentalForceLongPolling: true });
         
-        // 修正：使用動態 appId 確保權限
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'our-story-53723';
         let authInstance = auth;
 
@@ -435,20 +453,64 @@
         };
 
         window.generateDailyQuote = () => {
-            const quotesPool = ["每一顆靈石，都在訴說宇宙的秘密。", "靜謐之中，感受大地的呼吸。", "光影折射，映照出靈魂的純粹。", "穿越億萬年的星塵，只為與你相遇。", "心如明鏡，塵埃自落。", "在石頭的溫潤中，找回內心的平靜。", "礦石的低語，是時間留下的情書。", "擁抱自然，與萬物共鳴。", "純粹的光，照亮未曾察覺的角落。", "靜聽石語，找尋失落的記憶。", "大地之母的饋贈，值得溫柔以待。", "靈魂的頻率，在色彩中閃耀。", "靜默，是最高級的溝通方式。", "不刻意渲染，美自會浮現。", "每一道裂痕，都是成長的印記。", "與石結緣，即是與自己重逢。", "星辰隕落，化作掌心的溫度。", "在忙碌的世界中，保有一方淨土。", "心之所向，便是能量所在。", "靈石無言，卻最懂你的心。"];
-            const sessionQuote = quotesPool[Math.floor(Math.random() * quotesPool.length)];
+            const poolZh = ["每一顆靈石，都在訴說宇宙的秘密。", "靜謐之中，感受大地的呼吸。", "光影折射，映照出靈魂的純粹。", "穿越億萬年的星塵，只為與你相遇。", "心如明鏡，塵埃自落。", "在石頭的溫潤中，找回內心的平靜。", "礦石的低語，是時間留下的情書。", "擁抱自然，與萬物共鳴。"];
+            const poolEn = ["Every stone whispers the secrets of the universe.", "In silence, feel the breath of the earth.", "Light reflects the purity of the soul.", "Stardust crossing eons just to meet you.", "Heart like a mirror, dust settles naturally.", "Find inner peace in the warmth of the stone.", "Whispers of ore are love letters from time.", "Embrace nature, resonate with all things."];
+            
+            const pool = currentLang === 'zh' ? poolZh : poolEn;
+            const sessionQuote = pool[Math.floor(Math.random() * pool.length)];
             const btn = document.getElementById('btn-daily-quote');
             const display = document.getElementById('ai-quote');
-            btn.disabled = true; btn.innerText = "感應中...";
-            setTimeout(() => { display.innerText = `「${sessionQuote}」`; btn.disabled = false; btn.innerText = "獲取今日石語 ✨"; }, 1200);
+            
+            const loadingText = currentLang === 'zh' ? "感應中..." : "Sensing...";
+            const btnText = currentLang === 'zh' ? "獲取今日石語 ✨" : "Daily Wisdom ✨";
+            
+            btn.disabled = true; btn.innerText = loadingText;
+            setTimeout(() => { display.innerText = `「${sessionQuote}」`; btn.disabled = false; btn.innerText = btnText; }, 1200);
         };
 
         // --- 靈石測驗資料與邏輯 ---
         const MONTH_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        // 修正後的訊息：只提示成功，不跳轉 LINE
+        
+        // 全站多語系資料庫
         const I18N = {
-            zh: { title: "尋找您的命定靈石", desc: `輸入您的<span class="font-bold text-stone-700">國曆 (Solar)</span> 出生日期，<br>系統將自動換算精確的農曆五行，<br>為您連結那顆等待已久的守護石。`, labelYear: "國曆出生年", labelMonth: "國曆月份", labelDay: "國曆日期", btnCalc: "開始轉換並感應", loading: "正在換算農曆五行...", resultTitle: "農曆出生資訊", btnCollection: "查看收藏系列", btnBuy: "洽詢專員購買", btnRetry: "重新測驗", modalTitle: "專員購藏協助", modalDesc: `請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務專注於協助購買挑選，非命理諮詢)</span>`, labelCName: "您的稱呼", labelCContact: "聯絡電話", labelCNotes: "備註事項 (選填)", btnSubmit: "確認送出", alertSent: "資料已準備就緒！\n\n系統將自動開啟 LINE，請在對話視窗中按下「傳送」鍵，專員就會收到您的需求囉！", sending: "正在開啟 LINE...", selectYear: "請選擇年份", selectMonth: "月份", selectDay: "日期", refImg: "示意圖" },
-            en: { title: "Find Your Destined Stone", desc: `Enter your <span class="font-bold text-stone-700">Solar Birth Date</span>.<br>We will calculate your Lunar Elemental Energy<br>to reveal your Guardian Stone.`, labelYear: "Birth Year (Solar)", labelMonth: "Birth Month", labelDay: "Birth Day", btnCalc: "Reveal My Stone", loading: "Calculating Cosmic Energy...", resultTitle: "Your Lunar Profile", btnCollection: "View Collection", btnBuy: "Contact for Purchase", btnRetry: "Retake Quiz", modalTitle: "Purchasing Assistance", modalDesc: `Leave your info, and a specialist will guide you through our collection.<br><span class="text-stone-400 font-light block mt-1">(Assistance for purchase, not fortune telling)</span>`, labelCName: "Your Name", labelCContact: "Phone Number", labelCNotes: "Notes (Optional)", btnSubmit: "Submit", alertSent: "Ready to send!\n\nLINE will open automatically. Please press the 'Send' button in the chat to contact our specialist.", sending: "Opening LINE...", selectYear: "Select Year", selectMonth: "Month", selectDay: "Day", refImg: "Reference" }
+            zh: { 
+                'nav-about': "品牌故事", 'nav-coll': "收藏系列", 'nav-social': "追蹤我們", 'nav-quiz': "靈石測驗",
+                'hero-btn': "尋找您的命定靈石",
+                'about-title': "關於 奧兒絲朵", 'btn-quote': "獲取今日石語 ✨",
+                'social-title': "Follow Us", // Brand style kept
+                'loading-text': "讀取靈石能量中...",
+                
+                // Quiz
+                title: "尋找您的命定靈石", desc: `輸入您的<span class="font-bold text-stone-700">國曆 (Solar)</span> 出生日期，<br>系統將自動換算精確的農曆五行，<br>為您連結那顆等待已久的守護石。`, 
+                labelYear: "國曆出生年", labelMonth: "國曆月份", labelDay: "國曆日期", 
+                btnCalc: "開始轉換並感應", loading: "正在換算農曆五行...", 
+                resultTitle: "農曆出生資訊", btnCollection: "查看收藏系列", btnBuy: "洽詢專員購買", btnRetry: "重新測驗", 
+                
+                // Modal
+                modalTitle: "專員購藏協助", modalDesc: `請留下您的資訊，專員將為您介紹現貨款式與購買流程。<br><span class="text-stone-400 font-light block mt-1">(此服務專注於協助購買挑選，非命理諮詢)</span>`, 
+                labelCName: "您的稱呼", labelCContact: "聯絡電話", labelCNotes: "備註事項 (選填)", 
+                btnSubmit: "確認送出", alertSent: "資料已準備就緒！\n\n系統將自動開啟 LINE，請在對話視窗中按下「傳送」鍵，專員就會收到您的需求囉！", sending: "正在開啟 LINE...", 
+                selectYear: "請選擇年份", selectMonth: "月份", selectDay: "日期", refImg: "示意圖" 
+            },
+            en: { 
+                'nav-about': "Our Story", 'nav-coll': "Collections", 'nav-social': "Social", 'nav-quiz': "Gemstone Quiz",
+                'hero-btn': "Find Your Stone",
+                'about-title': "About Us", 'btn-quote': "Daily Wisdom ✨",
+                'social-title': "Follow Us",
+                'loading-text': "Reading Energy...",
+
+                // Quiz
+                title: "Find Your Destined Stone", desc: `Enter your <span class="font-bold text-stone-700">Solar Birth Date</span>.<br>We will calculate your Lunar Elemental Energy<br>to reveal your Guardian Stone.`, 
+                labelYear: "Birth Year (Solar)", labelMonth: "Birth Month", labelDay: "Birth Day", 
+                btnCalc: "Reveal My Stone", loading: "Calculating Cosmic Energy...", 
+                resultTitle: "Your Lunar Profile", btnCollection: "View Collection", btnBuy: "Contact for Purchase", btnRetry: "Retake Quiz", 
+                
+                // Modal
+                modalTitle: "Purchasing Assistance", modalDesc: `Leave your info, and a specialist will guide you through our collection.<br><span class="text-stone-400 font-light block mt-1">(Assistance for purchase, not fortune telling)</span>`, 
+                labelCName: "Your Name", labelCContact: "Phone Number", labelCNotes: "Notes (Optional)", 
+                btnSubmit: "Submit", alertSent: "Ready to send!\n\nLINE will open automatically. Please press the 'Send' button in the chat to contact our specialist.", sending: "Opening LINE...", 
+                selectYear: "Select Year", selectMonth: "Month", selectDay: "Day", refImg: "Reference" 
+            }
         };
 
         const STONES = {
@@ -514,12 +576,40 @@
             }
         };
 
+        // 全域語言切換函式
         window.toggleLanguage = () => {
             currentLang = currentLang === 'zh' ? 'en' : 'zh';
-            document.getElementById('langLabel').innerText = currentLang === 'zh' ? 'English' : '中文';
+            
+            // 1. 更新按鈕文字
+            document.querySelectorAll('.lang-label').forEach(el => {
+                if (el.parentNode.tagName === 'BUTTON' && el.parentNode.innerText.includes('Switch')) {
+                    el.innerText = currentLang === 'zh' ? 'Switch to English' : '切換為中文';
+                } else {
+                    el.innerText = currentLang === 'zh' ? 'English' : '中文';
+                }
+            });
+
+            // 2. 更新靜態文字 (Navigation, Footer, etc.)
+            updateStaticText();
+
+            // 3. 更新動態內容 (從資料庫讀取的部分)
+            renderFrontEnd();
+
+            // 4. 更新測驗 UI (包含 dropdowns)
             updateCalcUI();
             populateDropdowns(); 
         };
+
+        function updateStaticText() {
+            const t = I18N[currentLang];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.innerText = t[key];
+            });
+            
+            // loading screen
+            document.querySelector('.loading-text').innerText = t['loading-text'];
+        }
 
         window.calculateStone = (e) => {
             if(e) e.preventDefault();
@@ -625,7 +715,7 @@
             let lineId = (siteConfig.lineId && siteConfig.lineId.trim() !== "") ? siteConfig.lineId : "@291pcwxm";
             if (!lineId.startsWith('@')) lineId = '@' + lineId; 
             
-            // 構建 LINE 訊息
+            // 構建 LINE 訊息 (永遠用中文傳送，方便商家閱讀)
             let message = `您好，我是 ${name}。\n聯絡電話：${contact}\n`;
             if (notes) message += `備註：${notes}\n`;
             message += `\n我剛做了靈石測驗，結果是：${stoneTitle}\n想請專員協助介紹與購買，謝謝！`;
@@ -643,9 +733,13 @@
         };
         
         function updateCalcUI() {
-            const t = I18N[currentLang]; const safeSetText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; }; const safeSetHTML = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
+            const t = I18N[currentLang]; 
+            const safeSetText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; }; 
+            const safeSetHTML = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
             safeSetText('ui-title', t.title); safeSetHTML('ui-desc', t.desc); safeSetText('label-year', t.labelYear); safeSetText('label-month', t.labelMonth); safeSetText('label-day', t.labelDay); safeSetText('btn-calc', t.btnCalc);
-            const loadingEl = document.getElementById('loading-text'); if(loadingEl) loadingEl.innerText = t.loading; safeSetText('modal-title', t.modalTitle); safeSetHTML('modal-desc', t.modalDesc); safeSetText('label-cName', t.labelCName); safeSetText('label-cContact', t.labelCContact); safeSetText('label-cNotes', t.labelCNotes); safeSetText('btn-submit', t.btnSubmit);
+            
+            safeSetText('modal-title', t.modalTitle); safeSetHTML('modal-desc', t.modalDesc); safeSetText('label-cName', t.labelCName); safeSetText('label-cContact', t.labelCContact); safeSetText('label-cNotes', t.labelCNotes); safeSetText('btn-submit', t.btnSubmit);
+            
             const resultArea = document.getElementById('resultArea'); if (resultArea && !resultArea.classList.contains('hidden')) { if(document.getElementById('year').value) window.calculateStone(); }
         }
 
@@ -719,15 +813,23 @@
                 const updateData = { 
                     ...siteConfig, 
                     brandName: document.getElementById('edit-brand-name')?.value || siteConfig.brandName, 
+                    brandNameEn: document.getElementById('edit-brand-name-en')?.value || siteConfig.brandNameEn,
+                    
                     heroTitle: document.getElementById('edit-hero-title')?.value || siteConfig.heroTitle, 
+                    heroTitleEn: document.getElementById('edit-hero-title-en')?.value || siteConfig.heroTitleEn,
+                    
                     heroSub: document.getElementById('edit-hero-sub')?.value || siteConfig.heroSub, 
+                    heroSubEn: document.getElementById('edit-hero-sub-en')?.value || siteConfig.heroSubEn,
+                    
                     aboutText: document.getElementById('edit-about-text')?.value || siteConfig.aboutText, 
+                    aboutTextEn: document.getElementById('edit-about-text-en')?.value || siteConfig.aboutTextEn,
+                    
                     aboutLink: document.getElementById('edit-about-link')?.value || siteConfig.aboutLink,
                     igHandle: document.getElementById('edit-ig-handle')?.value || siteConfig.igHandle,
                     igUrl: document.getElementById('edit-ig-url')?.value || siteConfig.igUrl,
                     fbHandle: document.getElementById('edit-fb-handle')?.value || siteConfig.fbHandle,
                     fbUrl: document.getElementById('edit-fb-url')?.value || siteConfig.fbUrl,
-                    lineId: document.getElementById('edit-line-id')?.value || siteConfig.lineId // 儲存 LINE ID
+                    lineId: document.getElementById('edit-line-id')?.value || siteConfig.lineId
                 };
                 for(let i=1; i<=4; i++) { 
                     const val = document.getElementById(`edit-ig-embed-${i}`)?.value;
@@ -747,6 +849,8 @@
                     await setDoc(itemRef, cleanItem);
                 }
                 alert("同步成功！");
+                // 同步後重新渲染前端以反映英文變更
+                renderFrontEnd();
             } catch (e) { alert("失敗: " + e.message); }
             finally { document.getElementById('loading').style.display = 'none'; }
         };
@@ -815,11 +919,18 @@
             const safeSetHref = (id, href) => { if(document.getElementById(id)) document.getElementById(id).href = href || "#"; };
             const safeSetVal = (id, val) => { if(document.getElementById(id)) document.getElementById(id).value = val || ""; };
 
-            safeSetText('nav-brand-display', siteConfig.brandName);
-            safeSetText('hero-title-display', siteConfig.heroTitle);
-            safeSetText('hero-sub-display', siteConfig.heroSub);
+            // 根據語言選擇顯示內容
+            const suffix = currentLang === 'en' ? 'En' : '';
+            const tBrand = siteConfig[`brandName${suffix}`] || siteConfig.brandName;
+            const tHeroT = siteConfig[`heroTitle${suffix}`] || siteConfig.heroTitle;
+            const tHeroS = siteConfig[`heroSub${suffix}`] || siteConfig.heroSub;
+            const tAbout = siteConfig[`aboutText${suffix}`] || siteConfig.aboutText;
+
+            safeSetText('nav-brand-display', tBrand);
+            safeSetText('hero-title-display', tHeroT);
+            safeSetText('hero-sub-display', tHeroS);
             if (siteConfig.heroImg) safeSetSrc('hero-img-display', siteConfig.heroImg);
-            safeSetText('about-text-display', siteConfig.aboutText);
+            safeSetText('about-text-display', tAbout);
             if (siteConfig.aboutIcon) safeSetSrc('about-icon-display', siteConfig.aboutIcon);
             safeSetHref('about-link-display', siteConfig.aboutLink);
             
@@ -831,16 +942,25 @@
             for(let i=1; i<=4; i++) { renderIgSlot(`ig-slot-${i}`, siteConfig[`igEmbed${i}`], siteConfig[`igImg${i}`]); }
             setTimeout(() => { if (window.instgrm) window.instgrm.Embeds.process(); }, 1000);
             
+            // 填充管理後台欄位 (中英文都要有)
             safeSetVal('edit-brand-name', siteConfig.brandName);
+            safeSetVal('edit-brand-name-en', siteConfig.brandNameEn); // New
+            
             safeSetVal('edit-hero-title', siteConfig.heroTitle);
+            safeSetVal('edit-hero-title-en', siteConfig.heroTitleEn); // New
+            
             safeSetVal('edit-hero-sub', siteConfig.heroSub);
+            safeSetVal('edit-hero-sub-en', siteConfig.heroSubEn); // New
+            
             safeSetVal('edit-about-text', siteConfig.aboutText);
+            safeSetVal('edit-about-text-en', siteConfig.aboutTextEn); // New
+            
             safeSetVal('edit-about-link', siteConfig.aboutLink);
             safeSetVal('edit-ig-handle', siteConfig.igHandle);
             safeSetVal('edit-ig-url', siteConfig.igUrl);
             safeSetVal('edit-fb-handle', siteConfig.fbHandle);
             safeSetVal('edit-fb-url', siteConfig.fbUrl);
-            safeSetVal('edit-line-id', siteConfig.lineId); // LINE ID
+            safeSetVal('edit-line-id', siteConfig.lineId);
             for(let i=1; i<=4; i++) { safeSetVal(`edit-ig-embed-${i}`, siteConfig[`igEmbed${i}`]); }
         }
 
