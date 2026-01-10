@@ -396,7 +396,7 @@
 
     <!-- 頁腳 -->
     <footer class="py-24 px-8 bg-white border-t border-stone-200 text-center">
-        <span class="text-xl font-bold tracking-[0.5em] text-stone-900 uppercase">奧兒絲朵</span>
+        <span id="footer-brand-display" class="text-xl font-bold tracking-[0.5em] text-stone-900 uppercase">奧兒絲朵</span>
         <p id="footer-text" class="text-[10px] tracking-[0.2em] text-stone-400 mt-8 font-medium">© 2025 OUR STORY. CURATED FOR YOUR SOUL.</p>
         <button onclick="window.toggleAdmin()" id="admin-action-btn" class="text-[9px] tracking-[0.2em] text-stone-300 mt-8 uppercase border-b border-transparent hover:border-stone-400 transition-colors flex items-center justify-center mx-auto relative">
             Admin Login
@@ -1030,6 +1030,9 @@
             safeSetText('fb-text-display', `Facebook / ${siteConfig.fbHandle}`);
             safeSetHref('ig-link-display', siteConfig.igUrl);
             safeSetHref('fb-link-display', siteConfig.fbUrl);
+            
+            // Footer Brand Name logic
+            safeSetText('footer-brand-display', tBrand);
 
             for(let i=1; i<=4; i++) { renderIgSlot(`ig-slot-${i}`, siteConfig[`igEmbed${i}`], siteConfig[`igImg${i}`]); }
             setTimeout(() => { if (window.instgrm) window.instgrm.Embeds.process(); }, 1000);
