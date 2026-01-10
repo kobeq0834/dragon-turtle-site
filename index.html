@@ -82,10 +82,10 @@
         .ai-spirit-box { max-width: 700px; margin: 0 auto; padding: 4rem 2rem; border: 1px dashed #a8a29e; border-radius: 1.5rem; background: rgba(255, 255, 255, 0.7); }
         .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.98); z-index: 2000; display: none; align-items: center; justify-content: center; font-size: 0.8rem; letter-spacing: 0.3em; }
         
-        /* iPhone 相容性樣式 */
+        /* iPhone 相容性樣式 & 佈局修正 */
         .ig-embed-container { 
             width: 100%; 
-            min-height: 450px; 
+            min-height: 400px; /* 稍微縮小預設高度，避免載入前過長 */
             display: block; 
             overflow: visible !important; 
             background: #fff; 
@@ -175,10 +175,11 @@
             <div id="collections-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16 max-w-7xl mx-auto"></div>
         </section>
 
-        <!-- 社群區塊 -->
+        <!-- 社群區塊 (修復：調整斷點為 lg，避免平板尺寸重疊) -->
         <section id="social" class="py-24 md:py-40 px-8 bg-white">
-            <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16">
-                <div class="w-full md:w-2/5 space-y-12">
+            <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+                <!-- 左側文字：在 lg (1024px) 以前都是 100% 寬 -->
+                <div class="w-full lg:w-2/5 space-y-12">
                     <h2 id="social-title-display" class="text-2xl md:text-3xl font-light tracking-[0.3em] text-stone-900 uppercase">Follow Us</h2>
                     <div class="space-y-4">
                         <a id="ig-link-display" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between group py-5 border-b border-stone-200"><span id="ig-text-display" class="text-sm tracking-[0.2em] text-stone-600 font-medium uppercase">Instagram</span><i data-lucide="arrow-right" class="w-4 h-4 text-stone-400 group-hover:translate-x-1 transition-transform group-hover:text-stone-800"></i></a>
@@ -186,12 +187,13 @@
                     </div>
                 </div>
                 
-                <div id="gallery-container" class="w-full md:w-3/5 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                <!-- 右側照片牆：在 lg (1024px) 以前都是 100% 寬，且內部維持單欄，避免 IG 擠壓 -->
+                <div id="gallery-container" class="w-full lg:w-3/5 grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
                     <div class="space-y-6">
                         <div id="ig-slot-1" class="ig-embed-container shadow-md"></div>
                         <div id="ig-slot-2" class="ig-embed-container shadow-md"></div>
                     </div>
-                    <div class="space-y-6 md:pt-12">
+                    <div class="space-y-6 lg:pt-12">
                         <div id="ig-slot-3" class="ig-embed-container shadow-md"></div>
                         <div id="ig-slot-4" class="ig-embed-container shadow-md"></div>
                     </div>
