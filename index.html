@@ -488,50 +488,144 @@
             }, delay);
         };
 
+        // 輔助函式
         function toTraditionalChinese(str) { const map = { '龙': '龍', '马': '馬', '鸡': '雞', '猪': '豬', '腊': '臘' }; return str.split('').map(char => map[char] || char).join(''); }
         function getZodiacEn(chi) { const map = { '鼠': 'Rat', '牛': 'Ox', '虎': 'Tiger', '兔': 'Rabbit', '龍': 'Dragon', '蛇': 'Snake', '馬': 'Horse', '羊': 'Goat', '猴': 'Monkey', '雞': 'Rooster', '狗': 'Dog', '豬': 'Pig' }; return map[chi] || chi; }
-        function getStoneByFate(y, m) { const d = y % 10; if (d <= 1) return (m>=10||m<=12)?'gibeon':(m>=4&&m<=6)?'tektite':'gibeon'; if (d <= 3) return (m>=1&&m<=3)?'gibeon':'moldavite'; if (d <= 5) return (m>=7&&m<=9)?'tektite':'moldavite'; if (d <= 7) return (m>=10||m<=12)?'cherryAgate':(m>=4&&m<=6)?'libyan':'cherryAgate'; return (m>=1&&m<=3)?'libyan':'pallasite'; }
         
+        function getStoneByFate(y, m) {
+            const d = y % 10;
+            if (d <= 1) return (m>=10||m<=12)?'gibeon':(m>=4&&m<=6)?'tektite':'gibeon';
+            if (d <= 3) return (m>=1&&m<=3)?'gibeon':'moldavite';
+            if (d <= 5) return (m>=7&&m<=9)?'tektite':'moldavite';
+            if (d <= 7) return (m>=10||m<=12)?'cherryAgate':(m>=4&&m<=6)?'libyan':'cherryAgate';
+            return (m>=1&&m<=3)?'libyan':'pallasite';
+        }
+
+        // 渲染結果 - 修正為 object-contain 以自動適應大小
         function renderResult(stone, date) {
             const t = I18N[currentLang];
-            const name = stone.name[currentLang]; const desc = stone.desc[currentLang]; const tags = stone.tags[currentLang]; const subTitle = currentLang === 'zh' ? stone.name.en : "";
-            const html = `<div class="stone-card bg-stone-50 rounded-xl overflow-hidden shadow-sm border border-stone-100 fade-in"><div class="bg-stone-100 p-4 border-b border-stone-200 text-center"><p class="text-[10px] text-stone-400 tracking-wider mb-1 uppercase">${t.resultTitle}</p><p class="text-sm font-bold text-stone-700 tracking-widest">${date}</p></div><div class="relative h-64 overflow-hidden bg-stone-200 group"><img src="${stone.img}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400?text=Stone'"><div class="absolute top-2 right-2 bg-black/30 text-white text-[9px] px-2 py-1 rounded backdrop-blur-sm tracking-wider">${t.refImg}</div><div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 to-transparent flex items-end justify-center pb-6"><h3 class="text-white text-2xl font-bold tracking-[0.2em]">${name}</h3></div></div><div class="p-8">${subTitle ? `<p class="text-xs text-stone-400 uppercase tracking-widest mb-4 font-bold">${subTitle}</p>` : ''}<p class="text-sm text-stone-600 leading-loose tracking-wide mb-6 text-justify">${desc}</p><div class="flex justify-center space-x-2 mb-8 flex-wrap gap-y-2">${tags.map(tag => `<span class="px-3 py-1 bg-white border border-stone-200 rounded-full text-[10px] text-stone-500 tracking-wider">${tag}</span>`).join('')}</div><div class="space-y-3"><button onclick="window.scrollToSection('collections')" class="block w-full py-3 bg-stone-800 text-white text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-600 transition text-center">${t.btnCollection}</button><button onclick="window.openContactModal()" class="block w-full py-3 bg-white border border-stone-200 text-stone-600 text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-50 hover:border-stone-400 transition text-center">${t.btnBuy}</button></div><button onclick="document.getElementById('calcForm').reset(); document.getElementById('resultArea').classList.add('hidden');" class="mt-6 text-[10px] text-stone-400 border-b border-transparent hover:border-stone-400 hover:text-stone-600 transition">${t.btnRetry}</button></div></div>`;
+            const name = stone.name[currentLang];
+            const desc = stone.desc[currentLang];
+            const tags = stone.tags[currentLang];
+            const subTitle = currentLang === 'zh' ? stone.name.en : "";
+
+            const html = `
+                <div class="stone-card bg-stone-50 rounded-xl overflow-hidden shadow-sm border border-stone-100 fade-in">
+                    <div class="bg-stone-100 p-4 border-b border-stone-200 text-center">
+                        <p class="text-[10px] text-stone-400 tracking-wider mb-1 uppercase">${t.resultTitle}</p>
+                        <p class="text-sm font-bold text-stone-700 tracking-widest">${date}</p>
+                    </div>
+                    <!-- 圖片容器：使用 bg-stone-50 與 object-contain 讓圖片不裁切並置中 -->
+                    <div class="relative h-64 overflow-hidden bg-stone-50 group border-b border-stone-100">
+                        <img src="${stone.img}" class="w-full h-full object-contain p-4" onerror="this.src='https://placehold.co/600x400?text=Stone'">
+                        <div class="absolute top-2 right-2 bg-black/30 text-white text-[9px] px-2 py-1 rounded backdrop-blur-sm tracking-wider">${t.refImg}</div>
+                    </div>
+                    <div class="p-8">
+                        ${subTitle ? `<p class="text-xs text-stone-400 uppercase tracking-widest mb-4 font-bold">${subTitle}</p>` : ''}
+                        <p class="text-sm text-stone-600 leading-loose tracking-wide mb-6 text-justify">${desc}</p>
+                        <div class="flex justify-center space-x-2 mb-8 flex-wrap gap-y-2">
+                            ${tags.map(tag => `<span class="px-3 py-1 bg-white border border-stone-200 rounded-full text-[10px] text-stone-500 tracking-wider">${tag}</span>`).join('')}
+                        </div>
+                        <div class="space-y-3">
+                            <button onclick="window.scrollToSection('collections')" class="block w-full py-3 bg-stone-800 text-white text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-600 transition text-center">${t.btnCollection}</button>
+                            <button onclick="window.openContactModal()" class="block w-full py-3 bg-white border border-stone-200 text-stone-600 text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-stone-50 hover:border-stone-400 transition text-center">${t.btnBuy}</button>
+                        </div>
+                        <button onclick="document.getElementById('calcForm').reset(); document.getElementById('resultArea').classList.add('hidden');" class="mt-6 text-[10px] text-stone-400 border-b border-transparent hover:border-stone-400 hover:text-stone-600 transition">${t.btnRetry}</button>
+                    </div>
+                </div>`;
             document.getElementById('resultArea').innerHTML = html;
         }
 
         window.openContactModal = () => document.getElementById('contactModal').classList.remove('hidden');
         window.closeContactModal = () => document.getElementById('contactModal').classList.add('hidden');
-        window.handleContactSubmit = (e) => { e.preventDefault(); const btn = e.target.querySelector('button[type="submit"]'); const originalText = btn.innerText; const name = escapeHtml(document.getElementById('cName').value); const contact = escapeHtml(document.getElementById('cContact').value); btn.disabled = true; btn.innerText = I18N[currentLang].sending; setTimeout(() => { alert(I18N[currentLang].alertSent); btn.disabled = false; btn.innerText = originalText; e.target.reset(); window.closeContactModal(); }, 1000); };
-        function escapeHtml(text) { if (!text) return ""; return text.replace(/[&<>"']/g, function(m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]; }); }
+        window.handleContactSubmit = (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            // XSS 防護
+            const name = escapeHtml(document.getElementById('cName').value);
+            const contact = escapeHtml(document.getElementById('cContact').value);
+
+            btn.disabled = true; btn.innerText = I18N[currentLang].sending;
+            setTimeout(() => {
+                alert(I18N[currentLang].alertSent);
+                btn.disabled = false; btn.innerText = originalText;
+                e.target.reset(); window.closeContactModal();
+            }, 1000);
+        };
         
         function updateCalcUI() {
-            const t = I18N[currentLang]; const safeSetText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; }; const safeSetHTML = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
-            safeSetText('ui-title', t.title); safeSetHTML('ui-desc', t.desc); safeSetText('label-year', t.labelYear); safeSetText('label-month', t.labelMonth); safeSetText('label-day', t.labelDay); safeSetText('btn-calc', t.btnCalc);
-            const loadingEl = document.getElementById('loading-text'); if(loadingEl) loadingEl.innerText = t.loading; safeSetText('modal-title', t.modalTitle); safeSetHTML('modal-desc', t.modalDesc); safeSetText('label-cName', t.labelCName); safeSetText('label-cContact', t.labelCContact); safeSetText('btn-submit', t.btnSubmit);
-            const resultArea = document.getElementById('resultArea'); if (resultArea && !resultArea.classList.contains('hidden')) { if(document.getElementById('year').value) window.calculateStone(); }
+            const t = I18N[currentLang];
+            const safeSetText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
+            const safeSetHTML = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
+            safeSetText('ui-title', t.title); safeSetHTML('ui-desc', t.desc);
+            safeSetText('label-year', t.labelYear); safeSetText('label-month', t.labelMonth); safeSetText('label-day', t.labelDay);
+            safeSetText('btn-calc', t.btnCalc);
+            const loadingEl = document.getElementById('loading-text'); if(loadingEl) loadingEl.innerText = t.loading;
+            safeSetText('modal-title', t.modalTitle); safeSetHTML('modal-desc', t.modalDesc);
+            safeSetText('label-cName', t.labelCName); safeSetText('label-cContact', t.labelCContact);
+            safeSetText('btn-submit', t.btnSubmit);
+            const resultArea = document.getElementById('resultArea');
+            if (resultArea && !resultArea.classList.contains('hidden')) { if(document.getElementById('year').value) window.calculateStone(); }
         }
 
         function populateDropdowns() {
-            const yearSelect = document.getElementById('year'); const monthSelect = document.getElementById('month'); const daySelect = document.getElementById('day');
+            const yearSelect = document.getElementById('year');
+            const monthSelect = document.getElementById('month');
+            const daySelect = document.getElementById('day');
             const valY = yearSelect.value; const valM = monthSelect.value; const valD = daySelect.value;
-            yearSelect.innerHTML = `<option value="" disabled selected>${I18N[currentLang].selectYear}</option>`; monthSelect.innerHTML = `<option value="" disabled selected>${I18N[currentLang].selectMonth}</option>`; daySelect.innerHTML = `<option value="" disabled selected>${I18N[currentLang].selectDay}</option>`;
+            
+            yearSelect.innerHTML = `<option value="" disabled selected>${I18N[currentLang].selectYear}</option>`;
+            monthSelect.innerHTML = `<option value="" disabled selected>${I18N[currentLang].selectMonth}</option>`;
+            daySelect.innerHTML = `<option value="" disabled selected>${I18N[currentLang].selectDay}</option>`;
+
             for (let i = 2025; i >= 1950; i--) { let o = document.createElement('option'); o.value = i; o.text = currentLang === 'zh' ? `西元 ${i} 年` : `${i}`; yearSelect.appendChild(o); }
             for (let i = 1; i <= 12; i++) { let o = document.createElement('option'); o.value = i; o.text = currentLang === 'zh' ? `${i}月` : MONTH_EN[i-1]; monthSelect.appendChild(o); }
             for (let i = 1; i <= 31; i++) { let o = document.createElement('option'); o.value = i; o.text = currentLang === 'zh' ? `${i}日` : `${i}`; daySelect.appendChild(o); }
             if(valY) yearSelect.value = valY; if(valM) monthSelect.value = valM; if(valD) daySelect.value = valD;
         }
 
-        // --- 管理後台邏輯 ---
+        // === 內部邏輯函式 ===
+        function initNavbarScroll() {
+            const nav = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    nav.classList.add('nav-scrolled');
+                } else {
+                    nav.classList.remove('nav-scrolled');
+                }
+            });
+        }
+
+        // 優化後的圖片上傳與壓縮邏輯 (同時限制寬與高)
         window.handleImageUpload = (input, target, extra = null) => {
             const file = input.files[0]; if (!file) return;
             const reader = new FileReader();
             reader.onload = (e) => {
                 const img = new Image();
                 img.onload = () => {
-                    let w = 1000; let width = img.width; let height = img.height;
-                    if (width > w) { height *= w / width; width = w; }
-                    const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height;
-                    const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height);
+                    // 雙重限制：寬度或高度都不能超過 800px
+                    let width = img.width;
+                    let height = img.height;
+                    const maxDim = 800;
+
+                    if (width > height) {
+                        if (width > maxDim) {
+                            height *= maxDim / width;
+                            width = maxDim;
+                        }
+                    } else {
+                        if (height > maxDim) {
+                            width *= maxDim / height;
+                            height = maxDim;
+                        }
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
                     let base64 = canvas.toDataURL('image/jpeg', 0.8);
                     
                     if (target === 'hero') siteConfig.heroImg = base64;
@@ -549,14 +643,163 @@
             reader.readAsDataURL(file);
         };
 
+        async function init() {
+            document.getElementById('loading').style.display = 'flex';
+            initNavbarScroll();
+            populateDropdowns();
+
+            onAuthStateChanged(auth, (user) => {
+                const panel = document.getElementById('admin-panel');
+                const btn = document.getElementById('admin-action-btn');
+                const currentUid = user?.uid?.trim();
+                if (user && currentUid === ADMIN_UID) {
+                    panel.classList.add('active');
+                    btn.innerText = "管理模式 (已登入)";
+                    renderAdminList();
+                } else {
+                    panel.classList.remove('active');
+                    btn.innerText = "Admin Login";
+                }
+                startListeners();
+            });
+            await signInAnonymously(auth).catch(() => {});
+        }
+
+        function startListeners() {
+            // 監聽一般設定
+            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'main'), (snap) => {
+                if (snap.exists()) { siteConfig = { ...siteConfig, ...snap.data() }; renderFrontEnd(); }
+            });
+            // 監聽測驗圖片設定
+            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'calculator'), (snap) => {
+                if (snap.exists()) { 
+                    calculatorConfig = snap.data(); 
+                    if (calculatorConfig.stones) {
+                        Object.keys(calculatorConfig.stones).forEach(key => {
+                            if (STONES[key] && calculatorConfig.stones[key]) {
+                                STONES[key].img = calculatorConfig.stones[key];
+                            }
+                        });
+                        // 重新渲染結果區塊如果它是打開的
+                        const resultArea = document.getElementById('resultArea');
+                        if (resultArea && !resultArea.classList.contains('hidden')) {
+                             // 這裡簡單處理，如果不影響用戶體驗，可以選擇不自動刷新
+                        }
+                    }
+                }
+                document.getElementById('loading').style.display = 'none';
+            });
+            // 監聽商品列表
+            onSnapshot(collection(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems'), (snap) => {
+                collectionsList = []; snap.forEach(d => collectionsList.push({ id: d.id, ...d.data() }));
+                collectionsList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                renderCollections();
+                if (document.getElementById('admin-panel').classList.contains('active')) renderAdminList();
+            });
+        }
+
+        function renderIgSlot(slotId, embedUrl, fallbackImg) {
+            const container = document.getElementById(slotId);
+            if (!container) return;
+            if (embedUrl && embedUrl.trim() !== "") {
+                container.innerHTML = `
+                    <blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14" style="background:#FFF; border:0; margin:0; width:100%;">
+                        <div style="padding:16px;"> <a href="${embedUrl}" target="_blank" style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" rel="noopener noreferrer">載入貼文中...</a></div>
+                    </blockquote>
+                `;
+            } else if (fallbackImg) {
+                container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 hover:scale-105" alt="Showcase">`;
+            } else {
+                container.innerHTML = `<div class="w-full h-full bg-stone-100 flex items-center justify-center text-stone-300 text-[10px]">影像載入中</div>`;
+            }
+        }
+
+        function syncSEO(config) {
+            const brand = config.brandName || "奧兒絲朵";
+            const sub = config.heroSub || "靈石與您的故事";
+            document.title = `${brand} | ${sub} - 專業收藏`;
+            const desc = config.aboutText ? config.aboutText.substring(0, 160) : "奧兒絲朵致力於提供高品質天鐵隕石、能量水晶、精雕龍龜收藏。";
+            const metaDesc = document.getElementById('meta-desc');
+            if (metaDesc) metaDesc.setAttribute('content', desc);
+            const ogTitle = document.getElementById('og-title');
+            if (ogTitle) ogTitle.setAttribute('content', `${brand} | ${sub}`);
+            const ogDesc = document.getElementById('og-desc');
+            if (ogDesc) ogDesc.setAttribute('content', desc);
+        }
+
+        function renderFrontEnd() {
+            const safeSetText = (id, text) => { if(document.getElementById(id)) document.getElementById(id).innerText = text || ""; };
+            const safeSetSrc = (id, src) => { if(document.getElementById(id)) document.getElementById(id).src = src || ""; };
+            const safeSetHref = (id, href) => { if(document.getElementById(id)) document.getElementById(id).href = href || "#"; };
+            const safeSetVal = (id, val) => { if(document.getElementById(id)) document.getElementById(id).value = val || ""; };
+
+            safeSetText('nav-brand-display', siteConfig.brandName);
+            safeSetText('hero-title-display', siteConfig.heroTitle);
+            safeSetText('hero-sub-display', siteConfig.heroSub);
+            if (siteConfig.heroImg) safeSetSrc('hero-img-display', siteConfig.heroImg);
+            safeSetText('about-text-display', siteConfig.aboutText);
+            if (siteConfig.aboutIcon) safeSetSrc('about-icon-display', siteConfig.aboutIcon);
+            safeSetHref('about-link-display', siteConfig.aboutLink);
+            
+            safeSetText('ig-text-display', `Instagram / ${siteConfig.igHandle}`);
+            safeSetText('fb-text-display', `Facebook / ${siteConfig.fbHandle}`);
+            safeSetHref('ig-link-display', siteConfig.igUrl);
+            safeSetHref('fb-link-display', siteConfig.fbUrl);
+
+            for(let i=1; i<=4; i++) { renderIgSlot(`ig-slot-${i}`, siteConfig[`igEmbed${i}`], siteConfig[`igImg${i}`]); }
+            
+            setTimeout(() => { 
+                if (window.instgrm) {
+                    window.instgrm.Embeds.process(); 
+                    document.querySelectorAll('.ig-embed-container iframe').forEach(f => {
+                        f.style.pointerEvents = 'auto';
+                    });
+                }
+            }, 600);
+            
+            syncSEO(siteConfig);
+            
+            safeSetVal('edit-brand-name', siteConfig.brandName);
+            safeSetVal('edit-hero-title', siteConfig.heroTitle);
+            safeSetVal('edit-hero-sub', siteConfig.heroSub);
+            safeSetVal('edit-about-text', siteConfig.aboutText);
+            safeSetVal('edit-about-link', siteConfig.aboutLink);
+            safeSetVal('edit-ig-handle', siteConfig.igHandle);
+            safeSetVal('edit-ig-url', siteConfig.igUrl);
+            safeSetVal('edit-fb-handle', siteConfig.fbHandle);
+            safeSetVal('edit-fb-url', siteConfig.fbUrl);
+            for(let i=1; i<=4; i++) { safeSetVal(`edit-ig-embed-${i}`, siteConfig[`igEmbed${i}`]); }
+        }
+
+        function renderCollections() {
+            const container = document.getElementById('collections-container');
+            if (!container) return;
+            container.innerHTML = collectionsList.map(item => `
+                <article class="group flex flex-col items-center">
+                    <div class="aspect-[4/5] w-full overflow-hidden bg-stone-200 shadow-sm">
+                        <img src="${item.img}" class="w-full h-full object-cover transition-all duration-[1500ms] group-hover:scale-110" alt="${item.name}">
+                    </div>
+                    <h3 class="text-base font-medium mt-6 tracking-widest text-stone-900 uppercase">${item.name}</h3>
+                    <p class="text-xs text-stone-500 mt-2 tracking-widest">${item.desc}</p>
+                </article>
+            `).join('');
+        }
+
+        function renderAdminList() {
+            const list = document.getElementById('edit-collections-list');
+            if (!list) return;
+            list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="updateLocalItem(${index}, 'name', this.value)" class="text-xs font-bold"><textarea onchange="updateLocalItem(${index}, 'desc', this.value)" class="text-xs">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">換照<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
+            lucide.createIcons();
+        }
+
         window.addNewCollectionItem = () => {
             collectionsList.unshift({ id: 'temp_' + Date.now(), name: "新收藏", desc: "能量描述", img: "", createdAt: Date.now(), isNew: true });
-            window.renderAdminList();
+            renderAdminList();
         };
         window.updateLocalItem = (index, field, value) => { collectionsList[index][field] = value; };
         window.deleteItem = async (id) => {
             if (!confirm("確定移除嗎？")) return;
-            if (id.startsWith('temp_')) { collectionsList = collectionsList.filter(i => i.id !== id); window.renderAdminList(); }
+            if (id.startsWith('temp_')) { collectionsList = collectionsList.filter(i => i.id !== id); renderAdminList(); }
             else { await deleteDoc(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems', id)); }
         };
 
@@ -599,122 +842,45 @@
             finally { document.getElementById('loading').style.display = 'none'; }
         };
 
-        // Modal Login Logic
-        window.toggleAdmin = () => {
+        window.toggleAdmin = async () => {
             const panel = document.getElementById('admin-panel');
             const currentUid = auth.currentUser?.uid?.trim();
-            if (auth.currentUser && currentUid === ADMIN_UID) { panel.classList.toggle('active'); } 
-            else { document.getElementById('adminLoginModal').classList.remove('hidden'); }
-        };
-        window.closeAdminLoginModal = () => document.getElementById('adminLoginModal').classList.add('hidden');
-        window.handleAdminLogin = async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('adminEmail').value;
-            const pass = document.getElementById('adminPass').value;
-            const btn = e.target.querySelector('button[type="submit"]');
-            const originalText = btn.innerText;
-            btn.disabled = true; btn.innerText = "驗證中...";
-            try {
-                const cred = await signInWithEmailAndPassword(auth, email, pass);
-                if (cred.user.uid.trim() === ADMIN_UID) {
-                    alert("身分核對成功！"); window.closeAdminLoginModal();
-                    document.getElementById('admin-panel').classList.add('active');
-                    document.getElementById('admin-action-btn').innerText = "管理模式 (已登入)";
-                    if (typeof window.renderAdminList === 'function') window.renderAdminList();
-                } else { alert("不具備管理權限。"); await signOut(auth); }
-            } catch(e) { alert("帳號或密碼錯誤: " + e.message); } 
-            finally { btn.disabled = false; btn.innerText = originalText; }
-        };
-        window.signOutAdmin = () => { if(!confirm("確定要登出管理員身份嗎？")) return; signOut(auth).then(() => { alert("已安全登出。"); window.location.reload(); }); };
-
-        function renderFrontEnd() {
-            const safeSetText = (id, text) => { if(document.getElementById(id)) document.getElementById(id).innerText = text || ""; };
-            const safeSetSrc = (id, src) => { if(document.getElementById(id)) document.getElementById(id).src = src || ""; };
-            const safeSetHref = (id, href) => { if(document.getElementById(id)) document.getElementById(id).href = href || "#"; };
-            const safeSetVal = (id, val) => { if(document.getElementById(id)) document.getElementById(id).value = val || ""; };
-            safeSetText('nav-brand-display', siteConfig.brandName); safeSetText('hero-title-display', siteConfig.heroTitle); safeSetText('hero-sub-display', siteConfig.heroSub);
-            if (siteConfig.heroImg) safeSetSrc('hero-img-display', siteConfig.heroImg);
-            safeSetText('about-text-display', siteConfig.aboutText);
-            if (siteConfig.aboutIcon) safeSetSrc('about-icon-display', siteConfig.aboutIcon);
-            safeSetHref('about-link-display', siteConfig.aboutLink);
-            safeSetText('ig-text-display', `Instagram / ${siteConfig.igHandle}`); safeSetText('fb-text-display', `Facebook / ${siteConfig.fbHandle}`);
-            safeSetHref('ig-link-display', siteConfig.igUrl); safeSetHref('fb-link-display', siteConfig.fbUrl);
-            for(let i=1; i<=4; i++) { renderIgSlot(`ig-slot-${i}`, siteConfig[`igEmbed${i}`], siteConfig[`igImg${i}`]); }
-            setTimeout(() => { if (window.instgrm) window.instgrm.Embeds.process(); }, 600);
-            syncSEO(siteConfig);
-            safeSetVal('edit-brand-name', siteConfig.brandName); safeSetVal('edit-hero-title', siteConfig.heroTitle); safeSetVal('edit-hero-sub', siteConfig.heroSub);
-            safeSetVal('edit-about-text', siteConfig.aboutText); safeSetVal('edit-about-link', siteConfig.aboutLink);
-            safeSetVal('edit-ig-handle', siteConfig.igHandle); safeSetVal('edit-ig-url', siteConfig.igUrl); safeSetVal('edit-fb-handle', siteConfig.fbHandle); safeSetVal('edit-fb-url', siteConfig.fbUrl);
-            for(let i=1; i<=4; i++) { safeSetVal(`edit-ig-embed-${i}`, siteConfig[`igEmbed${i}`]); }
-        }
-
-        function renderIgSlot(slotId, embedUrl, fallbackImg) {
-            const container = document.getElementById(slotId); if (!container) return;
-            if (embedUrl && embedUrl.trim() !== "") { container.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${embedUrl}" data-instgrm-version="14" style="background:#FFF; border:0; margin:0; width:100%;"><div style="padding:16px;"> <a href="${embedUrl}" target="_blank" style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;">View on Instagram</a></div></blockquote>`; } 
-            else if (fallbackImg) { container.innerHTML = `<img src="${fallbackImg}" class="w-full h-full object-cover opacity-95 transition-all duration-1000 hover:scale-105" alt="Showcase">`; } 
-            else { container.innerHTML = `<div class="w-full h-full bg-stone-100 flex items-center justify-center text-stone-300 text-[10px]">影像載入中</div>`; }
-        }
-
-        function syncSEO(config) {
-            const brand = config.brandName || "奧兒絲朵"; const sub = config.heroSub || "靈石與您的故事"; document.title = `${brand} | ${sub} - 專業收藏`;
-            const desc = config.aboutText ? config.aboutText.substring(0, 160) : "奧兒絲朵致力於提供高品質天鐵隕石、能量水晶、精雕龍龜收藏。";
-            const metaDesc = document.getElementById('meta-desc'); if (metaDesc) metaDesc.setAttribute('content', desc);
-            const ogTitle = document.getElementById('og-title'); if (ogTitle) ogTitle.setAttribute('content', `${brand} | ${sub}`);
-            const ogDesc = document.getElementById('og-desc'); if (ogDesc) ogDesc.setAttribute('content', desc);
-        }
-
-        function renderCollections() {
-            const container = document.getElementById('collections-container'); if (!container) return;
-            container.innerHTML = collectionsList.map(item => `<article class="group flex flex-col items-center"><div class="aspect-[4/5] w-full overflow-hidden bg-stone-200 shadow-sm"><img src="${item.img}" class="w-full h-full object-cover transition-all duration-[1500ms] group-hover:scale-110" alt="${item.name}"></div><h3 class="text-base font-medium mt-6 tracking-widest text-stone-900 uppercase">${item.name}</h3><p class="text-xs text-stone-500 mt-2 tracking-widest">${item.desc}</p></article>`).join('');
-        }
-
-        window.renderAdminList = function() {
-            const list = document.getElementById('edit-collections-list'); if (!list) return;
-            list.innerHTML = collectionsList.map((item, index) => `<div class="p-4 bg-stone-50 rounded border border-stone-200 space-y-2 relative shadow-sm"><button onclick="deleteItem('${item.id}')" class="absolute top-2 right-2 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button><input type="text" value="${item.name}" onchange="updateLocalItem(${index}, 'name', this.value)" class="text-xs font-bold"><textarea onchange="updateLocalItem(${index}, 'desc', this.value)" class="text-xs">${item.desc}</textarea><label class="upload-btn m-0 py-2 px-3 text-[10px]">換照<input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'col', ${index})"></label></div>`).join('');
-            lucide.createIcons();
-        }
-
-        function initNavbarScroll() {
-            const nav = document.getElementById('navbar');
-            window.addEventListener('scroll', () => { if (window.scrollY > 50) { nav.classList.add('nav-scrolled'); } else { nav.classList.remove('nav-scrolled'); } });
-        }
-
-        // Init Flow
-        document.getElementById('loading').style.display = 'flex';
-        initNavbarScroll();
-        populateDropdowns();
-
-        onAuthStateChanged(auth, (user) => {
-            const panel = document.getElementById('admin-panel');
-            const btn = document.getElementById('admin-action-btn');
-            const currentUid = user?.uid?.trim();
-            if (user && currentUid === ADMIN_UID) {
-                panel.classList.add('active'); btn.innerText = "管理模式 (已登入)"; window.renderAdminList();
-            } else { panel.classList.remove('active'); btn.innerText = "Admin Login"; }
-
-            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'main'), (snap) => {
-                if (snap.exists()) { siteConfig = { ...siteConfig, ...snap.data() }; renderFrontEnd(); }
-            });
-            onSnapshot(doc(db, 'artifacts', 'our-story-53723', 'public', 'data', 'siteSettings', 'calculator'), (snap) => {
-                if (snap.exists()) { 
-                    calculatorConfig = snap.data(); 
-                    if (calculatorConfig.stones) {
-                        Object.keys(calculatorConfig.stones).forEach(key => {
-                            if (STONES[key] && calculatorConfig.stones[key]) { STONES[key].img = calculatorConfig.stones[key]; }
-                        });
+            if (auth.currentUser && currentUid === ADMIN_UID) {
+                panel.classList.toggle('active');
+            } else {
+                const email = prompt("Email:"); if (!email) return;
+                const pass = prompt("Password:"); if (!pass) return;
+                try {
+                    const cred = await signInWithEmailAndPassword(auth, email, pass);
+                    if (cred.user.uid.trim() === ADMIN_UID) {
+                        alert("身分核對成功！");
+                        panel.classList.add('active');
+                    } else {
+                        alert("不具備管理權限。"); await signOut(auth);
                     }
-                }
-                document.getElementById('loading').style.display = 'none';
-            });
-            onSnapshot(collection(db, 'artifacts', 'our-story-53723', 'public', 'data', 'galleryItems'), (snap) => {
-                collectionsList = []; snap.forEach(d => collectionsList.push({ id: d.id, ...d.data() }));
-                collectionsList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                renderCollections();
-                if (document.getElementById('admin-panel').classList.contains('active')) window.renderAdminList();
-            });
-        });
+                } catch(e) { alert("帳號或密碼錯誤。"); }
+            }
+        };
 
-        await signInAnonymously(auth).catch(() => {});
+        window.signOutAdmin = () => { 
+            if(!confirm("確定要登出管理員身份嗎？")) return;
+            signOut(auth).then(() => { alert("已安全登出。"); window.location.reload(); }); 
+        };
+        
+        window.scrollToSection = (id) => {
+            const e = document.getElementById(id);
+            if (e) { 
+                window.scrollTo({ top: e.offsetTop - 80, behavior: 'smooth' }); 
+                document.getElementById('mobile-menu').classList.remove('active'); 
+            }
+        };
+        
+        window.toggleMenu = () => {
+            const m = document.getElementById('mobile-menu');
+            m.classList.toggle('active');
+        };
+
+        init();
         lucide.createIcons();
     </script>
 </body>
